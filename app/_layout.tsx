@@ -11,6 +11,7 @@ import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
+import CustomDrawerContent from "~/components/CustomDrawerContent";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -66,17 +67,48 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Drawer initialRouteName="homepage">
+        <Drawer initialRouteName="homepage"
+          screenOptions={{ 
+            drawerHideStatusBarOnOpen: true,
+            drawerLabelStyle: { fontSize: 14, fontWeight: "bold", marginLeft: -10}, 
+          }}
+          drawerContent={CustomDrawerContent}
+          >
           <Drawer.Screen
             name="homepage"
-            
             options={{
-              title: "Homepage",
+              drawerLabel: "Homepage",
               headerTitle: "Homepage",
-              headerTitleAlign: "center",
-              drawerIcon: ({ color }) => (
-                <FontAwesome size={25} name="home" color={color} />
+              // headerTitleAlign: "center",
+              drawerIcon: ({ color, size }) => (
+                <FontAwesome size={size} name="home" color={color} />
               ),
+              // headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="lead"
+            options={{
+              drawerLabel: "Lead",
+              headerTitle: "Lead",
+              drawerLabelStyle:{fontSize: 14, fontWeight: "bold", marginLeft:-4 },
+              // headerTitleAlign: "center",
+              drawerIcon: ({ color, size }) => (
+                <FontAwesome size={size} name="user" color={color} />
+              ),
+              // headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="followup"
+            options={{
+              drawerLabel: "Follow Up",
+              headerTitle: "Follow Up",
+              // headerTitleAlign: "center",
+              drawerIcon: ({ color, size }) => (
+                <FontAwesome size={size} name="bell" color={color} />
+              ),
+              // headerShown: false,
             }}
           />
         </Drawer>
