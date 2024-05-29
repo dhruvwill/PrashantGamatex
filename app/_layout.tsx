@@ -1,11 +1,12 @@
 import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link, SplashScreen, useNavigation } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Platform } from "react-native";
+import { Platform, View, Image } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
@@ -13,7 +14,8 @@ import { ThemeToggle } from "~/components/ThemeToggle";
 import CustomDrawerContent from "~/components/CustomDrawerContent";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import { FontAwesome } from "@expo/vector-icons";
+import MenuIcon from "~/components/MenuIcon";
+import Logo from "~/components/Logo";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -86,7 +88,9 @@ export default function RootLayout() {
             name="homepage"
             options={{
               drawerLabel: "Homepage",
-              headerTitle: "Homepage",
+              headerRight: () => <Logo/>,
+              headerLeft: () => <MenuIcon/>,
+              headerTitleStyle: { display: "none"},
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size} name="home" color={color} />
@@ -98,12 +102,11 @@ export default function RootLayout() {
             name="lead"
             options={{
               drawerLabel: "Lead",
+              headerRight: () => <Logo/>,
+              headerLeft: () => <MenuIcon/>,
+              headerTitleStyle: { display: "none"},
+              drawerLabelStyle:{fontSize: 14, fontWeight: "bold", marginLeft:-4 },
               headerTitle: "Lead",
-              drawerLabelStyle: {
-                fontSize: 14,
-                fontWeight: "bold",
-                marginLeft: -4,
-              },
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size} name="user" color={color} />
@@ -115,7 +118,9 @@ export default function RootLayout() {
             name="followup"
             options={{
               drawerLabel: "Follow Up",
-              headerTitle: "Follow Up",
+              headerRight: () => <Logo/>,
+              headerLeft: () => <MenuIcon/>,
+              headerTitleStyle: { display: "none"},
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size - 3} name="bell" color={color} />
