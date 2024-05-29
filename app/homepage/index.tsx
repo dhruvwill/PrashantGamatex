@@ -8,9 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const index = () => {
   return (
     // tabs
-    <SafeAreaView className="h-full">
+    <SafeAreaView className="h-full bg-background">
       <View className="flex items-center justify-center h-full">
-        <Text className="text-black dark:text-white">Dashboard</Text>
+        <Text className="text-foreground">Dashboard</Text>
       </View>
     </SafeAreaView>
   );

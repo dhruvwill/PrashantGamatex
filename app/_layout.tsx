@@ -2,16 +2,18 @@ import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { SplashScreen } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { PortalHost } from "~/components/primitives/portal";
+import { ThemeToggle } from "~/components/ThemeToggle";
+import CustomDrawerContent from "~/components/CustomDrawerContent";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import CustomDrawerContent from "~/components/CustomDrawerContent";
+import { FontAwesome } from "@expo/vector-icons";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -46,13 +48,14 @@ export default function RootLayout() {
         setIsColorSchemeLoaded(true);
         return;
       }
-      const colorTheme = theme === "dark" ? "dark" : "light";
-      if (colorTheme !== colorScheme) {
-        setColorScheme(colorTheme);
+      // const colorTheme = theme === "dark" ? "dark" : "light";
+      // if (colorTheme !== colorScheme) {
+      //   setColorScheme(colorTheme);
 
-        setIsColorSchemeLoaded(true);
-        return;
-      }
+      //   setIsColorSchemeLoaded(true);
+      //   return;
+      // }
+      setColorScheme("light");
       setIsColorSchemeLoaded(true);
     })().finally(() => {
       SplashScreen.hideAsync();
@@ -65,15 +68,20 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Drawer initialRouteName="homepage"
-          screenOptions={{ 
-            drawerHideStatusBarOnOpen: true,
-            drawerLabelStyle: { fontSize: 14, fontWeight: "bold", marginLeft: -10}, 
+        <Drawer
+          screenOptions={{
+            drawerLabelStyle: {
+              fontSize: 14,
+              fontWeight: "bold",
+              marginLeft: -10,
+            },
+            // headerRight: () => <ThemeToggle />,
+            // headerRightContainerStyle: { marginRight: 10 },
           }}
+          initialRouteName="signin"
           drawerContent={CustomDrawerContent}
-          >
+        >
           <Drawer.Screen
             name="homepage"
             options={{
@@ -91,7 +99,11 @@ export default function RootLayout() {
             options={{
               drawerLabel: "Lead",
               headerTitle: "Lead",
-              drawerLabelStyle:{fontSize: 14, fontWeight: "bold", marginLeft:-4 },
+              drawerLabelStyle: {
+                fontSize: 14,
+                fontWeight: "bold",
+                marginLeft: -4,
+              },
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size} name="user" color={color} />
@@ -106,13 +118,26 @@ export default function RootLayout() {
               headerTitle: "Follow Up",
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="bell" color={color} />
+                <FontAwesome size={size - 3} name="bell" color={color} />
+              ),
+              // headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="signin"
+            options={{
+              drawerLabel: "Sign In",
+              headerTitle: "Sign In",
+              // headerTitleAlign: "center",
+              drawerIcon: ({ color, size }) => (
+                <FontAwesome size={size} name="sign-in" color={color} />
               ),
               // headerShown: false,
             }}
           />
         </Drawer>
       </GestureHandlerRootView>
+      <PortalHost />
     </ThemeProvider>
   );
 }

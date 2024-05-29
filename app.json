@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "Starter Base",
-    "slug": "starter-base",
+    "name": "Prashant Gamatex",
+    "slug": "prashant-gamatex",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
+    "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
