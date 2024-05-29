@@ -5,9 +5,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const calendar = () => {
   return (
-    <SafeAreaView className="h-full">
+    <SafeAreaView className="h-full bg-background">
       <View className="flex items-center justify-center h-full">
-        <Text className="text-black dark:text-white">Calendar</Text>
+        <Text className="text-foreground">Calendar</Text>
       </View>
     </SafeAreaView>
   );
