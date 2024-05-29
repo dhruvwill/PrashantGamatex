@@ -2,7 +2,7 @@ import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, SplashScreen, useNavigation } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -16,6 +16,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
 import MenuIcon from "~/components/MenuIcon";
 import Logo from "~/components/Logo";
+import CustomHeader from "~/components/CustomHeader";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -88,11 +89,21 @@ export default function RootLayout() {
             name="homepage"
             options={{
               drawerLabel: "Homepage",
-              headerRight: () => <Logo/>,
-              headerLeft: () => <MenuIcon/>,
-              headerTitleStyle: { display: "none"},
-              // headerTitleAlign: "center",
+              // headerRight: () => <Logo />,
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                // height: 100,
+              },
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
               drawerIcon: ({ color, size }) => (
+                // <Ionicons name="home-outline" size={size} color={color} />
                 <FontAwesome size={size} name="home" color={color} />
               ),
               // headerShown: false,
@@ -102,10 +113,14 @@ export default function RootLayout() {
             name="lead"
             options={{
               drawerLabel: "Lead",
-              headerRight: () => <Logo/>,
-              headerLeft: () => <MenuIcon/>,
-              headerTitleStyle: { display: "none"},
-              drawerLabelStyle:{fontSize: 14, fontWeight: "bold", marginLeft:-4 },
+              headerRight: () => <Logo />,
+              headerLeft: () => <MenuIcon />,
+              headerTitleStyle: { display: "none" },
+              drawerLabelStyle: {
+                fontSize: 14,
+                fontWeight: "bold",
+                marginLeft: -4,
+              },
               headerTitle: "Lead",
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
@@ -118,9 +133,9 @@ export default function RootLayout() {
             name="followup"
             options={{
               drawerLabel: "Follow Up",
-              headerRight: () => <Logo/>,
-              headerLeft: () => <MenuIcon/>,
-              headerTitleStyle: { display: "none"},
+              headerRight: () => <Logo />,
+              headerLeft: () => <MenuIcon />,
+              headerTitleStyle: { display: "none" },
               // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size - 3} name="bell" color={color} />

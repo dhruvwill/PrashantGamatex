@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import {
   DrawerContentScrollView,
@@ -21,7 +21,12 @@ const CustomDrawerContent = (props: any) => {
         contentContainerClassName="flex h-full justify-between"
       >
         <View>
-          <DrawerItemList {...props} />
+          <View className="flex justify-center px-5 pt-5 pb-10">
+            <Image source={require("~/assets/images/logoWithHeading.png")} />
+          </View>
+          <View>
+            <DrawerItemList {...props} />
+          </View>
         </View>
         <View
         // style={{ paddingBottom: bottom + 20 }}

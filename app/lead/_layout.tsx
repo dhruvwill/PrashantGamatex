@@ -1,49 +1,60 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Tabs } from 'expo-router'
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { View, Text } from "react-native";
+import React from "react";
+import { Tabs } from "expo-router";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 
 const _layout = () => {
-    return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: "red" }}>
-            <Tabs.Screen
-                name='newLead'
-                options={
-                    {
-                        title: 'New Lead',
-                        tabBarIcon: ({ color }) => (
-                            <FontAwesome size={28} name='plus' color={color} />
-                        ),
-                        headerShown: false
-                    }
-                }
-            />
-            <Tabs.Screen
-                name='leadList'
-                options={
-                    {
-                        title: 'Lead List',
-                        tabBarIcon: ({ color }) => (
-                            <FontAwesome size={28} name='list' color={color} />
-                        ),
-                        headerShown: false
-                    }
-                }
-            />
-            <Tabs.Screen 
-                name='report'
-                options={
-                    {
-                        title: 'Report',
-                        tabBarIcon: ({ color }) => (
-                            <FontAwesome size={28} name='file' color={color} />
-                        ),
-                        headerShown: false
-                    }
-                }
-            />
-        </Tabs>
-    )
-}
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 10,
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="newLead"
+        options={{
+          title: "New Lead",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Ionicons name="add-circle" size={size} />
+            ) : (
+              <Ionicons name="add-circle-outline" size={size} />
+            ),
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="leadList"
+        options={{
+          title: "Lead List",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Ionicons name="list" size={size} />
+            ) : (
+              <Ionicons name="list-outline" size={size} />
+            ),
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="report"
+        options={{
+          title: "Report",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Ionicons name="document-text" size={size} />
+            ) : (
+              <Ionicons name="document-text-outline" size={size} />
+            ),
+          headerShown: false,
+        }}
+      />
+    </Tabs>
+  );
+};
 
-export default _layout
+export default _layout;

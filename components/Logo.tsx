@@ -1,10 +1,15 @@
-import { Image } from 'react-native';
-import { Link } from 'expo-router';
+import { Image, View } from "react-native";
+import { Link } from "expo-router";
 
 const Logo = () => (
-    <Link href={"/"} className="mr-8">
-      <Image source={require('~/assets/images/logo.png')} className="w-[100px] h-5" resizeMode="content"/>
-    </Link>
-)
+  <Link href={"/"}>
+    <View className="h-8 w-8 overflow-hidden">
+      <Image
+        source={require("~/assets/images/logo.png")}
+        className="h-full w-full"
+      />
+    </View>
+  </Link>
+);
 
 export default Logo;
