@@ -1,18 +1,30 @@
 import { View, Text } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 
 const _layout = () => {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "red" }}>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 10,
+          marginBottom:5,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="home" color={color} />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <Ionicons size={25} name="home" />
+            ) : (
+              <Ionicons size={25} name="home-outline" />
+            ),
           headerShown: false,
         }}
       />
@@ -20,9 +32,12 @@ const _layout = () => {
         name="calendar"
         options={{
           title: "Calendar",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={25} name="calendar" color={color} />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <Ionicons size={25} name="calendar" />
+            ) : (
+              <Ionicons size={25} name="calendar-outline" />
+            ),
           headerShown: false,
         }}
       />
