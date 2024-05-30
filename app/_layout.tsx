@@ -79,8 +79,6 @@ export default function RootLayout() {
               fontWeight: "bold",
               marginLeft: -10,
             },
-            // headerRight: () => <ThemeToggle />,
-            // headerRightContainerStyle: { marginRight: 10 },
           }}
           initialRouteName="signin"
           drawerContent={CustomDrawerContent}
@@ -89,13 +87,11 @@ export default function RootLayout() {
             name="homepage"
             options={{
               drawerLabel: "Homepage",
-              // headerRight: () => <Logo />,
               headerStyle: {
                 borderWidth: 1,
                 borderColor: "#f0f0f0",
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
-                // height: 100,
               },
               headerTitle: () => <Logo />,
               headerTitleAlign: "center",
@@ -103,44 +99,53 @@ export default function RootLayout() {
                 height: "auto",
               },
               drawerIcon: ({ color, size }) => (
-                // <Ionicons name="home-outline" size={size} color={color} />
                 <FontAwesome size={size} name="home" color={color} />
               ),
-              // headerShown: false,
             }}
           />
           <Drawer.Screen
             name="lead"
             options={{
               drawerLabel: "Lead",
-              headerRight: () => <Logo />,
-              headerLeft: () => <MenuIcon />,
-              headerTitleStyle: { display: "none" },
-              drawerLabelStyle: {
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              drawerLabelStyle:{
+                marginLeft: -5,
                 fontSize: 14,
                 fontWeight: "bold",
-                marginLeft: -4,
               },
-              headerTitle: "Lead",
-              // headerTitleAlign: "center",
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size} name="user" color={color} />
               ),
-              // headerShown: false,
             }}
           />
           <Drawer.Screen
             name="followup"
             options={{
               drawerLabel: "Follow Up",
-              headerRight: () => <Logo />,
-              headerLeft: () => <MenuIcon />,
-              headerTitleStyle: { display: "none" },
-              // headerTitleAlign: "center",
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size - 3} name="bell" color={color} />
               ),
-              // headerShown: false,
             }}
           />
           <Drawer.Screen
@@ -148,11 +153,9 @@ export default function RootLayout() {
             options={{
               drawerLabel: "Sign In",
               headerTitle: "Sign In",
-              // headerTitleAlign: "center",
               drawerIcon: ({ color, size }) => (
                 <FontAwesome size={size} name="sign-in" color={color} />
               ),
-              // headerShown: false,
             }}
           />
         </Drawer>

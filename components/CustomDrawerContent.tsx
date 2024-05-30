@@ -18,7 +18,7 @@ const CustomDrawerContent = (props: any) => {
       <DrawerContentScrollView
         {...props}
         scrollEnabled={false}
-        contentContainerClassName="flex h-full justify-between"
+        contentContainerClassName="flex h-full justify-between px-3"
       >
         <View>
           <View className="flex justify-center px-5 pt-5 pb-10">
@@ -29,7 +29,7 @@ const CustomDrawerContent = (props: any) => {
           </View>
         </View>
         <View
-        // style={{ paddingBottom: bottom + 20 }}
+        style={{ paddingBottom: bottom }}
         >
           <DrawerItem
             icon={({ color, size }) => (
