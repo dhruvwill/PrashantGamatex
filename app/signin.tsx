@@ -1,5 +1,5 @@
-import { User } from "lucide-react-native";
-import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useUserStore } from "~/store";
 
 export default function Example() {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+  const store = useUserStore();
+  const router = useRouter();
   return (
     <SafeAreaView className="flex-1 ">
       <View className="p-6 flex-grow flex-shrink basis-0">
@@ -65,7 +68,7 @@ export default function Example() {
           <View className="my-6">
             <TouchableOpacity
               onPress={() => {
-                // handle onPress
+                router.replace("homepage");
               }}
             >
               <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">

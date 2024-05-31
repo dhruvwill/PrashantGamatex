@@ -1,5 +1,4 @@
 import { View, Text, Image } from "react-native";
-import React from "react";
 import {
   DrawerContentScrollView,
   DrawerItem,
@@ -7,18 +6,21 @@ import {
 } from "@react-navigation/drawer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const CustomDrawerContent = (props: any) => {
   const handleLogout = () => {
     console.log("Logout");
+    router.replace("/signin");
   };
   const { top, bottom } = useSafeAreaInsets();
+  const router = useRouter();
   return (
     <View className="flex-1">
       <DrawerContentScrollView
         {...props}
         scrollEnabled={false}
-        contentContainerClassName="flex h-full justify-between px-3"
+        contentContainerClassName="flex h-full justify-between"
       >
         <View>
           <View className="flex justify-center px-5 pt-5 pb-10">
@@ -28,9 +30,7 @@ const CustomDrawerContent = (props: any) => {
             <DrawerItemList {...props} />
           </View>
         </View>
-        <View
-        style={{ paddingBottom: bottom }}
-        >
+        <View style={{ paddingBottom: bottom }}>
           <DrawerItem
             icon={({ color, size }) => (
               <Text style={{ color: color, fontSize: size }}>

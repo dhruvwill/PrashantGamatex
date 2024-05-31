@@ -1,22 +1,14 @@
 import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link, SplashScreen, useNavigation } from "expo-router";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Theme, ThemeProvider } from "@react-navigation/native";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Platform, View, Image } from "react-native";
+import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
-import { ThemeToggle } from "~/components/ThemeToggle";
-import CustomDrawerContent from "~/components/CustomDrawerContent";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Drawer } from "expo-router/drawer";
-import MenuIcon from "~/components/MenuIcon";
-import Logo from "~/components/Logo";
-import CustomHeader from "~/components/CustomHeader";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -39,6 +31,8 @@ export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
 
+  const signedIn = true;
+
   React.useEffect(() => {
     (async () => {
       const theme = await AsyncStorage.getItem("theme");
@@ -51,13 +45,13 @@ export default function RootLayout() {
         setIsColorSchemeLoaded(true);
         return;
       }
-      // const colorTheme = theme === "dark" ? "dark" : "light";
-      // if (colorTheme !== colorScheme) {
-      //   setColorScheme(colorTheme);
+      //   const colorTheme = theme === "dark" ? "dark" : "light";
+      //   if (colorTheme !== colorScheme) {
+      //     setColorScheme(colorTheme);
 
-      //   setIsColorSchemeLoaded(true);
-      //   return;
-      // }
+      //     setIsColorSchemeLoaded(true);
+      //     return;
+      //   }
       setColorScheme("light");
       setIsColorSchemeLoaded(true);
     })().finally(() => {
@@ -71,95 +65,21 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Drawer
-          screenOptions={{
-            drawerLabelStyle: {
-              fontSize: 14,
-              fontWeight: "bold",
-              marginLeft: -10,
-            },
+      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+      <Stack initialRouteName="signin">
+        <Stack.Screen
+          name="(marketing)"
+          options={{
+            headerShown: false,
           }}
-          initialRouteName="signin"
-          drawerContent={CustomDrawerContent}
-        >
-          <Drawer.Screen
-            name="homepage"
-            options={{
-              drawerLabel: "Homepage",
-              headerStyle: {
-                borderWidth: 1,
-                borderColor: "#f0f0f0",
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-              },
-              headerTitle: () => <Logo />,
-              headerTitleAlign: "center",
-              headerTitleContainerStyle: {
-                height: "auto",
-              },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="home" color={color} />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="lead"
-            options={{
-              drawerLabel: "Lead",
-              headerStyle: {
-                borderWidth: 1,
-                borderColor: "#f0f0f0",
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-              },
-              drawerLabelStyle:{
-                marginLeft: -5,
-                fontSize: 14,
-                fontWeight: "bold",
-              },
-              headerTitle: () => <Logo />,
-              headerTitleAlign: "center",
-              headerTitleContainerStyle: {
-                height: "auto",
-              },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="user" color={color} />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="followup"
-            options={{
-              drawerLabel: "Follow Up",
-              headerStyle: {
-                borderWidth: 1,
-                borderColor: "#f0f0f0",
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-              },
-              headerTitle: () => <Logo />,
-              headerTitleAlign: "center",
-              headerTitleContainerStyle: {
-                height: "auto",
-              },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size - 3} name="bell" color={color} />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="signin"
-            options={{
-              drawerLabel: "Sign In",
-              headerTitle: "Sign In",
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="sign-in" color={color} />
-              ),
-            }}
-          />
-        </Drawer>
-      </GestureHandlerRootView>
+        />
+        <Stack.Screen
+          name="signin"
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack>
       <PortalHost />
     </ThemeProvider>
   );
