@@ -6,7 +6,7 @@ import { useNavigation, Link } from 'expo-router';
 const about = () => {
     const navigation = useNavigation()
     const toggletoHome = () => {
-        navigation.navigate('homepage' as never)
+        navigation.navigate('m_homepage' as never)
     }
     return (
 
