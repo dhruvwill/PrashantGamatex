@@ -1,26 +1,23 @@
 import { View, Text } from "react-native";
-import React from "react";
 import { Tabs } from "expo-router";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Import the FontAwesome component from the '@expo/vector-icons' package
 
 const _layout = () => {
-  const {top,bottom} = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
           height: 65,
           paddingBottom: 10,
-          paddingTop:10,
+          paddingTop: 10,
           marginBottom:5,
         },
       }}
     >
       <Tabs.Screen
-        name="newLead"
+        name="m_newFollowUp"
         options={{
-          title: "New Lead",
+          title: "New Follow-Up",
           tabBarIcon: ({ color, focused, size }) =>
             focused ? (
               <Ionicons name="add-circle" size={size} />
@@ -28,12 +25,13 @@ const _layout = () => {
               <Ionicons name="add-circle-outline" size={size} />
             ),
           headerShown: false,
+          tabBarIconStyle: { marginBottom: 5 },
         }}
       />
       <Tabs.Screen
-        name="leadList"
+        name="m_followUpList"
         options={{
-          title: "Lead List",
+          title: "Follow-Up List",
           tabBarIcon: ({ color, focused, size }) =>
             focused ? (
               <Ionicons name="list" size={size} />
@@ -44,7 +42,7 @@ const _layout = () => {
         }}
       />
       <Tabs.Screen
-        name="report"
+        name="m_report"
         options={{
           title: "Report",
           tabBarIcon: ({ color, focused, size }) =>

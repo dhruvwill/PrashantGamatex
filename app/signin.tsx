@@ -18,7 +18,7 @@ export default function Example() {
   const router = useRouter();
   return (
     <SafeAreaView className="flex-1 ">
-      <View className="p-6 flex-grow flex-shrink basis-0">
+      <View className="p-6 flex-grow flex-shrink">
         <View className="my-9">
           <Text className="text-4xl text-neutral-900 dark:text-gray-200 font-bold mb-1.5 text-center">
             Welcome back!
@@ -68,7 +68,7 @@ export default function Example() {
           <View className="my-6">
             <TouchableOpacity
               onPress={() => {
-                router.replace("homepage");
+                router.replace("m_homepage");
               }}
             >
               <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">

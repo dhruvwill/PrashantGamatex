@@ -1,8 +1,7 @@
 import { View, Text } from 'react-native'
-import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const report = () => {
+const m_report = () => {
   return (
     <SafeAreaView className="h-full">
       <View className='flex items-center justify-center h-full'>
@@ -12,4 +11,4 @@ const report = () => {
   )
 }
 
-export default report
+export default m_report

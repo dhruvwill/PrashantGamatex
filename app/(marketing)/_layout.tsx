@@ -81,11 +81,11 @@ export default function RootLayout() {
             },
             drawerActiveTintColor: "steelblue",
           }}
-          initialRouteName="signin"
+          initialRouteName="m_homepage"
           drawerContent={CustomDrawerContent}
         >
           <Drawer.Screen
-            name="homepage"
+            name="m_homepage"
             options={{
               drawerLabel: "Homepage",
               headerStyle: {
@@ -99,13 +99,17 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="home" color={color} />
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="home" size={size} />
+                ) : (
+                  <Ionicons name="home-outline" size={size} />
+                )
               ),
             }}
           />
           <Drawer.Screen
-            name="lead"
+            name="m_lead"
             options={{
               drawerLabel: "Lead",
               headerStyle: {
@@ -114,23 +118,22 @@ export default function RootLayout() {
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
               },
-              drawerLabelStyle: {
-                marginLeft: -5,
-                fontSize: 14,
-                fontWeight: "bold",
-              },
               headerTitle: () => <Logo />,
               headerTitleAlign: "center",
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size} name="user" color={color} />
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="person" size={size} />
+                ) : (
+                  <Ionicons name="person-outline" size={size} />
+                )
               ),
             }}
           />
           <Drawer.Screen
-            name="followup"
+            name="m_followup"
             options={{
               drawerLabel: "Follow Up",
               headerStyle: {
@@ -144,8 +147,37 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size - 3} name="bell" color={color} />
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="notifications" size={size} />
+                ) : (
+                  <Ionicons name="notifications-outline" size={size} />
+                )
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="about"
+            options={{
+              drawerLabel: "About",
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
+              headerShown: false,
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="information-circle" size={size} />
+                ) : (
+                  <Ionicons name="information-circle-outline" size={size} />
+                )
               ),
             }}
           />
@@ -164,8 +196,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ color, size }) => (
-                <FontAwesome size={size - 3} name="bell" color={color} />
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="notifications" size={size} />
+                ) : (
+                  <Ionicons name="notifications-outline" size={size} />
+                )
               ),
             }}
           />

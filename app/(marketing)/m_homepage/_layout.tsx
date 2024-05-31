@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import React from "react";
 
 const _layout = () => {
   return (
@@ -16,10 +15,10 @@ const _layout = () => {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="m_index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, focused }) =>
+          tabBarIcon: ({ focused }) =>
             focused ? (
               <Ionicons size={25} name="home" />
             ) : (
@@ -29,10 +28,10 @@ const _layout = () => {
         }}
       />
       <Tabs.Screen
-        name="calendar"
+        name="m_calendar"
         options={{
           title: "Calendar",
-          tabBarIcon: ({ color, focused }) =>
+          tabBarIcon: ({ focused }) =>
             focused ? (
               <Ionicons size={25} name="calendar" />
             ) : (
