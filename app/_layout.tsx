@@ -9,6 +9,7 @@ import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
+import { useFonts } from "expo-font";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -30,6 +31,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const [fontsLoaded] = useFonts({
+    acumin: require("../assets/fonts/Acumin.otf"),
+    acumin_italic: require("../assets/fonts/Acumin_italic.otf"),
+    acumin_bold: require("../assets/fonts/Acumin_bold.otf"),
+    acumin_bolditalic: require("../assets/fonts/Acumin_bolditalic.otf"),
+  });
 
   const signedIn = true;
 
@@ -59,14 +66,14 @@ export default function RootLayout() {
     });
   }, []);
 
-  if (!isColorSchemeLoaded) {
+  if (!isColorSchemeLoaded && !fontsLoaded) {
     return null;
   }
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack initialRouteName="m_homepage">
+      <Stack>
         <Stack.Screen
           name="(marketing)"
           options={{

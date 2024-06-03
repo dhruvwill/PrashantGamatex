@@ -63,6 +63,12 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        acumin: ["acumin", "sans-serif"],
+        acumin_italic: ["acumin_italic", "sans-serif"],
+        acumin_bold: ["acumin_bold", "sans-serif"],
+        acumin_bolditalic: ["acumin_bolditalic", "sans-serif"],
+      },
     },
   },
   // plugins: [require("tailwindcss-animate")],
