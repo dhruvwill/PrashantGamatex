@@ -11,6 +11,26 @@ type UserStore = {
   setUser: (user: User) => void;
 };
 
+type ThemeStore = {
+  theme: "light" | "dark" | "system";
+  setTheme: (theme: "light" | "dark" | "system") => void;
+};
+
+const useThemeStore = create<ThemeStore>()(
+  devtools(
+    persist(
+      (set) => ({
+        theme: "light",
+        setTheme: (theme) => set({ theme }),
+      }),
+      {
+        name: "themeStore",
+        storage: createJSONStorage(() => AsyncStorage),
+      }
+    )
+  )
+);
+
 const useUserStore = create<UserStore>()(
   devtools(
     persist(
@@ -26,4 +46,4 @@ const useUserStore = create<UserStore>()(
   )
 );
 
-export { useUserStore, User };
+export { useUserStore, useThemeStore, User };

@@ -12,9 +12,7 @@ import { useRouter } from "expo-router";
 import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-import DatePicker from "react-native-date-picker";
 
 const m_newLead = () => {
   const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
@@ -38,7 +36,6 @@ const m_newLead = () => {
     timeFrame: "",
   });
   const [phone, setPhone] = useState("");
-  const [date, setDate] = useState(new Date());
 
   const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isRefDateVisible, setRefDateVisible] = useState(false);
@@ -97,7 +94,7 @@ const m_newLead = () => {
                 onChangeText={(documentNo) => setForm({ ...form, documentNo })}
                 placeholder="0"
                 placeholderTextColor="#6b7280"
-                className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                 value={form.documentNo}
               />
             </View>
@@ -109,7 +106,7 @@ const m_newLead = () => {
                 onPress={() => {
                   setDocDateVisible(true);
                 }}
-                className="bg-[#f1f5f9] dark:bg-gray-800 h-11 w-full px-4 rounded-lg flex-row items-center"
+                className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center"
               >
                 <Ionicons
                   name="calendar-clear-outline"
@@ -117,7 +114,7 @@ const m_newLead = () => {
                   size={20}
                 />
                 <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                  {form.documentDate.toLocaleDateString()}
+                  {form.documentDate.toLocaleDateString("en-GB")}
                 </Text>
                 {isDocDateVisible && (
                   <DateTimePicker
@@ -148,7 +145,7 @@ const m_newLead = () => {
                 onChangeText={(refNo) => setForm({ ...form, refNo })}
                 placeholder="0"
                 placeholderTextColor="#6b7280"
-                className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
                 value={form.refNo}
               />
             </View>
@@ -160,7 +157,7 @@ const m_newLead = () => {
                 onPress={() => {
                   setRefDateVisible(true);
                 }}
-                className="bg-[#f1f5f9] dark:bg-gray-800 h-11 w-full px-4 rounded-lg flex-row items-center"
+                className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center"
               >
                 <Ionicons
                   name="calendar-clear-outline"
@@ -168,7 +165,7 @@ const m_newLead = () => {
                   size={20}
                 />
                 <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                  {form.refDate.toLocaleDateString()}
+                  {form.refDate.toLocaleDateString("en-GB")}
                 </Text>
                 {isRefDateVisible && (
                   <DateTimePicker
@@ -198,7 +195,7 @@ const m_newLead = () => {
               onChangeText={(serialNo) => setForm({ ...form, serialNo })}
               placeholder="0"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.serialNo}
             />
           </View>
@@ -218,7 +215,7 @@ const m_newLead = () => {
               onChangeText={(companyName) => setForm({ ...form, companyName })}
               placeholder="Enter Company Name"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.companyName}
             />
           </View>
@@ -235,7 +232,7 @@ const m_newLead = () => {
               placeholder="Contact Person Name"
               placeholderTextColor="#6b7280"
               keyboardType="phone-pad"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.contactPerson}
             />
           </View>
@@ -249,7 +246,7 @@ const m_newLead = () => {
               onChangeText={(designation) => setForm({ ...form, designation })}
               placeholder="Designation"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.designation}
             />
           </View>
@@ -264,7 +261,7 @@ const m_newLead = () => {
               onChangeText={(phone) => setPhone(phone)}
               placeholder="phone"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={phone}
             />
             {/* <PhoneInput
@@ -283,7 +280,7 @@ const m_newLead = () => {
               onChangeText={(emailId) => setForm({ ...form, emailId })}
               placeholder="Email"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.emailId}
             />
           </View>
@@ -297,7 +294,7 @@ const m_newLead = () => {
               onChangeText={(product) => setForm({ ...form, product })}
               placeholder="Product"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.product}
             />
           </View>
@@ -317,7 +314,7 @@ const m_newLead = () => {
               onChangeText={(competition) => setForm({ ...form, competition })}
               placeholder="Competition"
               placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.competition}
             />
           </View>

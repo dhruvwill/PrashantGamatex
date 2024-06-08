@@ -1,3 +1,3 @@
-import { useUserStore } from "./store";
+import { useUserStore, useThemeStore } from "./store";
 
-export { useUserStore };
+export { useUserStore, useThemeStore };

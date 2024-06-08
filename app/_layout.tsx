@@ -10,6 +10,7 @@ import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
 import { useFonts } from "expo-font";
+import { useThemeStore } from "~/store"; // adjust the path to match your file structure
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -29,8 +30,8 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
-  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const { theme, setTheme } = useThemeStore();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const [fontsLoaded] = useFonts({
     acumin: require("../assets/fonts/Acumin.otf"),
     acumin_italic: require("../assets/fonts/Acumin_italic.otf"),
@@ -38,41 +39,24 @@ export default function RootLayout() {
     acumin_bolditalic: require("../assets/fonts/Acumin_bolditalic.otf"),
   });
 
-  const signedIn = true;
-
   React.useEffect(() => {
-    (async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (Platform.OS === "web") {
-        // Adds the background color to the html element to prevent white background on overscroll.
-        document.documentElement.classList.add("bg-background");
-      }
-      if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme);
-        setIsColorSchemeLoaded(true);
-        return;
-      }
-      //   const colorTheme = theme === "dark" ? "dark" : "light";
-      //   if (colorTheme !== colorScheme) {
-      //     setColorScheme(colorTheme);
+    if (Platform.OS === "web") {
+      // Adds the background color to the html element to prevent white background on overscroll.
+      document.documentElement.classList.add("bg-background");
+    }
+    setColorScheme(theme);
+    SplashScreen.hideAsync();
+  }, [theme, setColorScheme]);
 
-      //     setIsColorSchemeLoaded(true);
-      //     return;
-      //   }
-      setColorScheme("light");
-      setIsColorSchemeLoaded(true);
-    })().finally(() => {
-      SplashScreen.hideAsync();
-    });
-  }, []);
-
-  if (!isColorSchemeLoaded && !fontsLoaded) {
+  if (!fontsLoaded) {
     return null;
   }
 
+  const selectedTheme = colorScheme === "dark" ? DARK_THEME : LIGHT_THEME;
+
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+    <ThemeProvider value={selectedTheme}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       <Stack>
         <Stack.Screen
           name="(marketing)"

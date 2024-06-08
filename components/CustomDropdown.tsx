@@ -7,8 +7,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '~/components/ui/select';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "~/components/ui/select";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Separator } from "./ui/separator";
 
@@ -25,26 +25,25 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   const contentInsets = {
     top: insets.top,
     bottom: insets.bottom,
-    left: 12,
-    right: 12,
+    // left: 20,
+    // right: 20,
   };
   return (
-    <Select
-      defaultValue={{ value: title, label: title }}
-    >
+    <Select defaultValue={{ value: title, label: title }}>
       <SelectTrigger className="w-full">
         <SelectValue
-          className='text-foreground text-sm native:text-lg'
+          className="text-foreground text-sm native:text-lg"
           placeholder={`Select ${title}`}
         />
       </SelectTrigger>
-      <SelectContent insets={contentInsets} className="bg-slate-200 border-0 my-1 w-96">
+      <SelectContent
+        insets={contentInsets}
+        className="bg-white dark:bg-black outline-none border-0 my-1 min-w-96"
+      >
         <SelectGroup>
           <SelectLabel>{title}</SelectLabel>
           {itemsList.map((item: string, index) => (
-            <SelectItem
-              key={index} label={item} value={item}
-            >
+            <SelectItem key={index} label={item} value={item}>
               {item}
             </SelectItem>
           ))}
