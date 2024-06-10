@@ -32,8 +32,9 @@ const m_leadList = () => {
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
         </View>
         <View className="px-3 flex-col gap-2">
-          {leadData.map((lead) => (
+          {leadData.map((lead,index) => (
             <LeadCard
+              key={index}
               companyName={lead.companyName}
               productList={lead.productList}
               timeFrame={lead.timeFrame}

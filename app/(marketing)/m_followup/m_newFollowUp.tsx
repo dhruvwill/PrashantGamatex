@@ -18,34 +18,39 @@ import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
 
 const m_newfollowup = () => {
   const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
+  const Ratings = ["Banking and land process", "Banking process pending", "Building is yet not ready", "Project is going slow due", "Project is initial stage. Will", "Project is slow due to low", "Project is very slow moving", "Project postponed"]
+  const Closed = ["Close", "Hold", "Lost", "Received"]
   const [form, setForm] = useState({
     company: "",
-    branch: "",
-    division: "",
     category: "",
     documentNo: "",
     documentDate: new Date(),
     refNo: "",
     refDate: new Date(),
-    serialNo: "",
     partyname: "",
     communicationperson: "",
     followupstartdatetime: new Date(),
     followupenddatetime: new Date(),
     communicationwith: "",
     followupdetails: "",
-    modeofcommumication:"Personally",
-    followupstatus:"Not Now",
-    rating:"",
+    modeofcommumication: "Personally",
+    followupstatus: "Not Now",
+    rating: "",
+    nextcommunicationwith: "",
+    nextcommunicationby: "",
+    attentionon: "",
+    ordergoesto: "",
+    closereason: "",
+    detaileddescription: "",
   });
   const onLabelPressMode = (label: string) => {
     return () => {
-      setForm({...form, modeofcommumication:label});
+      setForm({ ...form, modeofcommumication: label });
     };
   }
   const onLabelPressStatus = (label: string) => {
     return () => {
-      setForm({...form, followupstatus:label});
+      setForm({ ...form, followupstatus: label });
     };
   }
   const RadioGroupItemWithLabel = ({
@@ -57,7 +62,7 @@ const m_newfollowup = () => {
   }) => {
     return (
       <View className={'flex-row gap-2 items-center'}>
-        <RadioGroupItem aria-labelledby={`label-for-${value}`} value={value}  />
+        <RadioGroupItem aria-labelledby={`label-for-${value}`} value={value} />
         <Label nativeID={`label-for-${value}`} onPress={onLabelPress}>
           {value}
         </Label>
@@ -70,6 +75,7 @@ const m_newfollowup = () => {
   const [isRefDateVisible, setRefDateVisible] = useState(false);
   const [isFollowUpStartDateTimeVisible, setFollowUpStartDateTimeVisible] = useState(false);
   const [isFollowUpEndDateTimeVisible, setFollowUpEndDateTimeVisible] = useState(false);
+  const [isNextVisitOn, setNextVisitOn] = useState(false);
   const router = useRouter();
 
   const handleSubmit = () => {
@@ -91,18 +97,6 @@ const m_newfollowup = () => {
               Company
             </Text>
             <CustomDropdown title="Company" itemsList={Items} />
-          </View>
-          <View className="mb-4">
-            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin ">
-              Branch
-            </Text>
-            <CustomDropdown title="Branch" itemsList={Items} />
-          </View>
-          <View className="mb-4">
-            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-              Division
-            </Text>
-            <CustomDropdown title="Division" itemsList={Items} />
           </View>
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -214,21 +208,6 @@ const m_newfollowup = () => {
           </View>
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-              Serial No.
-            </Text>
-            <TextInput
-              keyboardType="numeric"
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              onChangeText={(serialNo) => setForm({ ...form, serialNo })}
-              placeholder="0"
-              placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
-              value={form.serialNo}
-            />
-          </View>
-          <View className="mb-4">
-            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Party name
             </Text>
             <TextInput
@@ -256,26 +235,6 @@ const m_newfollowup = () => {
               className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.communicationperson}
             />
-          </View>
-          <View className="mb-4">
-            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-              No. Of Follow Ups
-            </Text>
-            <TextInput
-              keyboardType="numeric"
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              onChangeText={(phone) => setPhone(phone)}
-              placeholder="Enter No. of Follow Ups"
-              placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
-              value={phone}
-            />
-            {/* <PhoneInput
-                defaultCountry="US"
-                value={phone}
-                onChange={setPhone}
-              /> */}
           </View>
           <Text className="text-xl font-acumin_bold" >
             Additional Follow Up Details
@@ -388,8 +347,9 @@ const m_newfollowup = () => {
               Mode Of Communication
             </Text>
             <View className=''>
-              <RadioGroup value={form.modeofcommumication} onValueChange={(modeofcommumication) => setForm({...form, modeofcommumication})} className='flex flex-row gap-3'>
+              <RadioGroup value={form.modeofcommumication} onValueChange={(modeofcommumication) => setForm({ ...form, modeofcommumication })} className='flex flex-row gap-3'>
                 <RadioGroupItemWithLabel value='Personally' onLabelPress={onLabelPressMode('Personally')} />
+                {/* Expense Form */}
                 <RadioGroupItemWithLabel value='Phone' onLabelPress={onLabelPressMode('Phone')} />
                 <RadioGroupItemWithLabel value='By Mail' onLabelPress={onLabelPressMode('By Mail')} />
               </RadioGroup>
@@ -399,28 +359,167 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Follow Up Status
             </Text>
-            <View className=''>
-              <RadioGroup value={form.followupstatus} onValueChange={(followupstatus) => setForm({...form, followupstatus})} className='flex flex-row gap-3'>
-                <RadioGroupItemWithLabel value='Not Now' onLabelPress={onLabelPressStatus('Not Now')} />
-                <RadioGroupItemWithLabel value='Fix in New Visit' onLabelPress={onLabelPressStatus('Fix in New Visit')} />
-                <RadioGroupItemWithLabel value='Close' onLabelPress={onLabelPressStatus('Close')} />
-              </RadioGroup>
+            <View className="flex flex-col">
+              <View className='mb-2'>
+                <RadioGroup value={form.followupstatus} onValueChange={(followupstatus) => setForm({ ...form, followupstatus })} className='flex flex-row gap-3'>
+                  <RadioGroupItemWithLabel value='Not Now' onLabelPress={onLabelPressStatus('Not Now')} />
+                  <RadioGroupItemWithLabel value='Fix in New Visit' onLabelPress={onLabelPressStatus('Fix in New Visit')} />
+                  <RadioGroupItemWithLabel value='Close' onLabelPress={onLabelPressStatus('Close')} />
+                </RadioGroup>
+              </View>
+              {form.followupstatus === 'Not Now' &&
+                (<View className="">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                    Rating
+                  </Text>
+                  <CustomDropdown title="Ratings" itemsList={Ratings} />
+                </View>)
+              }
+              {form.followupstatus === 'Fix in New Visit' &&
+                (<View className="border-2 border-[#000]">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
+                    Next Visit Detail
+                  </Text>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
+                      Next Visit On
+                    </Text>
+                    <Pressable
+                      onPress={() => {
+                        setNextVisitOn(true);
+                      }}
+                      className="bg-[#f1f5f9] dark:bg-gray-800 h-11 w-full px-4 rounded-lg flex-row items-center flex-1"
+                    >
+                      <Ionicons
+                        name="calendar-clear-outline"
+                        color={"#222222"}
+                        size={20}
+                      />
+                      <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                        {form.followupenddatetime.toLocaleDateString() + " " + form.followupenddatetime.toLocaleTimeString()}
+                      </Text>
+                      {isNextVisitOn && (
+                        <DateTimePicker
+                          mode="datetime"
+                          value={form.followupenddatetime}
+                          display="default"
+                          onChange={(event, newDate) => {
+                            setForm({
+                              ...form,
+                              followupenddatetime: newDate ? newDate : new Date(),
+                            });
+                            setNextVisitOn(false);
+                          }}
+                        />
+                      )}
+                    </Pressable>
+                  </View>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                      Next Communication With
+                    </Text>
+                    <TextInput
+                      editable
+                      multiline
+                      numberOfLines={4}
+                      maxLength={40}
+                      autoCorrect={false}
+                      clearButtonMode="while-editing"
+                      onChangeText={(nextcommunicationwith) => setForm({ ...form, nextcommunicationwith })}
+                      placeholder="Next Communication With"
+                      placeholderTextColor="#6b7280"
+                      className="bg-[#f1f5f9] h-11 dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                      value={form.nextcommunicationwith}
+                    />
+                  </View>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                      Next Communication By
+                    </Text>
+                    <TextInput
+                      editable
+                      multiline
+                      numberOfLines={4}
+                      maxLength={40}
+                      autoCorrect={false}
+                      clearButtonMode="while-editing"
+                      onChangeText={(nextcommunicationby) => setForm({ ...form, nextcommunicationby })}
+                      placeholder="Next Communication By"
+                      placeholderTextColor="#6b7280"
+                      className="bg-[#f1f5f9] h-11 dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                      value={form.nextcommunicationby}
+                    />
+                  </View>
+                  <View className="">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                      Attention On
+                    </Text>
+                    <TextInput
+                      editable
+                      multiline
+                      numberOfLines={4}
+                      maxLength={40}
+                      autoCorrect={false}
+                      clearButtonMode="while-editing"
+                      onChangeText={(attentionon) => setForm({ ...form, attentionon })}
+                      placeholder="Attention On"
+                      placeholderTextColor="#6b7280"
+                      className="bg-[#f1f5f9] h-11 dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                      value={form.attentionon}
+                    />
+                  </View>
+                </View>)
+              }
+              {form.followupstatus === 'Close' &&
+                (<View className="">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-xl font-acumin_bold">
+                    Close
+                  </Text>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                      Order Goes To
+                    </Text>
+                    <TextInput
+                      editable
+                      multiline
+                      numberOfLines={4}
+                      maxLength={40}
+                      autoCorrect={false}
+                      clearButtonMode="while-editing"
+                      onChangeText={(ordergoesto) => setForm({ ...form, ordergoesto })}
+                      placeholder="Order Goes To"
+                      placeholderTextColor="#6b7280"
+                      className="bg-[#f1f5f9] h-11 dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                      value={form.ordergoesto}
+                    />
+                  </View>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
+                      Reason
+                    </Text>
+                    <CustomDropdown title="Close" itemsList={Closed} />
+                  </View>
+                  <View className="">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                      Detailed Description
+                    </Text>
+                    <TextInput
+                      editable
+                      multiline
+                      numberOfLines={4}
+                      maxLength={40}
+                      autoCorrect={false}
+                      clearButtonMode="while-editing"
+                      onChangeText={(detaileddescription) => setForm({ ...form, detaileddescription })}
+                      placeholder="Detailed Description"
+                      placeholderTextColor="#6b7280"
+                      className="bg-[#f1f5f9] h-11 dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                      value={form.detaileddescription}
+                    />
+                  </View>
+                </View>)
+              }
             </View>
-          </View>
-          <View className="mb-4">
-            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-              Rating
-            </Text>
-            <TextInput
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              onChangeText={(rating) => setForm({ ...form, rating })}
-              keyboardType="numeric"
-              placeholder="Ratings"
-              placeholderTextColor="#6b7280"
-              className="h-11 bg-[#f1f5f9] dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
-              value={form.rating}
-            />
           </View>
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
           <View>
