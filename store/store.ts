@@ -4,11 +4,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type User = {
   username: string;
-  password: string;
+  usercode: string;
+  token: string;
 };
 type UserStore = {
   user: User | null;
   setUser: (user: User) => void;
+  clearUser: () => void;
+  setToken: (token: string) => void;
+  clearToken: () => void;
 };
 
 type ThemeStore = {
@@ -37,6 +41,11 @@ const useUserStore = create<UserStore>()(
       (set) => ({
         user: null,
         setUser: (user) => set({ user }),
+        clearUser: () => set({ user: null }),
+        setToken: (token) =>
+          set((state) => ({ user: { ...state.user!, token } })),
+        clearToken: () =>
+          set((state) => ({ user: { ...state.user!, token: "" } })),
       }),
       {
         name: "userStore",

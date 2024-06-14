@@ -13,7 +13,6 @@ const index = () => {
     <SafeAreaView className="h-full bg-background">
       <View className="flex items-center justify-center h-full">
         <Text className="text-foreground">Dashboard</Text>
-        <Text>{store?.username}</Text>
       </View>
     </SafeAreaView>
   );

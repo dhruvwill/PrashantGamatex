@@ -7,15 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useUserStore } from "~/store";
+import { useLogin } from "~/hooks/auth";
 
 export default function Example() {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
-  const store = useUserStore();
   const router = useRouter();
+  const login = useLogin();
   return (
     <SafeAreaView className="flex-1 ">
       <View className="p-6 flex-grow flex-shrink">
@@ -65,10 +65,17 @@ export default function Example() {
             />
           </View>
 
+          {login.isError && (
+            <View>
+              <Text className="text-red-500 font-semibold text-center">
+                Invalid username or password
+              </Text>
+            </View>
+          )}
           <View className="my-6">
             <TouchableOpacity
               onPress={() => {
-                router.replace("m_homepage");
+                login.mutate(form);
               }}
             >
               <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
@@ -78,7 +85,6 @@ export default function Example() {
               </View>
             </TouchableOpacity>
           </View>
-
           <TouchableOpacity
             onPress={() => {
               // handle link

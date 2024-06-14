@@ -10,7 +10,8 @@ import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
 import { useFonts } from "expo-font";
-import { useThemeStore } from "~/store"; // adjust the path to match your file structure
+import { useThemeStore } from "~/store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -53,25 +54,28 @@ export default function RootLayout() {
   }
 
   const selectedTheme = colorScheme === "dark" ? DARK_THEME : LIGHT_THEME;
+  const queryClient = new QueryClient();
 
   return (
-    <ThemeProvider value={selectedTheme}>
-      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      <Stack>
-        <Stack.Screen
-          name="(marketing)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="signin"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={selectedTheme}>
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        <Stack>
+          <Stack.Screen
+            name="(marketing)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="signin"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+        <PortalHost />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
