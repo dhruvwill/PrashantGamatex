@@ -157,6 +157,30 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
+            name="m_expense"
+            options={{
+              drawerLabel: "Expense & Travel",
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
+              drawerIcon: ({ focused, color, size }) => (
+                focused ? (
+                  <Ionicons name="wallet" size={size} />
+                ) : (
+                  <Ionicons name="wallet-outline" size={size} />
+                )
+              ),
+            }}
+          />
+          <Drawer.Screen
             name="about"
             options={{
               drawerLabel: "About",

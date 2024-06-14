@@ -346,10 +346,9 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Mode Of Communication
             </Text>
-            <View className=''>
+            <View className="">
               <RadioGroup value={form.modeofcommumication} onValueChange={(modeofcommumication) => setForm({ ...form, modeofcommumication })} className='flex flex-row gap-3'>
                 <RadioGroupItemWithLabel value='Personally' onLabelPress={onLabelPressMode('Personally')} />
-                {/* Expense Form */}
                 <RadioGroupItemWithLabel value='Phone' onLabelPress={onLabelPressMode('Phone')} />
                 <RadioGroupItemWithLabel value='By Mail' onLabelPress={onLabelPressMode('By Mail')} />
               </RadioGroup>
@@ -367,18 +366,18 @@ const m_newfollowup = () => {
                   <RadioGroupItemWithLabel value='Close' onLabelPress={onLabelPressStatus('Close')} />
                 </RadioGroup>
               </View>
-              {form.followupstatus === 'Not Now' &&
-                (<View className="">
-                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              {form.followupstatus === 'Not Now' && (
+                <View style={{ borderWidth: 1, borderColor: '#313131', padding: 10, borderRadius: 5 }}>
+                  <Text className="color-[#313131] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
                     Rating
                   </Text>
                   <CustomDropdown title="Ratings" itemsList={Ratings} />
-                </View>)
-              }
+                </View>
+              )}
               {form.followupstatus === 'Fix in New Visit' &&
-                (<View className="border-2 border-[#000]">
-                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
-                    Next Visit Detail
+                (<View style={{ borderWidth: 1, borderColor: '#313131', padding: 10, borderRadius: 5 }}>
+                  <Text className="color-[#313131] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
+                    Next Visit Details
                   </Text>
                   <View className="mb-4">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
@@ -471,9 +470,9 @@ const m_newfollowup = () => {
                 </View>)
               }
               {form.followupstatus === 'Close' &&
-                (<View className="">
+                (<View style={{ borderWidth: 1, borderColor: '#313131', padding: 10, borderRadius: 5 }}>
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-xl font-acumin_bold">
-                    Close
+                    Close Order
                   </Text>
                   <View className="mb-4">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">

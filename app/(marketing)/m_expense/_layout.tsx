@@ -15,9 +15,9 @@ const _layout = () => {
       }}
     >
       <Tabs.Screen
-        name="m_newFollowUp"
+        name="m_expenseForm"
         options={{
-          title: "New Follow-Up",
+          title: "Expense Form",
           tabBarIcon: ({ color, focused, size }) =>
             focused ? (
               <Ionicons name="add-circle" size={size} />
@@ -29,22 +29,22 @@ const _layout = () => {
         }}
       />
       <Tabs.Screen
-        name="m_followUpList"
+        name="m_expenseReport"
         options={{
-          title: "Follow-Up List",
+          title: "Expense Report",
           tabBarIcon: ({ color, focused, size }) =>
             focused ? (
-              <Ionicons name="list" size={size} />
+              <Ionicons name="document-text" size={size} />
             ) : (
-              <Ionicons name="list-outline" size={size} />
+              <Ionicons name="document-text-outline" size={size} />
             ),
           headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="m_report"
+        name="m_travelReport"
         options={{
-          title: "Report",
+          title: "Travel Report",
           tabBarIcon: ({ color, focused, size }) =>
             focused ? (
               <Ionicons name="document-text" size={size} />
