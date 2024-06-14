@@ -23,7 +23,7 @@ const m_leadList = () => {
   ];
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
-      <View className="flex h-auto mx-3 my-5">
+      <View className="flex mx-3 my-5">
         <View className="px-3">
           <Text className="text-3xl font-acumin_bold">Leads</Text>
           <Text className="text-muted text-sm text-gray-500 font-acumin">
@@ -32,7 +32,7 @@ const m_leadList = () => {
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
         </View>
         <View className="px-3 flex-col gap-2">
-          {leadData.map((lead,index) => (
+          {leadData.map((lead, index) => (
             <LeadCard
               key={index}
               companyName={lead.companyName}
