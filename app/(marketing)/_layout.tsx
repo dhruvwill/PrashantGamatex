@@ -17,6 +17,7 @@ import { Drawer } from "expo-router/drawer";
 import MenuIcon from "~/components/MenuIcon";
 import Logo from "~/components/Logo";
 import CustomHeader from "~/components/CustomHeader";
+import { useAuth } from "~/hooks/auth";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -38,6 +39,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+
+  const { isAuthenticated } = useAuth();
 
   React.useEffect(() => {
     (async () => {
@@ -67,6 +70,24 @@ export default function RootLayout() {
 
   if (!isColorSchemeLoaded) {
     return null;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            source={require("~/assets/images/logo.png")}
+            style={{ width: 200, height: 200 }}
+          />
+          <Link href="signin" style={{ marginTop: 20 }}>
+            <FontAwesome name="sign-in" size={30} color="steelblue" />
+          </Link>
+        </View>
+      </ThemeProvider>
+    );
   }
 
   return (
@@ -99,13 +120,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="home" size={size} />
                 ) : (
                   <Ionicons name="home-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
           <Drawer.Screen
@@ -123,13 +143,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="person" size={size} />
                 ) : (
                   <Ionicons name="person-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
           <Drawer.Screen
@@ -147,13 +166,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="notifications" size={size} />
                 ) : (
                   <Ionicons name="notifications-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
           <Drawer.Screen
@@ -171,13 +189,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="wallet" size={size} />
                 ) : (
                   <Ionicons name="wallet-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
           <Drawer.Screen
@@ -196,13 +213,12 @@ export default function RootLayout() {
                 height: "auto",
               },
               headerShown: false,
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="information-circle" size={size} />
                 ) : (
                   <Ionicons name="information-circle-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
           <Drawer.Screen
@@ -220,13 +236,12 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              drawerIcon: ({ focused, color, size }) => (
+              drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="notifications" size={size} />
                 ) : (
                   <Ionicons name="notifications-outline" size={size} />
-                )
-              ),
+                ),
             }}
           />
         </Drawer>

@@ -3,10 +3,15 @@ import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type User = {
-  username: string;
-  usercode: string;
+  data: {
+    uid: string;
+    username: string;
+    name: string;
+    company: string;
+  };
   token: string;
 };
+
 type UserStore = {
   user: User | null;
   setUser: (user: User) => void;
@@ -40,12 +45,22 @@ const useUserStore = create<UserStore>()(
     persist(
       (set) => ({
         user: null,
-        setUser: (user) => set({ user }),
+        setUser: (user: User) => set({ user }),
         clearUser: () => set({ user: null }),
-        setToken: (token) =>
-          set((state) => ({ user: { ...state.user!, token } })),
+        setToken: (token: string) =>
+          set((state) => {
+            if (state.user) {
+              return { user: { ...state.user, token } };
+            }
+            return state;
+          }),
         clearToken: () =>
-          set((state) => ({ user: { ...state.user!, token: "" } })),
+          set((state) => {
+            if (state.user) {
+              return { user: { ...state.user, token: "" } };
+            }
+            return state;
+          }),
       }),
       {
         name: "userStore",

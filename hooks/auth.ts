@@ -1,59 +1,31 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login, register } from "~/services/auth";
+import { login } from "~/services/auth";
 import { useUserStore } from "~/store";
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
-
-interface LoginData {
-  username: string;
-  password: string;
-}
-
-interface RegisterData {
-  name: string;
-  username: string;
-  password: string;
-}
-
-interface AuthResponse {
-  username: string;
-  usercode: string;
-  token: string;
-}
+import { AuthResponse, LoginData, ErrorResponse } from "~/types/auth";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const setToken = useUserStore((state) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
 
-  return useMutation<AuthResponse, unknown, LoginData>({
+  return useMutation<AuthResponse, ErrorResponse, LoginData>({
     mutationFn: login,
     onSuccess: (data) => {
       setUser({
-        username: data.username,
-        usercode: data.usercode,
+        data: {
+          uid: data.payload.uid,
+          username: data.payload.username,
+          name: data.payload.name,
+          company: data.payload.company,
+        },
         token: data.token,
       });
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });
       router.replace("m_homepage");
-    },
-  });
-};
-
-export const useRegister = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
-  return useMutation<AuthResponse, unknown, RegisterData>({
-    mutationFn: register,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["auth"],
-      });
-      router.replace("signin");
     },
   });
 };
