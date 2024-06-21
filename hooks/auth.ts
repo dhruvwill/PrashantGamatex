@@ -12,6 +12,7 @@ export const useLogin = () => {
 
   return useMutation<AuthResponse, ErrorResponse, LoginData>({
     mutationFn: login,
+    mutationKey: ["login"],
     onSuccess: (data) => {
       setUser({
         data: {

@@ -35,6 +35,7 @@ const m_newLead = () => {
     customerApplication: "",
     customerExistingMachine: "",
   });
+
   const [phone, setPhone] = useState("");
 
   const [isDocDateVisible, setDocDateVisible] = useState(false);
@@ -131,7 +132,9 @@ const m_newLead = () => {
             <TextInput
               autoCorrect={false}
               clearButtonMode="while-editing"
-              onChangeText={(customerCompanyName) => setForm({ ...form, customerCompanyName })}
+              onChangeText={(customerCompanyName) =>
+                setForm({ ...form, customerCompanyName })
+              }
               placeholder="Enter Customer Company Name"
               placeholderTextColor="#6b7280"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
@@ -174,20 +177,15 @@ const m_newLead = () => {
               Mobile No.
             </Text>
             <TextInput
-              keyboardType="numeric"
+              keyboardType="phone-pad"
               autoCorrect={false}
               clearButtonMode="while-editing"
               onChangeText={(phone) => setPhone(phone)}
-              placeholder="phone"
+              placeholder="Phone"
               placeholderTextColor="#6b7280"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={phone}
             />
-            {/* <PhoneInput
-                defaultCountry="US"
-                value={phone}
-                onChange={setPhone}
-              /> */}
           </View>
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -298,7 +296,9 @@ const m_newLead = () => {
             <TextInput
               autoCorrect={false}
               clearButtonMode="while-editing"
-              onChangeText={(customerApplication) => setForm({ ...form, customerApplication })}
+              onChangeText={(customerApplication) =>
+                setForm({ ...form, customerApplication })
+              }
               placeholder="Enter Customer Application"
               placeholderTextColor="#6b7280"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
@@ -312,7 +312,9 @@ const m_newLead = () => {
             <TextInput
               autoCorrect={false}
               clearButtonMode="while-editing"
-              onChangeText={(customerExistingMachine) => setForm({ ...form, customerExistingMachine })}
+              onChangeText={(customerExistingMachine) =>
+                setForm({ ...form, customerExistingMachine })
+              }
               placeholder="Enter Customer Existing Machine"
               placeholderTextColor="#6b7280"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"

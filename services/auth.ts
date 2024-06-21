@@ -3,7 +3,14 @@ import { AuthResponse, LoginData, ErrorResponse } from "~/types/auth";
 
 export const login = async (data: LoginData): Promise<AuthResponse> => {
   try {
-    const response = await client.post("/auth/login", data);
+    const user = {
+      username: data.username,
+      password: data.password,
+      company: data.company,
+    };
+    const response = await client.post("/auth/login", {
+      user,
+    });
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
