@@ -13,6 +13,7 @@ import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";
+import { useInsertLead } from "~/hooks/leads";
 
 const m_newLead = () => {
   const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
@@ -25,6 +26,7 @@ const m_newLead = () => {
     customerCompanyName: "",
     contactPerson: "",
     designation: "",
+    mobileNo: "",
     emailId: "",
     product: "",
     leadSource: "",
@@ -36,14 +38,28 @@ const m_newLead = () => {
     customerExistingMachine: "",
   });
 
-  const [phone, setPhone] = useState("");
-
   const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isLeadRemindDate, setLeadRemindDate] = useState(false);
   const router = useRouter();
+  const leadSubmit = useInsertLead();
 
   const handleSubmit = () => {
-    Alert.alert("value", [{ ...form }].join(""));
+    leadSubmit.mutate({
+      category: form.category,
+      customerCompanyName: form.customerCompanyName,
+      contactPerson: form.contactPerson,
+      designation: form.designation,
+      mobileNo: form.designation,
+      emailId: form.emailId,
+      product: form.product,
+      leadSource: form.leadSource,
+      competition: form.competition,
+      timeFrame: form.timeFrame,
+      leadRemindDate: form.leadRemindDate,
+      customerApplication: form.customerApplication,
+      customerExistingMachine: form.customerExistingMachine,
+      leadNote: form.leadNote
+    })
   };
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -153,7 +169,6 @@ const m_newLead = () => {
               }
               placeholder="Contact Person Name"
               placeholderTextColor="#6b7280"
-              keyboardType="phone-pad"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
               value={form.contactPerson}
             />
@@ -180,11 +195,11 @@ const m_newLead = () => {
               keyboardType="phone-pad"
               autoCorrect={false}
               clearButtonMode="while-editing"
-              onChangeText={(phone) => setPhone(phone)}
+              onChangeText={(mobileNo) => setForm({...form , mobileNo}) }
               placeholder="Phone"
               placeholderTextColor="#6b7280"
               className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
-              value={phone}
+              value={form.mobileNo}
             />
           </View>
           <View className="mb-4">

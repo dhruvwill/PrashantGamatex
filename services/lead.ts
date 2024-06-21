@@ -18,7 +18,7 @@ import { ErrorResponse } from "~/types/auth";
 
 export const insertLead = async (data: LeadInsertData): Promise<any> => {
   try {
-    const response = await client.post("/leads", data, {
+    const response = await client.post("/user/lead/insert", data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + useUserStore.getState().user?.token,

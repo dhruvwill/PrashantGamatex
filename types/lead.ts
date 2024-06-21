@@ -3,7 +3,7 @@ type LeadInsertData = {
   customerCompanyName: string;
   contactPerson: string;
   designation: string;
-  UDF_MobileNo_2361: "1234567890";
+  mobileNo: string;
   emailId: string;
   product: string;
   leadSource: string;
