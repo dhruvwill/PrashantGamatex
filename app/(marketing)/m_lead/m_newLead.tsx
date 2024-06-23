@@ -4,9 +4,9 @@ import {
   TextInput,
   Text,
   ScrollView,
-  Alert,
   Pressable,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -15,7 +15,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";
 import { useInsertLead } from "~/hooks/leads";
-import { Category, LeadSource, Currency, TimeFrame } from "~/constants/dropdowns";
+import {
+  Category,
+  LeadSource,
+  Currency,
+  TimeFrame,
+} from "~/constants/dropdowns";
+import { Portal } from "~/components/primitives/portal";
+import Toast from "react-native-toast-message";
 
 const m_newLead = () => {
   const [form, setForm] = useState({
@@ -39,8 +46,32 @@ const m_newLead = () => {
     customerExistingMachine: "",
   });
 
+  const clearForm = () => {
+    setForm({
+      company: "",
+      category: "",
+      documentNo: "",
+      documentDate: new Date(),
+      currency: "",
+      customerCompanyName: "",
+      contactPerson: "",
+      designation: "",
+      mobileNo: "",
+      emailId: "",
+      product: "",
+      leadSource: "",
+      competition: "",
+      timeFrame: "",
+      leadNote: "",
+      leadRemindDate: new Date(),
+      customerApplication: "",
+      customerExistingMachine: "",
+    });
+  };
+
   const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isLeadRemindDate, setLeadRemindDate] = useState(false);
+
   const router = useRouter();
   const leadSubmit = useInsertLead();
 
@@ -51,7 +82,7 @@ const m_newLead = () => {
       customerCompanyName: form.customerCompanyName,
       contactPerson: form.contactPerson,
       designation: form.designation,
-      mobileNo: form.designation,
+      mobileNo: form.mobileNo,
       emailId: form.emailId,
       product: form.product,
       leadSource: form.leadSource,
@@ -60,12 +91,45 @@ const m_newLead = () => {
       leadRemindDate: form.leadRemindDate,
       customerApplication: form.customerApplication,
       customerExistingMachine: form.customerExistingMachine,
-      leadNote: form.leadNote
-    })
+      leadNote: form.leadNote,
+    });
+    console.log(leadSubmit.status);
+    if (leadSubmit.isError) {
+      console.log("Error in adding lead", leadSubmit.error);
+      Toast.show({
+        type: "error",
+        text1: leadSubmit.error.errorMessage,
+        visibilityTime: 3000,
+      });
+    }
+    if (leadSubmit.isSuccess) {
+      console.log("Lead Added Successfully");
+      Toast.show({
+        type: "success",
+        text1: "Lead Added Successfully",
+        visibilityTime: 3000,
+      });
+      clearForm();
+    }
+    if (leadSubmit.isPaused) {
+      Toast.show({
+        type: "info",
+        text1: "Paused",
+        visibilityTime: 3000,
+      });
+    }
   };
   return (
     <KeyboardAvoidingView behavior="padding">
+      <View
+        className={`${
+          leadSubmit.isPending ? "" : "hidden"
+        } z-50 bg-blue-100/40 absolute spinner h-screen w-screen flex justify-center items-center overflow-hidden`}
+      >
+        <ActivityIndicator size="large" />
+      </View>
       <ScrollView keyboardShouldPersistTaps="handled">
+        {/* <Spinner visible={leadSubmit.isPending} /> */}
         <View className="flex h-full mx-3 my-5">
           <View className="px-3">
             <Text className="text-3xl font-acumin_bold">New Lead</Text>
@@ -79,7 +143,11 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Category
               </Text>
-              <CustomDropdown title="Category" itemsList={Category} onValueChange={(value) => setForm({ ...form, category: value })} />
+              <CustomDropdown
+                title="Category"
+                itemsList={Category}
+                onValueChange={(value) => setForm({ ...form, category: value })}
+              />
             </View>
             <View className="mb-4 flex flex-row gap-2">
               <View className="flex-1">
@@ -90,7 +158,9 @@ const m_newLead = () => {
                   keyboardType="numeric"
                   autoCorrect={false}
                   clearButtonMode="while-editing"
-                  onChangeText={(documentNo) => setForm({ ...form, documentNo })}
+                  onChangeText={(documentNo) =>
+                    setForm({ ...form, documentNo })
+                  }
                   placeholder="0"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
@@ -136,7 +206,11 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Currency
               </Text>
-              <CustomDropdown title="Currency" itemsList={Currency} onValueChange={(value) => setForm({ ...form, currency: value })} />
+              <CustomDropdown
+                title="Currency"
+                itemsList={Currency}
+                onValueChange={(value) => setForm({ ...form, currency: value })}
+              />
             </View>
             <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -177,7 +251,9 @@ const m_newLead = () => {
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(designation) => setForm({ ...form, designation })}
+                onChangeText={(designation) =>
+                  setForm({ ...form, designation })
+                }
                 placeholder="Designation"
                 placeholderTextColor="#6b7280"
                 className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
@@ -231,7 +307,13 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Lead Source
               </Text>
-              <CustomDropdown title="Lead Source" itemsList={LeadSource} onValueChange={(value) => setForm({ ...form, leadSource: value })} />
+              <CustomDropdown
+                title="Lead Source"
+                itemsList={LeadSource}
+                onValueChange={(value) =>
+                  setForm({ ...form, leadSource: value })
+                }
+              />
             </View>
             <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -240,7 +322,9 @@ const m_newLead = () => {
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(competition) => setForm({ ...form, competition })}
+                onChangeText={(competition) =>
+                  setForm({ ...form, competition })
+                }
                 placeholder="Competition"
                 placeholderTextColor="#6b7280"
                 className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
@@ -251,7 +335,13 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Time Frame
               </Text>
-              <CustomDropdown title="Time Frame" itemsList={TimeFrame} onValueChange={(value) => setForm({ ...form, timeFrame: value })} />
+              <CustomDropdown
+                title="Time Frame"
+                itemsList={TimeFrame}
+                onValueChange={(value) =>
+                  setForm({ ...form, timeFrame: value })
+                }
+              />
             </View>
             <View className="flex-1 flex flex-col mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">

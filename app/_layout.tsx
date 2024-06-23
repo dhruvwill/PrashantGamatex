@@ -12,6 +12,7 @@ import { PortalHost } from "~/components/primitives/portal";
 import { useFonts } from "expo-font";
 import { useThemeStore } from "~/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -74,6 +75,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+        <Toast />
         <PortalHost />
       </ThemeProvider>
     </QueryClientProvider>
