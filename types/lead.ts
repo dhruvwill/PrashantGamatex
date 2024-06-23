@@ -1,5 +1,6 @@
 type LeadInsertData = {
   category: string;
+  currency: string;
   customerCompanyName: string;
   contactPerson: string;
   designation: string;

@@ -15,11 +15,13 @@ import { Separator } from "./ui/separator";
 interface CustomDropdownProps {
   title: string;
   itemsList: string[];
+  onValueChange?: (value: string) => void;
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   title,
   itemsList,
+  onValueChange
 }) => {
   const insets = useSafeAreaInsets();
   const contentInsets = {
@@ -27,6 +29,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     bottom: insets.bottom,
     // left: 20,
     // right: 20,
+  };
+  const [dropdownValue, setDropdownValue] = useState(title); // Use selectedValue prop or fallback to title
+
+  const handleValueChange = (newValue: string) => {
+    setDropdownValue(newValue);
+    if (onValueChange) {
+      onValueChange(newValue); // Call the callback if provided
+    }
   };
   return (
     <Select defaultValue={{ value: title, label: title }}>
@@ -43,7 +53,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         <SelectGroup>
           <SelectLabel>{title}</SelectLabel>
           {itemsList.map((item: string, index) => (
-            <SelectItem key={index} label={item} value={item}>
+            <SelectItem key={index} label={item} value={item} onPress={() => handleValueChange(item)}>
               {item}
             </SelectItem>
           ))}
