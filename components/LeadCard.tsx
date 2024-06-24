@@ -11,7 +11,7 @@ const LeadCard = ({
 }: {
   leadId: string;
   companyName: string;
-  productList: string[];
+  productList: string;
   timeFrame: string;
 }) => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const LeadCard = ({
     >
       <View>
         <Text className="text-lg font-medium">{companyName}</Text>
-        <Text className="text-md my-1">{productList.join(", ")}</Text>
+        <Text className="text-md my-1">{productList}</Text>
         <Text className="text-sm text-gray-500">{timeFrame}</Text>
       </View>
       <View className="flex items-center justify-center">

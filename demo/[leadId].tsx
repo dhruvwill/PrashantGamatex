@@ -8,13 +8,13 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";
-import { useInsertLead } from "~/hooks/leads";
+import { useUpdateLead, useLeads } from "~/hooks/leads";
 import {
   Category,
   LeadSource,
@@ -24,9 +24,23 @@ import {
 import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
-const m_newLead = () => {
+const m_editLead = () => {
+  const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Edit Lead #" + leadId,
+      headerTitleStyle: {
+        fontFamily: "acumin",
+      },
+      headerTitleAlign: "center",
+      headerStyle: {
+        backgroundColor: "steelblue",
+      },
+    });
+  }, [leadId]);
+
   const leadFormSchema = z.object({
-    category: z.string().min(1, "Category is required"),
     currency: z.string().min(1, "Currency is required"),
     customerCompanyName: z.string().min(1, "Customer Company Name is required"),
     contactPerson: z.string().min(1, "Contact Person is required"),
@@ -66,9 +80,9 @@ const m_newLead = () => {
 
   const clearForm = () => {
     setForm({
-      company: "",
+      company: currentLead?.UDF_CompanyName_2361,
       category: "",
-      documentNo: "",
+      documentNo: currentLead?.DocumentNo,
       documentDate: new Date(),
       currency: "",
       customerCompanyName: "",
@@ -89,18 +103,32 @@ const m_newLead = () => {
 
   const [errors, setErrors] = useState<any>({});
 
-  const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isLeadRemindDate, setLeadRemindDate] = useState(false);
 
   const router = useRouter();
-  const leadSubmit = useInsertLead();
+  const leadUpdate = useUpdateLead();
+
+  const allLeads = useLeads();
+  const currentLead: LeadData | undefined = allLeads.data?.find((lead) => {
+    if (isString(leadId)) {
+      return lead.ReferenceTransaction_2361Id === parseInt(leadId);
+    } else if (Array.isArray(leadId)) {
+      return lead.ReferenceTransaction_2361Id === parseInt(leadId[0]);
+    }
+    return false;
+  });
+
+  function isString(value: unknown): value is string {
+    return typeof value === "string";
+  }
 
   const handleSubmit = async () => {
     try {
       const validatedForm = leadFormSchema.parse(form);
       setErrors({});
-      await leadSubmit.mutateAsync({
-        category: form.category,
+      await leadUpdate.mutateAsync({
+        ReferenceTransaction_2361Id:
+          currentLead?.ReferenceTransaction_2361Id || 0,
         currency: form.currency,
         customerCompanyName: form.customerCompanyName,
         contactPerson: form.contactPerson,
@@ -116,7 +144,7 @@ const m_newLead = () => {
         customerExistingMachine: form.customerExistingMachine,
         leadNote: form.leadNote,
       });
-      if (!leadSubmit.isError) {
+      if (!leadUpdate.isError) {
         clearForm();
       }
     } catch (error) {
@@ -146,21 +174,14 @@ const m_newLead = () => {
     <KeyboardAvoidingView behavior="padding">
       <View
         className={`${
-          leadSubmit.isPending ? "" : "hidden"
+          leadUpdate.isPending ? "" : "hidden"
         } z-50 bg-blue-100/40 absolute spinner h-screen w-screen flex justify-center items-center overflow-hidden`}
       >
         <ActivityIndicator size="large" />
       </View>
       <ScrollView keyboardShouldPersistTaps="handled">
-        {/* <Spinner visible={leadSubmit.isPending} /> */}
+        {/* <Spinner visible={leadUpdate.isPending} /> */}
         <View className="flex h-full mx-3 my-5">
-          <View className="px-3">
-            <Text className="text-3xl font-acumin_bold">New Lead</Text>
-            <Text className="text-muted text-sm text-gray-500 font-acumin">
-              Add a New Lead
-            </Text>
-            <Separator className="my-5 bg-gray-500" orientation="horizontal" />
-          </View>
           <View className="px-3">
             <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -181,12 +202,10 @@ const m_newLead = () => {
                   Doc No.
                 </Text>
                 <TextInput
+                  readOnly
                   keyboardType="numeric"
                   autoCorrect={false}
                   clearButtonMode="while-editing"
-                  onChangeText={(documentNo) =>
-                    setForm({ ...form, documentNo })
-                  }
                   placeholder="0"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
@@ -197,12 +216,7 @@ const m_newLead = () => {
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                   Doc. Date
                 </Text>
-                <Pressable
-                  onPress={() => {
-                    setDocDateVisible(true);
-                  }}
-                  className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center"
-                >
+                <View className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center">
                   <Ionicons
                     name="calendar-clear-outline"
                     color={"#222222"}
@@ -211,21 +225,7 @@ const m_newLead = () => {
                   <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
                     {form.documentDate.toLocaleDateString("en-GB")}
                   </Text>
-                  {isDocDateVisible && (
-                    <DateTimePicker
-                      mode="date"
-                      value={form.documentDate}
-                      display="default"
-                      onChange={(event, newDate) => {
-                        setForm({
-                          ...form,
-                          documentDate: newDate ? newDate : new Date(),
-                        });
-                        setDocDateVisible(false);
-                      }}
-                    />
-                  )}
-                </Pressable>
+                </View>
               </View>
             </View>
             <View className="mb-4">
@@ -545,4 +545,4 @@ const m_newLead = () => {
   );
 };
 
-export default m_newLead;
+export default m_editLead;

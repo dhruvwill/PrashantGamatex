@@ -1,15 +1,26 @@
-// dynamic route for one lead
-
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, Text } from "react-native";
+import React, { useEffect } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 
 const index = () => {
-  const { leadId } = useLocalSearchParams();
+  const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Edit Lead #" + leadId,
+      headerTitleStyle: {
+        fontFamily: "acumin",
+      },
+      headerTitleAlign: "center",
+      headerStyle: {
+        backgroundColor: "steelblue",
+      },
+    });
+  }, [leadId]);
+
   return (
     <View>
-      <Text>Lead Details : {leadId}</Text>
+      <Text>{leadId}</Text>
     </View>
   );
 };
