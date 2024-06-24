@@ -23,7 +23,6 @@ import {
 } from "~/constants/dropdowns";
 import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
-
 const m_newLead = () => {
   const [form, setForm] = useState({
     company: "",
@@ -93,20 +92,22 @@ const m_newLead = () => {
       customerExistingMachine: form.customerExistingMachine,
       leadNote: form.leadNote,
     });
-    console.log(leadSubmit.status);
     if (leadSubmit.isError) {
-      console.log("Error in adding lead", leadSubmit.error);
       Toast.show({
         type: "error",
-        text1: leadSubmit.error.errorMessage,
+        text1: "Error",
+        text2: leadSubmit.error.errorMessage,
+        text2Style: {
+          fontSize: 12,
+        },
         visibilityTime: 3000,
       });
     }
     if (leadSubmit.isSuccess) {
-      console.log("Lead Added Successfully");
       Toast.show({
         type: "success",
-        text1: "Lead Added Successfully",
+        text1: "Success",
+        text2: "Lead Added Successfully",
         visibilityTime: 3000,
       });
       clearForm();
