@@ -1,4 +1,4 @@
-type LeadInsertData = {
+export type LeadInsertData = {
   category: string;
   currency: string;
   customerCompanyName: string;
@@ -16,8 +16,7 @@ type LeadInsertData = {
   leadNote: string;
 };
 
-type LeadUpdateData = {
-  ReferenceTransaction_2361Id: number;
+export type LeadUpdateData = {
   currency: string;
   customerCompanyName: string;
   contactPerson: string;
@@ -34,9 +33,11 @@ type LeadUpdateData = {
   leadNote: string;
 };
 
-type LeadData = {
+export type LeadData = {
   DocumentDate: string;
   DocumentNo: number;
+  CategoryName: string;
+  CurrencyName: string;
   ReferenceTransaction_2361UDFId: number;
   ReferenceTransaction_2361Id: number;
   UDF_CompanyName_2361: string;

@@ -1,7 +1,7 @@
 import client from "~/api/client";
 import { useUserStore } from "~/store";
 import { ErrorResponse } from "~/types/auth";
-// // import { Lead, LeadResponse, ErrorResponse } from "~/types/lead";
+import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
 
 // export const getLeads = async (): Promise<any> => {
 //   try {
@@ -54,7 +54,7 @@ export const insertLead = async (data: LeadInsertData): Promise<any> => {
 
 export const updateLead = async (data: LeadUpdateData): Promise<any> => {
   try {
-    const response = await client.post("/user/lead/update", data, {
+    const response = await client.patch("/user/lead/update", data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + useUserStore.getState().user?.token,

@@ -10,6 +10,7 @@
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
     "start": "expo start -c",
+    "build:preview:android": "eas build -p android --profile preview",
     "eas-build-post-install": "tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css.native.css"
   },
   "dependencies": {

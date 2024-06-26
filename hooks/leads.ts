@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllLeads, insertLead, updateLead } from "~/services/lead";
 import { ErrorResponse } from "~/types/auth";
 import Toast from "react-native-toast-message";
+import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
 
 export const useLeads = () => {
   return useQuery<any, ErrorResponse, LeadData[]>({
@@ -42,7 +43,14 @@ export const useInsertLead = () => {
 
 export const useUpdateLead = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, ErrorResponse, LeadUpdateData>({
+  return useMutation<
+    unknown,
+    ErrorResponse,
+    LeadUpdateData & {
+      RecordId: number;
+      category: string;
+    }
+  >({
     mutationFn: updateLead,
     mutationKey: ["updateLead"],
     onSuccess: () => {

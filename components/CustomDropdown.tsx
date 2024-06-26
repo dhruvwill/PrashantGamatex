@@ -21,7 +21,7 @@ interface CustomDropdownProps {
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   title,
   itemsList,
-  onValueChange
+  onValueChange,
 }) => {
   const insets = useSafeAreaInsets();
   const contentInsets = {
@@ -51,9 +51,13 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         className="bg-white dark:bg-black outline-none border-0 my-1 min-w-96"
       >
         <SelectGroup>
-          <SelectLabel>{title}</SelectLabel>
           {itemsList.map((item: string, index) => (
-            <SelectItem key={index} label={item} value={item} onPress={() => handleValueChange(item)}>
+            <SelectItem
+              key={index}
+              label={item}
+              value={item}
+              onPress={() => handleValueChange(item)}
+            >
               {item}
             </SelectItem>
           ))}

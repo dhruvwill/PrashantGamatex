@@ -68,7 +68,7 @@ const m_leadList = () => {
           {allLeads.data?.map((lead: any, index: any) => (
             <LeadCard
               key={lead.ReferenceTransaction_2361Id}
-              leadId={lead.DocumentNo}
+              leadId={lead.ReferenceTransaction_2361Id}
               companyName={lead.UDF_CompanyName_2361}
               productList={lead.UDF_Product_2361}
               timeFrame={lead.UDF_TimeFrame_2361}
