@@ -9,9 +9,9 @@
 - [ ] User Attendance Marking
 - [ ] Leave Management Structure
 - [ ] Lead Inward and Follow up
-- [ ]Order status, review, & followup
-- [ ]Email sending provision for Followup and Quotation.
-- [ ]ToDo list & remainder Facility
-- [ ]Reminder with alarm and visit updates
-- [ ]User Data should link with ERP data update status.
-- [ ]Social Media Links in application.
+- [ ] Order status, review, & followup
+- [ ] Email sending provision for Followup and Quotation.
+- [ ] ToDo list & remainder Facility
+- [ ] Reminder with alarm and visit updates
+- [x] User Data should link with ERP data update status.
+- [ ] Social Media Links in application.

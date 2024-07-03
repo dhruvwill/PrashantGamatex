@@ -19,7 +19,7 @@ export const LeadSource = [
 ];
 
 export const Currency = [
-  "Rs",
+  "Rs.",
   "USD",
   "Euro",
   "CHF",

@@ -10,8 +10,9 @@ const _layout = () => {
           height: 65,
           paddingBottom: 10,
           paddingTop: 10,
-          marginBottom:5,
+          marginBottom: 5,
         },
+        tabBarActiveTintColor: "#000000",
       }}
     >
       <Tabs.Screen

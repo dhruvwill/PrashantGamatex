@@ -37,6 +37,7 @@ const m_newfollowup = () => {
     refNo: "",
     refDate: new Date(),
     partyname: "",
+    mobileNo: "",
     communicationperson: "",
     followupstartdatetime: new Date(),
     followupenddatetime: new Date(),
@@ -78,7 +79,6 @@ const m_newfollowup = () => {
       </View>
     );
   };
-  const [phone, setPhone] = useState("");
 
   const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isRefDateVisible, setRefDateVisible] = useState(false);

@@ -29,7 +29,8 @@ export const getAllLeads = async (): Promise<LeadData[]> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      throw { errorMessage: error.message } as ErrorResponse;
     }
   }
 };
@@ -47,7 +48,8 @@ export const insertLead = async (data: LeadInsertData): Promise<any> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      throw { errorMessage: error.message } as ErrorResponse;
     }
   }
 };
@@ -65,7 +67,8 @@ export const updateLead = async (data: LeadUpdateData): Promise<any> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      throw { errorMessage: error.message } as ErrorResponse;
     }
   }
 };

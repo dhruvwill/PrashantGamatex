@@ -16,7 +16,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      throw { errorMessage: error.name } as ErrorResponse;
     }
   }
 };
