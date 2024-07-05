@@ -4,10 +4,6 @@ export type LoginData = {
   company: "PrashantGamatex" | "WestPoint" | "Serber";
 };
 
-export type ErrorResponse = {
-  errorMessage: string;
-};
-
 export type AuthResponse = {
   payload: {
     uid: string;

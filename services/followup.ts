@@ -1,24 +1,13 @@
 import client from "~/api/client";
 import { useUserStore } from "~/store";
+import { SalesFollowupInsert, SalesInquiryFollowup } from "~/types/followup";
 import { ErrorResponse } from "~/types/query";
-import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
 
-// export const getLeads = async (): Promise<any> => {
-//   try {
-//     const response = await client.get("/leads");
-//     return response.data;
-//   } catch (error: any) {
-//     if (error.response && error.response.data) {
-//       throw { errorMessage: error.response.data.error } as any;
-//     } else {
-//       throw { errorMessage: "An unexpected error occurred" } as any;
-//     }
-//   }
-// };
-
-export const getAllLeads = async (): Promise<LeadData[]> => {
+export const getInquiryFollowups = async (): Promise<
+  SalesInquiryFollowup[]
+> => {
   try {
-    const response = await client.get("/user/lead/get", {
+    const response = await client.get("/user/followup/inquiry/get", {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + useUserStore.getState().user?.token,
@@ -29,15 +18,16 @@ export const getAllLeads = async (): Promise<LeadData[]> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
       throw { errorMessage: error.message } as ErrorResponse;
     }
   }
 };
 
-export const insertLead = async (data: LeadInsertData): Promise<any> => {
+export const getQuotationFollowups = async (): Promise<
+  SalesInquiryFollowup[]
+> => {
   try {
-    const response = await client.post("/user/lead/insert", data, {
+    const response = await client.get("/user/followup/quotation/get", {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + useUserStore.getState().user?.token,
@@ -48,26 +38,40 @@ export const insertLead = async (data: LeadInsertData): Promise<any> => {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
       throw { errorMessage: error.message } as ErrorResponse;
     }
   }
 };
 
-export const updateLead = async (data: LeadUpdateData): Promise<any> => {
+export const insertInquiryFollowup = async (data: SalesFollowupInsert) => {
   try {
-    const response = await client.patch("/user/lead/update", data, {
+    await client.post("/user/followup/inquiry/insert", data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + useUserStore.getState().user?.token,
       },
     });
-    return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
-      // throw { errorMessage: "An unexpected error occurred" } as ErrorResponse;
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};
+
+export const insertQuotationFollowup = async (data: SalesFollowupInsert) => {
+  try {
+    await client.post("/user/followup/quotation/insert", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
       throw { errorMessage: error.message } as ErrorResponse;
     }
   }

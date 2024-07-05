@@ -13,22 +13,9 @@ const _layout = () => {
           marginBottom: 5,
         },
         tabBarActiveTintColor: "#000000",
+        tabBarHideOnKeyboard: true,
       }}
     >
-      <Tabs.Screen
-        name="m_newFollowUp"
-        options={{
-          title: "New Follow-Up",
-          tabBarIcon: ({ color, focused, size }) =>
-            focused ? (
-              <Ionicons name="add-circle" size={size} />
-            ) : (
-              <Ionicons name="add-circle-outline" size={size} />
-            ),
-          headerShown: false,
-          tabBarIconStyle: { marginBottom: 5 },
-        }}
-      />
       <Tabs.Screen
         name="m_followUpList"
         options={{
@@ -53,6 +40,21 @@ const _layout = () => {
               <Ionicons name="document-text-outline" size={size} />
             ),
           headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="m_newFollowUp"
+        options={{
+          href: null,
+          title: "New Follow-Up",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Ionicons name="add-circle" size={size} />
+            ) : (
+              <Ionicons name="add-circle-outline" size={size} />
+            ),
+          headerShown: false,
+          tabBarIconStyle: { marginBottom: 5 },
         }}
       />
     </Tabs>

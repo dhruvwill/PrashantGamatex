@@ -133,7 +133,6 @@ const m_newLead = () => {
         });
         setErrors(newErrors);
       } else {
-        console.error(error);
         Toast.show({
           type: "error",
           text1: "Error",

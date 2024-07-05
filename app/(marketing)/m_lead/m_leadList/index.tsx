@@ -72,6 +72,7 @@ const m_leadList = () => {
               companyName={lead.UDF_CompanyName_2361}
               productList={lead.UDF_Product_2361}
               timeFrame={lead.UDF_TimeFrame_2361}
+              docDate={new Date(lead.DocumentDate)}
             />
           ))}
         </View>

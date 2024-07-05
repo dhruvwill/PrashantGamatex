@@ -1,5 +1,6 @@
 import client from "~/api/client";
-import { AuthResponse, LoginData, ErrorResponse } from "~/types/auth";
+import { AuthResponse, LoginData } from "~/types/auth";
+import { ErrorResponse } from "~/types/query";
 
 export const login = async (data: LoginData): Promise<AuthResponse> => {
   try {

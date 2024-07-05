@@ -3,7 +3,8 @@ import { login } from "~/services/auth";
 import { useUserStore } from "~/store";
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
-import { AuthResponse, LoginData, ErrorResponse } from "~/types/auth";
+import { AuthResponse, LoginData } from "~/types/auth";
+import { ErrorResponse } from "~/types/query";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
