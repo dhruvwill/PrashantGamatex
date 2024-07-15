@@ -6,12 +6,16 @@ import {
   ScrollView,
   Alert,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { z } from "zod";
 import CustomDropdown from "~/components/CustomDropdown";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import RNDateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";
 import { Label } from "~/components/ui/label";
@@ -19,18 +23,26 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { SalesFollowupInsert, SalesInquiryFollowup } from "~/types/followup";
 import { useUserStore } from "~/store";
 import Toast from "react-native-toast-message";
-import { useInsertInquiryFollowup } from "~/hooks/followup";
+import {
+  useCategoryList,
+  useDocumentNo,
+  useInsertInquiryFollowup,
+} from "~/hooks/followup";
+import { useConstants } from "~/hooks/const";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import client from "~/api/client";
+import { ErrorResponse } from "~/types/query";
 
 const m_newfollowup = () => {
   const store = useUserStore();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data } = useLocalSearchParams<{ data: string }>();
   const parsedData: SalesInquiryFollowup | undefined = JSON.parse(data || "{}");
 
   const followupInsert = useInsertInquiryFollowup();
 
-  const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
   const Ratings = [
     "Banking and land process",
     "Banking process pending",
@@ -44,6 +56,9 @@ const m_newfollowup = () => {
   const Closed = ["Close", "Hold", "Lost", "Received"];
 
   const followupFormSchema = z.object({
+    DocumentNo: z.number(),
+    DocumentDate: z.date(),
+    CategoryName: z.string().min(1, "Category is required"),
     SalesInquiryId: z.number(),
     SalesInquiryDetailsId: z.number(),
     SalesQuotationId: z.number(),
@@ -70,6 +85,9 @@ const m_newfollowup = () => {
   });
 
   const [form, setForm] = useState<SalesFollowupInsert>({
+    DocumentNo: 0,
+    DocumentDate: new Date(),
+    CategoryName: "",
     SalesInquiryId: parsedData?.SalesInquiryId || 0,
     SalesInquiryDetailsId: parsedData?.SalesInquiryDetailsId || 0,
     SalesQuotationId: 0,
@@ -90,6 +108,16 @@ const m_newfollowup = () => {
     DetailDescription: "",
     Rating: "",
   });
+
+  const doc = useDocumentNo(form.CategoryName);
+  useEffect(() => {
+    if (doc.data) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        DocumentNo: Number(doc.data.DocumentNo) || 0,
+      }));
+    }
+  }, [doc.data]);
 
   const [errors, setErrors] = useState<any>({});
 
@@ -149,6 +177,8 @@ const m_newfollowup = () => {
     );
   };
 
+  const [isDocumentDateVisible, setDocumentDateVisible] = useState(false);
+
   const [isFollowUpStartDateVisible, setFollowUpStartDateVisible] =
     useState(false);
   const [isFollowUpStartTimeVisible, setFollowUpStartTimeVisible] =
@@ -157,7 +187,10 @@ const m_newfollowup = () => {
   const [isFollowUpEndDateVisible, setFollowUpEndDateVisible] = useState(false);
   const [isFollowUpEndTimeVisible, setFollowUpEndTimeVisible] = useState(false);
 
-  const [isNextVisitOn, setNextVisitOn] = useState(false);
+  const [isNextDateVisible, setNextDateVisible] = useState(false);
+  const [isNextTimeVisible, setNextTimeVisible] = useState(false);
+
+  const category = useCategoryList();
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -174,9 +207,31 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Category
             </Text>
-            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
-              <Text>HO01</Text>
-            </View>
+            {category.isError && (
+              <Text className="text-red-500 text-sm mt-1">
+                {category.error?.errorMessage}
+              </Text>
+            )}
+            {category.isLoading && !category.isError ? (
+              <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <ActivityIndicator />
+                <Text>Fetching</Text>
+              </View>
+            ) : (
+              <CustomDropdown
+                title="Category"
+                itemsList={category.data.CategoryName.split(",")}
+                onValueChange={(value) => {
+                  setForm((prevForm) => ({
+                    ...prevForm,
+                    CategoryName: value,
+                  }));
+                  queryClient.invalidateQueries({
+                    queryKey: ["getFollowupDocumentNo"],
+                  });
+                }}
+              />
+            )}
           </View>
           <View className="mb-4 flex flex-row gap-2">
             <View className="flex-1">
@@ -184,25 +239,42 @@ const m_newfollowup = () => {
                 Doc No.
               </Text>
               <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
-                <Text>{parsedData?.DocumentNo}</Text>
+                <Text>{form.DocumentNo}</Text>
               </View>
             </View>
             <View className="flex-1 flex flex-col">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Doc. Date
               </Text>
-              <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center">
+              <Pressable
+                onPress={() => {
+                  setDocumentDateVisible(true);
+                }}
+                className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+              >
                 <Ionicons
                   name="calendar-clear-outline"
                   color={"#222222"}
                   size={20}
                 />
                 <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                  {new Date(parsedData?.DocumentDate || 0).toLocaleDateString(
-                    "en-GB"
-                  )}
+                  {form.DocumentDate.toLocaleDateString()}
                 </Text>
-              </View>
+              </Pressable>
+              {isDocumentDateVisible && (
+                <DateTimePicker
+                  mode="date"
+                  value={form.DocumentDate}
+                  display="default"
+                  onChange={(event, newDate) => {
+                    setForm({
+                      ...form,
+                      DocumentDate: newDate ? newDate : new Date(),
+                    });
+                    setDocumentDateVisible(false);
+                  }}
+                />
+              )}
             </View>
           </View>
           <View className="mb-4 flex flex-row gap-2">
@@ -518,7 +590,13 @@ const m_newfollowup = () => {
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                     Rating
                   </Text>
-                  <CustomDropdown title="Ratings" itemsList={Ratings} />
+                  <CustomDropdown
+                    title="Ratings"
+                    itemsList={Ratings}
+                    onValueChange={(value) => {
+                      setForm({ ...form, Rating: value });
+                    }}
+                  />
                 </View>
               )}
               {form.FollowupStatus === "Fix in New Visit" && (
@@ -530,39 +608,85 @@ const m_newfollowup = () => {
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
                       Next Visit On
                     </Text>
-                    <Pressable
-                      onPress={() => {
-                        setNextVisitOn(true);
-                      }}
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center flex-1"
-                    >
-                      <Ionicons
-                        name="calendar-clear-outline"
-                        color={"#222222"}
-                        size={20}
-                      />
-                      <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                        {form.FollowupEndDateTime.toLocaleDateString() +
-                          " " +
-                          form.FollowupEndDateTime.toLocaleTimeString()}
-                      </Text>
-                      {isNextVisitOn && (
-                        <RNDateTimePicker
-                          mode="datetime"
-                          value={form.FollowupEndDateTime}
-                          display="default"
-                          onChange={(event, newDate) => {
+                    <View className="flex-row justify-around gap-2">
+                      <Pressable
+                        onPress={() => {
+                          setNextDateVisible(true);
+                        }}
+                        className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+                      >
+                        <Ionicons
+                          name="calendar-clear-outline"
+                          color={"#222222"}
+                          size={20}
+                        />
+                        <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                          {form.NextVisitDateTime.toLocaleDateString()}
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => {
+                          setNextTimeVisible(true);
+                        }}
+                        className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+                      >
+                        <Ionicons
+                          name="time-outline"
+                          color={"#222222"}
+                          size={20}
+                        />
+                        <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                          {form.NextVisitDateTime.toLocaleTimeString()}
+                        </Text>
+                      </Pressable>
+                    </View>
+                    {isNextDateVisible && (
+                      <RNDateTimePicker
+                        mode="date"
+                        value={form.NextVisitDateTime}
+                        display="default"
+                        onChange={(event, newDate) => {
+                          setNextDateVisible(false);
+                          if (newDate) {
+                            const updatedDateTime = new Date(
+                              form.NextVisitDateTime
+                            );
+                            updatedDateTime.setFullYear(
+                              newDate.getFullYear(),
+                              newDate.getMonth(),
+                              newDate.getDate()
+                            );
                             setForm({
                               ...form,
-                              FollowupEndDateTime: newDate
-                                ? newDate
-                                : new Date(),
+                              NextVisitDateTime: updatedDateTime,
                             });
-                            setNextVisitOn(false);
-                          }}
-                        />
-                      )}
-                    </Pressable>
+                          }
+                        }}
+                      />
+                    )}
+                    {isNextTimeVisible && (
+                      <RNDateTimePicker
+                        mode="time"
+                        value={form.NextVisitDateTime}
+                        display="default"
+                        onChange={(event, newTime) => {
+                          setNextTimeVisible(false);
+                          if (newTime) {
+                            const updatedDateTime = new Date(
+                              form.NextVisitDateTime
+                            );
+                            updatedDateTime.setHours(
+                              newTime.getHours(),
+                              newTime.getMinutes()
+                            );
+                            setForm({
+                              ...form,
+                              NextVisitDateTime: updatedDateTime,
+                            });
+                          }
+                        }}
+                      />
+                    )}
                   </View>
                   <View className="mb-4">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -661,7 +785,13 @@ const m_newfollowup = () => {
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
                       Reason
                     </Text>
-                    <CustomDropdown title="Close" itemsList={Closed} />
+                    <CustomDropdown
+                      title="Close"
+                      itemsList={Closed}
+                      onValueChange={(value) => {
+                        setForm({ ...form, CloseReason: value });
+                      }}
+                    />
                   </View>
                   <View className="">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">

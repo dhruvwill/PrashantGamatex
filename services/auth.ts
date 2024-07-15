@@ -12,6 +12,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
     const response = await client.post("/auth/login", {
       user,
     });
+    console.log("auth data received", response.data);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {

@@ -212,7 +212,6 @@ export default function RootLayout() {
               headerTitleContainerStyle: {
                 height: "auto",
               },
-              headerShown: false,
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
                   <Ionicons name="information-circle" size={size} />

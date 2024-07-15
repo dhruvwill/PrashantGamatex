@@ -22,7 +22,7 @@ const m_followUpList = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [list, setList] = useState("inquiry");
 
-  const inquuiryFollowups = useInquiryFollowup();
+  const inquiryFollowups = useInquiryFollowup();
   const quotationFollowups = useQuotationFollowup();
   const queryClient = useQueryClient();
 
@@ -42,7 +42,9 @@ const m_followUpList = () => {
     >
       <View className="flex mx-3 my-5">
         <View className="px-3">
-          <Text className="text-3xl font-acumin_bold">List of Follow ups</Text>
+          <Text className="text-3xl font-acumin_bold">
+            List of Inquiry/Quotations
+          </Text>
           <Text className="text-muted text-sm font-acumin">
             Add a Follow up
           </Text>
@@ -101,23 +103,23 @@ const m_followUpList = () => {
         <View className="px-3 flex gap-3">
           {list == "inquiry" && (
             <>
-              {inquuiryFollowups.isLoading ? (
+              {inquiryFollowups.isLoading ? (
                 <View className="flex-1 justify-center items-center">
                   <ActivityIndicator size="large" color="#00ff00" />
                 </View>
               ) : null}
-              {inquuiryFollowups.error ? (
+              {inquiryFollowups.error ? (
                 <View className="flex-1 justify-center px-3 my-3">
                   <Text className="text-lg text-red-500 font-semibold">
                     Error
                   </Text>
                   <Text className="text-md text-red-500">
-                    {inquuiryFollowups.error.errorMessage ||
+                    {inquiryFollowups.error.errorMessage ||
                       "An unexpected error occurred, Please Try again later."}
                   </Text>
                 </View>
               ) : null}
-              {inquuiryFollowups.data?.length === 0 ? (
+              {inquiryFollowups.data?.length === 0 ? (
                 <View className="flex-1 justify-center px-3 my-3">
                   <Text className="text-lg text-gray-500 font-semibold">
                     No Inquiry Followups Found
@@ -128,9 +130,9 @@ const m_followUpList = () => {
                   </Text>
                 </View>
               ) : null}
-              {inquuiryFollowups.data?.map((followup: any, index: any) => (
+              {inquiryFollowups.data?.map((followup: any, index: any) => (
                 <Pressable
-                  key={followup.SalesInquiryId}
+                  key={index}
                   onPress={() => {
                     router.push({
                       pathname: "m_followup/m_followUpList/newInquiryFollowup",
@@ -150,6 +152,8 @@ const m_followUpList = () => {
               ))}
             </>
           )}
+        </View>
+        <View className="px-3 flex gap-3">
           {list == "quotation" && (
             <>
               {quotationFollowups.isLoading ? (
@@ -181,7 +185,7 @@ const m_followUpList = () => {
               ) : null}
               {quotationFollowups.data?.map((followup: any, index: any) => (
                 <Pressable
-                  key={followup.SalesQuotationId}
+                  key={index}
                   onPress={() => {
                     router.push({
                       pathname:

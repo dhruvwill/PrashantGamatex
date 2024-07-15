@@ -15,3 +15,17 @@
 - [ ] Reminder with alarm and visit updates
 - [x] User Data should link with ERP data update status.
 - [ ] Social Media Links in application.
+
+### Changes After Lead Testing
+
+- Contact person should be selected from Contacts. ### Done
+- Visiting card attachment
+- Hide Category
+- Document no shouldn't be focusable
+- Document Date should be editable
+- Currency should be by default selected
+- Product list table as per company
+- Add a lead source "existing customer"
+- Application list as per sowolink
+- Mandatory field with \* mark
+- Lead Note should be textarea

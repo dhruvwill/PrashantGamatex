@@ -8,23 +8,27 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import CustomDropdown from "~/components/CustomDropdown";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
-import { Ionicons } from "@expo/vector-icons";
-import { useInsertLead } from "~/hooks/leads";
-import {
-  Category,
-  LeadSource,
-  Currency,
-  TimeFrame,
-} from "~/constants/dropdowns";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { useDocumentNo, useInsertLead } from "~/hooks/leads";
 import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
+import client from "~/api/client";
 import { z } from "zod";
+import { useUserStore } from "~/store";
+import { useConstants } from "~/hooks/const";
+import { useQueryClient } from "@tanstack/react-query";
+import { Contact } from "~/types/contacts";
+import ContactPickerModal from "~/components/ContactPickerModal";
 const m_newLead = () => {
+  const constants = useConstants();
+  const queryClient = useQueryClient();
+
   const leadFormSchema = z.object({
     category: z.string().min(1, "Category is required"),
     currency: z.string().min(1, "Currency is required"),
@@ -92,7 +96,6 @@ const m_newLead = () => {
   const [isDocDateVisible, setDocDateVisible] = useState(false);
   const [isLeadRemindDate, setLeadRemindDate] = useState(false);
 
-  const router = useRouter();
   const leadSubmit = useInsertLead();
 
   const handleSubmit = async () => {
@@ -141,6 +144,30 @@ const m_newLead = () => {
       }
     }
   };
+
+  const doc = useDocumentNo(form.category);
+
+  useEffect(() => {
+    if (doc.data) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        documentNo: doc.data.DocumentNo || "",
+      }));
+    }
+  }, [doc.data]);
+
+  const [isContactPickerVisible, setIsContactPickerVisible] = useState(false);
+  const handleSelectContact = (contact: Contact) => {
+    if (contact.phoneNumbers && contact.phoneNumbers.length > 0) {
+      setForm((prev) => ({
+        ...prev,
+        mobileNo: contact.phoneNumbers![0].number || "",
+        contactPerson: `${contact.name}`.trim(),
+      }));
+    }
+    setIsContactPickerVisible(false);
+  };
+
   return (
     <KeyboardAvoidingView behavior="padding">
       <View
@@ -151,7 +178,6 @@ const m_newLead = () => {
         <ActivityIndicator size="large" />
       </View>
       <ScrollView keyboardShouldPersistTaps="handled">
-        {/* <Spinner visible={leadSubmit.isPending} /> */}
         <View className="flex h-full mx-3 my-5">
           <View className="px-3">
             <Text className="text-3xl font-acumin_bold">New Lead</Text>
@@ -165,11 +191,28 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Category
               </Text>
-              <CustomDropdown
-                title="Category"
-                itemsList={Category}
-                onValueChange={(value) => setForm({ ...form, category: value })}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <CustomDropdown
+                  title="Category"
+                  // itemsList={Category}
+                  itemsList={constants.data?.CategoryOutput.split(",") || []}
+                  onValueChange={(value) => {
+                    setForm((prevForm) => ({
+                      ...prevForm,
+                      category: value,
+                      documentNo: "",
+                    }));
+                    queryClient.invalidateQueries({
+                      queryKey: ["getLeadDocumentNo"],
+                    });
+                  }}
+                />
+              )}
               {errors.category && (
                 <Text className="text-red-500 mt-1">{errors.category}</Text>
               )}
@@ -183,19 +226,23 @@ const m_newLead = () => {
                   keyboardType="numeric"
                   autoCorrect={false}
                   clearButtonMode="while-editing"
-                  onChangeText={(documentNo) =>
-                    setForm({ ...form, documentNo })
-                  }
-                  placeholder="0"
+                  onChangeText={(documentNo) => {
+                    setForm({ ...form, documentNo });
+                  }}
+                  editable={false}
+                  placeholder="Document No"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
-                  value={form.documentNo}
+                  value={doc.data?.DocumentNo || form.documentNo}
                 />
               </View>
               <View className="flex-1 flex flex-col">
-                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Doc. Date
-                </Text>
+                <View className="flex flex-row">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                    Doc. Date
+                  </Text>
+                  <Text className="text-red-500">*</Text>
+                </View>
                 <Pressable
                   onPress={() => {
                     setDocDateVisible(true);
@@ -225,17 +272,49 @@ const m_newLead = () => {
                     />
                   )}
                 </Pressable>
+                {/* <View className="flex-row items-center h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <Text>{form.documentDate.toLocaleDateString("en-GB")}</Text>
+                </View> */}
               </View>
             </View>
             <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Currency
               </Text>
-              <CustomDropdown
-                title="Currency"
-                itemsList={Currency}
-                onValueChange={(value) => setForm({ ...form, currency: value })}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdown
+                    title="Currency"
+                    itemsList={constants.data?.CurrencyOutput.split(",") || []}
+                    onValueChange={(value) =>
+                      setForm({ ...form, currency: value })
+                    }
+                  />
+                  <CustomDropdownV2
+                    options={[
+                      { value: "USD", label: "USD" },
+                      { value: "INR", label: "INR" },
+                      { value: "EUR", label: "EUR" },
+                      { value: "GBP", label: "GBP" },
+                      { value: "JPY", label: "JPY" },
+                      { value: "AUD", label: "AUD" },
+                      { value: "CAD", label: "CAD" },
+                      { value: "CHF", label: "CHF" },
+                      { value: "CNY", label: "CNY" },
+                      { value: "SEK", label: "SEK" },
+                      { value: "NZD", label: "NZD" },
+                      { value: "KRW", label: "KRW" },
+                    ]}
+                    placeholder="Currency"
+                    onChange={(value) => setForm({ ...form, currency: value })}
+                  />
+                </>
+              )}
               {errors.currency && (
                 <Text className="text-red-500 mt-1">{errors.currency}</Text>
               )}
@@ -267,19 +346,30 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Contact person
               </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(contactPerson) =>
-                  setForm({ ...form, contactPerson })
-                }
-                placeholder="Contact Person Name"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.contactPerson ? "border-red-500" : ""
-                }`}
-                value={form.contactPerson}
-              />
+              <View className="flex-row items-center justify-between gap-2">
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(contactPerson) =>
+                    setForm({ ...form, contactPerson })
+                  }
+                  placeholder="Contact Person Name"
+                  placeholderTextColor="#6b7280"
+                  className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
+                    errors.contactPerson ? "border-red-500" : ""
+                  } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
+                  value={form.contactPerson}
+                />
+                <Pressable
+                  onPress={() => setIsContactPickerVisible(true)}
+                  className="border p-2 px-3 rounded-lg flex items-center justify-center"
+                >
+                  {/* <Ionicons name="person" size={24} color="white" /> */}
+                  {/* <AntDesign name="contacts" size={24} color="white" /> */}
+                  <MaterialIcons name="contacts" size={24} color="black" />
+                </Pressable>
+              </View>
+
               {errors.contactPerson && (
                 <Text className="text-red-500 mt-1">
                   {errors.contactPerson}
@@ -369,13 +459,20 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Lead Source
               </Text>
-              <CustomDropdown
-                title="Lead Source"
-                itemsList={LeadSource}
-                onValueChange={(value) =>
-                  setForm({ ...form, leadSource: value })
-                }
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <CustomDropdown
+                  title="Lead Source"
+                  itemsList={constants.data?.LeadSourceOutput.split(",") || []}
+                  onValueChange={(value) =>
+                    setForm({ ...form, leadSource: value })
+                  }
+                />
+              )}
               {errors.leadSource && (
                 <Text className="text-red-500 mt-1">{errors.leadSource}</Text>
               )}
@@ -405,13 +502,20 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Time Frame
               </Text>
-              <CustomDropdown
-                title="Time Frame"
-                itemsList={TimeFrame}
-                onValueChange={(value) =>
-                  setForm({ ...form, timeFrame: value })
-                }
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <CustomDropdown
+                  title="Time Frame"
+                  itemsList={constants.data?.TimeFrameOutput.split(",") || []}
+                  onValueChange={(value) =>
+                    setForm({ ...form, timeFrame: value })
+                  }
+                />
+              )}
               {errors.timeFrame && (
                 <Text className="text-red-500 mt-1">{errors.timeFrame}</Text>
               )}
@@ -526,10 +630,10 @@ const m_newLead = () => {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  // router.replace("homepage");
                   handleSubmit();
                 }}
               >
+                {/* Hello */}
                 <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
                   <Text className=" text-lg font-semibold text-white">
                     Submit
@@ -540,6 +644,11 @@ const m_newLead = () => {
           </View>
         </View>
       </ScrollView>
+      <ContactPickerModal
+        isVisible={isContactPickerVisible}
+        onClose={() => setIsContactPickerVisible(false)}
+        onSelectContact={handleSelectContact}
+      />
     </KeyboardAvoidingView>
   );
 };

@@ -127,6 +127,9 @@ export type QuotationFollowupInsert = {
   quantity: number;
 };
 export type SalesFollowupInsert = {
+  DocumentNo: number;
+  DocumentDate: Date;
+  CategoryName: string;
   SalesInquiryId: number;
   SalesInquiryDetailsId: number;
   SalesQuotationId: number;

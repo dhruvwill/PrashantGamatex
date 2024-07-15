@@ -1,8 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllLeads, insertLead, updateLead } from "~/services/lead";
+import {
+  getAllLeads,
+  getDocumentNo,
+  insertLead,
+  updateLead,
+} from "~/services/lead";
 import { ErrorResponse } from "~/types/query";
 import Toast from "react-native-toast-message";
 import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
+import { useUserStore } from "~/store";
 
 export const useLeads = () => {
   return useQuery<any, ErrorResponse, LeadData[]>({
@@ -18,7 +24,7 @@ export const useInsertLead = () => {
     mutationKey: ["insertLead"],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["getAllLeads"],
+        queryKey: ["getAllLeads", "getLeadDocumentNo"],
       });
       Toast.show({
         type: "success",
@@ -75,5 +81,15 @@ export const useUpdateLead = () => {
         visibilityTime: 3000,
       });
     },
+  });
+};
+
+export const useDocumentNo = (categoryName: string) => {
+  const token = useUserStore((state) => state.user?.token);
+
+  return useQuery({
+    queryKey: ["getLeadDocumentNo"],
+    queryFn: () => getDocumentNo(token, categoryName),
+    enabled: !!token && !!categoryName,
   });
 };

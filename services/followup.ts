@@ -76,3 +76,44 @@ export const insertQuotationFollowup = async (data: SalesFollowupInsert) => {
     }
   }
 };
+
+export const getDocumentNo = async (
+  token: string | undefined,
+  categoryName: string
+): Promise<any> => {
+  try {
+    const response = await client.get("/const/get/documentno/followup", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      params: {
+        CategoryName: categoryName,
+      },
+    });
+    return response.data[0];
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};
+
+export const getCategories = async (token: string | undefined) => {
+  try {
+    const response = await client.get("/const/get/category/followup", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data[0];
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};

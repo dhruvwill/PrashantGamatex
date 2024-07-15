@@ -13,7 +13,7 @@ export const useLogin = () => {
 
   return useMutation<AuthResponse, ErrorResponse, LoginData>({
     mutationFn: login,
-    mutationKey: ["login"],
+    mutationKey: undefined,
     onSuccess: (data) => {
       setUser({
         data: {
@@ -24,10 +24,10 @@ export const useLogin = () => {
         },
         token: data.token,
       });
+      router.replace("m_homepage");
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });
-      router.replace("m_homepage");
     },
   });
 };
@@ -36,6 +36,10 @@ export const useLogout = () => {
   const clearUser = useUserStore((state) => state.clearUser);
   const clearToken = useUserStore((state) => state.clearToken);
   const router = useRouter();
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries({
+    queryKey: ["auth"],
+  });
 
   const logout = () => {
     clearUser();

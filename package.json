@@ -25,6 +25,7 @@
     "@react-native-community/datetimepicker": "^8.0.1",
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.0.2",
+    "@rn-primitives/dialog": "^1.0.3",
     "@rn-primitives/slot": "^1.0.3",
     "@rn-primitives/tabs": "^1.0.3",
     "@rn-primitives/types": "^1.0.3",
@@ -33,6 +34,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "^51.0.8",
+    "expo-contacts": "^13.0.4",
     "expo-font": "~12.0.6",
     "expo-linking": "~6.3.1",
     "expo-navigation-bar": "~3.0.4",
@@ -60,7 +62,8 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "expo-image": "~1.12.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

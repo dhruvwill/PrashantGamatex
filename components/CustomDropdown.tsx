@@ -48,7 +48,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       </SelectTrigger>
       <SelectContent
         insets={contentInsets}
-        className="bg-white dark:bg-black outline-none border-0 my-1 min-w-96"
+        className="bg-white dark:bg-black border-0 my-1 min-w-96"
       >
         <SelectGroup>
           {itemsList.map((item: string, index) => (

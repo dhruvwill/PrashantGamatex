@@ -72,3 +72,27 @@ export const updateLead = async (data: LeadUpdateData): Promise<any> => {
     }
   }
 };
+
+export const getDocumentNo = async (
+  token: string | undefined,
+  categoryName: string
+): Promise<any> => {
+  try {
+    const response = await client.get("/const/get/documentno/lead", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      params: {
+        CategoryName: categoryName,
+      },
+    });
+    return response.data[0];
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};

@@ -1,11 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import {
+  getCategories,
+  getDocumentNo,
   getInquiryFollowups,
   getQuotationFollowups,
   insertInquiryFollowup,
   insertQuotationFollowup,
 } from "~/services/followup";
+import { useUserStore } from "~/store";
 import {
   SalesFollowupInsert,
   SalesInquiryFollowup,
@@ -39,7 +42,7 @@ export const useInsertInquiryFollowup = () => {
       Toast.show({
         type: "success",
         text1: "Success",
-        text2: "Lead Added Successfully",
+        text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
     },
@@ -69,7 +72,7 @@ export const useInsertQuotationFollowup = () => {
       Toast.show({
         type: "success",
         text1: "Success",
-        text2: "Lead Added Successfully",
+        text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
     },
@@ -84,5 +87,25 @@ export const useInsertQuotationFollowup = () => {
         visibilityTime: 3000,
       });
     },
+  });
+};
+
+export const useCategoryList = () => {
+  const token = useUserStore((state) => state.user?.token);
+
+  return useQuery<any, ErrorResponse, any>({
+    queryKey: ["getCategoryList"],
+    queryFn: () => getCategories(token),
+    enabled: !!token,
+  });
+};
+
+export const useDocumentNo = (categoryName: string) => {
+  const token = useUserStore((state) => state.user?.token);
+
+  return useQuery({
+    queryKey: ["getFollowupDocumentNo"],
+    queryFn: () => getDocumentNo(token, categoryName),
+    enabled: !!token && !!categoryName,
   });
 };

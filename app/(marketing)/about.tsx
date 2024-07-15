@@ -1,56 +1,95 @@
-import { View, Text, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, Link } from 'expo-router';
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Pressable,
+  Linking,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const about = () => {
-    const navigation = useNavigation()
-    const toggletoHome = () => {
-        navigation.navigate('m_homepage' as never)
-    }
-    return (
+const AboutPage = () => {
+  const openLink = (url: string) => {
+    Linking.openURL(url);
+  };
 
-        <SafeAreaView>
-            <View className='p-3 rounded-b-3xl' style={{ backgroundColor: "#0267B1dd" }}>
-                <View className='flex flex-row items-center'>
-                    <Ionicons name="chevron-back-outline" size={18} />
-                    <Text onPress={() => toggletoHome()} className='text-xl font-semibold'>Home</Text>
+  return (
+    <ScrollView className="flex-1 bg-gray-50">
+      <View className="py-12 px-6">
+        <View className="items-center mb-8">
+          <Image
+            source={require("assets/images/logo.png")}
+            className="w-32 h-32 rounded-full"
+          />
+          <Text className="text-3xl font-bold mt-4 text-gray-800">
+            Our Company
+          </Text>
+          <Text className="text-lg text-gray-600 mt-2">
+            Innovating for a better tomorrow
+          </Text>
+        </View>
+
+        <View className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <Text className="text-xl font-semibold mb-4 text-gray-800">
+            Our Mission
+          </Text>
+          <Text className="text-gray-600 leading-relaxed">
+            We strive to create innovative solutions that improve people's lives
+            and contribute to a sustainable future. Our team is dedicated to
+            pushing the boundaries of technology while maintaining the highest
+            standards of quality and ethics.
+          </Text>
+        </View>
+
+        <View className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <Text className="text-xl font-semibold mb-4 text-gray-800">
+            Our Values
+          </Text>
+          <View className="space-y-4">
+            {["Innovation", "Integrity", "Collaboration", "Excellence"].map(
+              (value, index) => (
+                <View key={index} className="flex-row items-center">
+                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
+                  <Text className="text-gray-700 ml-2 text-lg">{value}</Text>
                 </View>
-                <View className='flex items-center mt-5 gap-8'>
-                    <View className='w-[200px] h-[200px] overflow-hidden rounded-[40px]'>
-                        <Image
-                            style={{ width: "100%", height: "100%" }}
-                            source={require("~/assets/images/logo.png")}
-                        />
-                    </View>
-                    <View className='flex flex-row gap-10'>
-                        <Link href='#'>
-                            <Ionicons name="logo-instagram" size={40} />
-                        </Link>
-                        <Link href='#'>
+              )
+            )}
+          </View>
+        </View>
 
-                            <Ionicons name="logo-linkedin" size={40} />
-                        </Link>
-                        <Link href='#'>
-                            <Ionicons name="logo-facebook" size={40} />
+        <View className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <Text className="text-xl font-semibold mb-4 text-gray-800">
+            Connect With Us
+          </Text>
+          <View className="flex-row justify-around">
+            <Pressable
+              onPress={() => openLink("https://twitter.com/ourcompany")}
+            >
+              <Ionicons name={"logo-twitter"} size={32} color="#4F46E5" />
+            </Pressable>
+            <Pressable
+              onPress={() => openLink("https://twitter.com/ourcompany")}
+            >
+              <Ionicons name={"logo-linkedin"} size={32} color="#4F46E5" />
+            </Pressable>
+            <Pressable
+              onPress={() => openLink("https://twitter.com/ourcompany")}
+            >
+              <Ionicons name={"logo-instagram"} size={32} color="#4F46E5" />
+            </Pressable>
+          </View>
+        </View>
 
-                        </Link>
-                        <Link href='#'>
-                            <Ionicons name="logo-twitter" size={40} />
-                        </Link>
-                    </View>
-                </View>
-            </View>
-            <View className='m-5 flex gap-3'>
-                <View>
-                    <Text className='text-5xl'>About Us</Text>
-                </View>
-                <View>
-                    <Text>PRASHANT GROUP, established in 1975, is one of India's prominent and fast growing Textile Machine manufacturing companies. The Group has co-operations with leading European and American textile machine manufacturing companies which bring an edge in updated technology and enhancement in product profile.</Text>
-                </View>
-            </View>
-        </SafeAreaView>
-    )
-}
+        <Pressable
+          className="bg-indigo-600 py-3 px-6 rounded-full self-center"
+          onPress={() => openLink("https://ourcompany.com/contact")}
+        >
+          <Text className="text-white font-semibold text-lg">Contact Us</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  );
+};
 
-export default about
+export default AboutPage;
