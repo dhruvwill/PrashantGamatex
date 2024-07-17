@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { View } from "react-native";
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -35,59 +36,66 @@ export default function CustomDropdown({
     right: 12,
   };
 
+  useEffect(() => {
+    if (defaultValue && onChange) {
+      onChange(defaultValue.value);
+    }
+  }, []);
   return (
-    <Select
-      defaultValue={
-        defaultValue
-          ? { value: defaultValue.value, label: defaultValue.label }
-          : options[0]
-      }
-      onValueChange={(option) => {
-        if (onChange) {
-          onChange(option!.value);
+    <ScrollView className="max-h-[80px]">
+      <Select
+        defaultValue={
+          defaultValue
+            ? { value: defaultValue.value, label: defaultValue.label }
+            : options[0]
         }
-      }}
-    >
-      <SelectTrigger className="w-[250px]">
-        <SelectValue
-          className="text-foreground text-sm native:text-lg"
-          placeholder={placeholder}
-        />
-      </SelectTrigger>
-      <SelectContent
-        insets={contentInsets}
-        className="bg-white dark:bg-black border-0 my-1 min-w-96"
+        onValueChange={(option) => {
+          if (onChange) {
+            onChange(option!.value);
+          }
+        }}
       >
-        <ScrollView className="max-h-32">
-          <SelectGroup>
-            {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
-            {/* <SelectItem label="Apple" value="apple">
-            Apple
-          </SelectItem>
-          <SelectItem label="Banana" value="banana">
-            Banana
-          </SelectItem>
-          <SelectItem label="Blueberry" value="blueberry">
-            Blueberry
-          </SelectItem>
-          <SelectItem label="Grapes" value="grapes">
-            Grapes
-          </SelectItem>
-          <SelectItem label="Pineapple" value="pineapple">
-            Pineapple
-          </SelectItem> */}
-            {options.map((option) => (
-              <SelectItem
-                key={option.value}
-                label={option.label}
-                value={option.value}
-              >
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </ScrollView>
-      </SelectContent>
-    </Select>
+        <SelectTrigger className="w-full">
+          <SelectValue
+            className="text-foreground text-sm native:text-lg"
+            placeholder={placeholder}
+          />
+        </SelectTrigger>
+        <SelectContent
+          insets={contentInsets}
+          className="bg-white dark:bg-black border-0 my-1 w-full mx-3"
+        >
+          <ScrollView className="max-h-32">
+            <SelectGroup>
+              {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
+              {/* <SelectItem label="Apple" value="apple">
+              Apple
+            </SelectItem>
+            <SelectItem label="Banana" value="banana">
+              Banana
+            </SelectItem>
+            <SelectItem label="Blueberry" value="blueberry">
+              Blueberry
+            </SelectItem>
+            <SelectItem label="Grapes" value="grapes">
+              Grapes
+            </SelectItem>
+            <SelectItem label="Pineapple" value="pineapple">
+              Pineapple
+            </SelectItem> */}
+              {options.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </ScrollView>
+        </SelectContent>
+      </Select>
+    </ScrollView>
   );
 }

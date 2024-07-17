@@ -7,16 +7,17 @@ import {
   Pressable,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import CustomDropdown from "~/components/CustomDropdown";
+import { Textarea } from "~/components/ui/textarea";
 import CustomDropdownV2 from "~/components/CustomDropdownV2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
-import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useDocumentNo, useInsertLead } from "~/hooks/leads";
-import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
 import client from "~/api/client";
 import { z } from "zod";
@@ -25,6 +26,9 @@ import { useConstants } from "~/hooks/const";
 import { useQueryClient } from "@tanstack/react-query";
 import { Contact } from "~/types/contacts";
 import ContactPickerModal from "~/components/ContactPickerModal";
+import * as ImagePicker from "expo-image-picker";
+import { LeadInsertData } from "~/types/lead";
+
 const m_newLead = () => {
   const constants = useConstants();
   const queryClient = useQueryClient();
@@ -45,6 +49,7 @@ const m_newLead = () => {
     customerApplication: z.string().optional(),
     customerExistingMachine: z.string().optional(),
     leadNote: z.string().optional(),
+    attachments: z.array(z.any()).optional(),
   });
 
   const [form, setForm] = useState({
@@ -66,6 +71,7 @@ const m_newLead = () => {
     leadRemindDate: new Date(),
     customerApplication: "",
     customerExistingMachine: "",
+    attachments: [],
   });
 
   const clearForm = () => {
@@ -88,6 +94,7 @@ const m_newLead = () => {
       leadRemindDate: new Date(),
       customerApplication: "",
       customerExistingMachine: "",
+      attachments: [],
     });
   };
 
@@ -102,27 +109,27 @@ const m_newLead = () => {
     try {
       const validatedForm = leadFormSchema.parse(form);
       setErrors({});
-      await leadSubmit.mutateAsync({
-        category: form.category,
-        currency: form.currency,
-        customerCompanyName: form.customerCompanyName,
-        contactPerson: form.contactPerson,
-        designation: form.designation,
-        mobileNo: form.mobileNo,
-        emailId: form.emailId,
-        product: form.product,
-        leadSource: form.leadSource,
-        competition: form.competition,
-        timeFrame: form.timeFrame,
-        leadRemindDate: form.leadRemindDate,
-        customerApplication: form.customerApplication,
-        customerExistingMachine: form.customerExistingMachine,
-        leadNote: form.leadNote,
+      const formData: any = new FormData();
+      (Object.keys(form) as Array<keyof LeadInsertData>).forEach((key) => {
+        if (key !== "attachments") {
+          formData.append(key, form[key].toString());
+        }
       });
+
+      form.attachments.forEach((file: any, index: number) => {
+        formData.append("attachments", {
+          uri: file.uri,
+          type: file.mimeType || "image/jpeg", // You might want to determine the correct MIME type
+          name: `attachment_${index}.jpg`,
+        });
+      });
+
+      console.log("Form: ", formData);
+      await leadSubmit.mutateAsync(formData);
       if (!leadSubmit.isError) {
         clearForm();
       }
-    } catch (error) {
+    } catch (error: z.ZodError | any) {
       if (error instanceof z.ZodError) {
         // Handle validation errors
         const newErrors: any = {};
@@ -134,12 +141,13 @@ const m_newLead = () => {
           text1: "Error",
           text2: "Please fill all the required fields",
         });
+        console.log("Validation Errors: ", newErrors);
         setErrors(newErrors);
       } else {
         Toast.show({
           type: "error",
           text1: "Error",
-          text2: "An unexpected error occurred",
+          text2: error.message,
         });
       }
     }
@@ -166,6 +174,37 @@ const m_newLead = () => {
       }));
     }
     setIsContactPickerVisible(false);
+  };
+
+  const pickImages = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsMultipleSelection: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setForm(
+          (prevForm) =>
+            ({
+              ...prevForm,
+              attachments: [...prevForm.attachments, ...result.assets],
+            } as any)
+        );
+      }
+    } catch (err) {
+      console.error("Error picking images:", err);
+    }
+  };
+  const removeImage = (index: number) => {
+    setForm(
+      (prevForm) =>
+        ({
+          ...prevForm,
+          attachments: prevForm.attachments.filter((_, i) => i !== index),
+        } as any)
+    );
   };
 
   return (
@@ -272,15 +311,15 @@ const m_newLead = () => {
                     />
                   )}
                 </Pressable>
-                {/* <View className="flex-row items-center h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <Text>{form.documentDate.toLocaleDateString("en-GB")}</Text>
-                </View> */}
               </View>
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Currency
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Currency
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               {constants.isLoading ? (
                 <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
@@ -288,30 +327,27 @@ const m_newLead = () => {
                 </View>
               ) : (
                 <>
-                  <CustomDropdown
-                    title="Currency"
-                    itemsList={constants.data?.CurrencyOutput.split(",") || []}
-                    onValueChange={(value) =>
-                      setForm({ ...form, currency: value })
-                    }
-                  />
                   <CustomDropdownV2
-                    options={[
-                      { value: "USD", label: "USD" },
-                      { value: "INR", label: "INR" },
-                      { value: "EUR", label: "EUR" },
-                      { value: "GBP", label: "GBP" },
-                      { value: "JPY", label: "JPY" },
-                      { value: "AUD", label: "AUD" },
-                      { value: "CAD", label: "CAD" },
-                      { value: "CHF", label: "CHF" },
-                      { value: "CNY", label: "CNY" },
-                      { value: "SEK", label: "SEK" },
-                      { value: "NZD", label: "NZD" },
-                      { value: "KRW", label: "KRW" },
-                    ]}
+                    options={
+                      constants.data?.CurrencyOutput.split(",").map(
+                        (currency) => ({
+                          value: currency,
+                          label: currency,
+                        })
+                      ) || []
+                    }
+                    defaultValue={
+                      constants.data?.CurrencyOutput.split(",").map(
+                        (currency) => ({
+                          value: currency,
+                          label: currency,
+                        })
+                      )[0]
+                    }
                     placeholder="Currency"
-                    onChange={(value) => setForm({ ...form, currency: value })}
+                    onChange={(value) => {
+                      setForm({ ...form, currency: value });
+                    }}
                   />
                 </>
               )}
@@ -320,9 +356,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Customer Company name
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Customer Company name
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
@@ -343,9 +382,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Contact person
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Contact person
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <View className="flex-row items-center justify-between gap-2">
                 <TextInput
                   autoCorrect={false}
@@ -364,8 +406,6 @@ const m_newLead = () => {
                   onPress={() => setIsContactPickerVisible(true)}
                   className="border p-2 px-3 rounded-lg flex items-center justify-center"
                 >
-                  {/* <Ionicons name="person" size={24} color="white" /> */}
-                  {/* <AntDesign name="contacts" size={24} color="white" /> */}
                   <MaterialIcons name="contacts" size={24} color="black" />
                 </Pressable>
               </View>
@@ -377,9 +417,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Designation
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Designation
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
@@ -398,9 +441,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Mobile No.
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Mobile No.
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <TextInput
                 keyboardType="phone-pad"
                 autoCorrect={false}
@@ -418,9 +464,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Email Id
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Email Id
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
@@ -437,9 +486,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Product
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Product
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <TextInput
                 autoCorrect={false}
                 clearButtonMode="while-editing"
@@ -456,9 +508,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Lead Source
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Lead Source
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               {constants.isLoading ? (
                 <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
@@ -499,9 +554,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Time Frame
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Time Frame
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               {constants.isLoading ? (
                 <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
@@ -521,9 +579,12 @@ const m_newLead = () => {
               )}
             </View>
             <View className="flex-1 flex flex-col mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Lead Remind Date
-              </Text>
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Lead Remind Date
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
               <Pressable
                 onPress={() => {
                   setLeadRemindDate(true);
@@ -611,19 +672,52 @@ const m_newLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Lead Note
               </Text>
-              <TextInput
+              <Textarea
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(leadNote) => setForm({ ...form, leadNote })}
-                placeholder="Enter Lead Notes"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.leadNote ? "border-red-500" : ""
+                placeholder="Enter Lead Notes.."
+                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  errors.leadNote ? "border border-red-500" : ""
                 }`}
+                placeholderClassName="text-base text-muted"
                 value={form.leadNote}
+                onChangeText={(leadNote) => setForm({ ...form, leadNote })}
+                aria-labelledby="textareaLabel"
               />
               {errors.leadNote && (
                 <Text className="text-red-500 mt-1">{errors.leadNote}</Text>
+              )}
+            </View>
+            <View className="mb-4">
+              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                Attachments
+              </Text>
+              <TouchableOpacity onPress={pickImages}>
+                <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg flex-row items-center">
+                  <Ionicons name="document" size={24} color="#007aff" />
+                  <Text className="text-blue-500 text-base font-medium ml-2">
+                    Select Images
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              {form.attachments.length > 0 && (
+                <ScrollView horizontal className="mt-4">
+                  {form.attachments.map(
+                    (file: { uri: string }, index: number) => (
+                      <View key={index} className="mr-4 relative">
+                        <Image
+                          source={{ uri: file.uri }}
+                          className="w-20 h-20 rounded-md"
+                        />
+                        <View className="absolute top-1 right-1 bg-red-500 rounded-full p-1">
+                          <TouchableOpacity onPress={() => removeImage(index)}>
+                            <Ionicons name="close" size={16} color="white" />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )
+                  )}
+                </ScrollView>
               )}
             </View>
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />

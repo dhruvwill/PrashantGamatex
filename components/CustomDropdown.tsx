@@ -11,6 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Separator } from "./ui/separator";
+import { ScrollView } from "react-native";
 
 interface CustomDropdownProps {
   title: string;

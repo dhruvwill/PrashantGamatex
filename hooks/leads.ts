@@ -19,7 +19,7 @@ export const useLeads = () => {
 
 export const useInsertLead = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, ErrorResponse, LeadInsertData>({
+  return useMutation<unknown, ErrorResponse, LeadInsertData & FormData>({
     mutationFn: insertLead,
     mutationKey: ["insertLead"],
     onSuccess: () => {

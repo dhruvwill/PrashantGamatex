@@ -9,6 +9,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
       password: data.password,
       company: data.company,
     };
+    console.log("auth data sent", user);
     const response = await client.post("/auth/login", {
       user,
     });

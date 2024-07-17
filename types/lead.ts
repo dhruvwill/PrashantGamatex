@@ -14,6 +14,7 @@ export type LeadInsertData = {
   customerApplication: string;
   customerExistingMachine: string;
   leadNote: string;
+  attachments: Array<{ uri: string; mimeType: string; name: string }>;
 };
 
 export type LeadUpdateData = {

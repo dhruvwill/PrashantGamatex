@@ -21,11 +21,11 @@
 - Contact person should be selected from Contacts. ### Done
 - Visiting card attachment
 - Hide Category
-- Document no shouldn't be focusable
-- Document Date should be editable
-- Currency should be by default selected
+- Document no shouldn't be focusable ### Done
+- Document Date should be editable ### Done
+- Currency should be by default selected ### Done
 - Product list table as per company
 - Add a lead source "existing customer"
 - Application list as per sowolink
 - Mandatory field with \* mark
-- Lead Note should be textarea
+- Lead Note should be textarea ### Done

@@ -35,14 +35,21 @@ export const getAllLeads = async (): Promise<LeadData[]> => {
   }
 };
 
-export const insertLead = async (data: LeadInsertData): Promise<any> => {
+export const insertLead = async (
+  data: LeadInsertData & FormData
+): Promise<any> => {
   try {
+    console.log("sending data: ", data);
     const response = await client.post("/user/lead/insert", data, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + useUserStore.getState().user?.token,
       },
+      transformRequest: (data, headers) => {
+        return data;
+      },
     });
+    console.log("response", response);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
