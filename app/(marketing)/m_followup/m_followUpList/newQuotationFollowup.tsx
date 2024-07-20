@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { z } from "zod";
+import { set, z } from "zod";
 import CustomDropdown from "~/components/CustomDropdown";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -27,6 +27,8 @@ import {
   useInsertQuotationFollowup,
 } from "~/hooks/followup";
 import { useQueryClient } from "@tanstack/react-query";
+import CheckboxWithLabel from "~/components/CheckboxWithLabel";
+import Checkbox from "expo-checkbox";
 
 const m_newfollowup = () => {
   const store = useUserStore();
@@ -54,9 +56,9 @@ const m_newfollowup = () => {
   const Closed = ["Close", "Hold", "Lost", "Received"];
 
   const followupFormSchema = z.object({
-    DocumentNo: z.number(),
+    // DocumentNo: z.number(),
     DocumentDate: z.date(),
-    CategoryName: z.string().min(1, "Category is required"),
+    // CategoryName: z.string().min(1, "Category is required"),
     SalesInquiryId: z.number(),
     SalesInquiryDetailsId: z.number(),
     SalesQuotationId: z.number(),
@@ -68,6 +70,11 @@ const m_newfollowup = () => {
     ModeOfContact: z
       .string()
       .min(1, "Mode of Contact is required to be selected"),
+    documentSent: z.object({
+      offer: z.boolean(),
+      layout: z.boolean(),
+      pi: z.boolean(),
+    }),
     FollowupStatus: z
       .string()
       .min(1, "Follow Up Status is required to be selected"),
@@ -83,9 +90,9 @@ const m_newfollowup = () => {
   });
 
   const [form, setForm] = useState<SalesFollowupInsert>({
-    DocumentNo: 0,
+    // DocumentNo: 0,
     DocumentDate: new Date(),
-    CategoryName: "",
+    // CategoryName: "",
     SalesInquiryId: 0,
     SalesInquiryDetailsId: parsedData?.SalesInquiryDetailsId || 0,
     SalesQuotationId: parsedData?.SalesQuotationId || 0,
@@ -95,6 +102,11 @@ const m_newfollowup = () => {
     VisitTo: "",
     FollowupDetails: "",
     ModeOfContact: "Phone",
+    documentSent: {
+      offer: false,
+      layout: false,
+      pi: false,
+    },
     FollowupStatus: "Not Now",
     VisitorPerson: store?.user?.data.name || "",
     NextVisitDateTime: new Date(),
@@ -109,15 +121,15 @@ const m_newfollowup = () => {
 
   const [errors, setErrors] = useState<any>({});
 
-  const doc = useDocumentNo(form.CategoryName);
-  useEffect(() => {
-    if (doc.data) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        DocumentNo: Number(doc.data.DocumentNo) || 0,
-      }));
-    }
-  }, [doc.data]);
+  // const doc = useDocumentNo(form.CategoryName);
+  // useEffect(() => {
+  //   if (doc.data) {
+  //     setForm((prevForm) => ({
+  //       ...prevForm,
+  //       DocumentNo: Number(doc.data.DocumentNo) || 0,
+  //     }));
+  //   }
+  // }, [doc.data]);
 
   const handleSubmit = async () => {
     try {
@@ -201,7 +213,7 @@ const m_newfollowup = () => {
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
         </View>
         <View className="px-3">
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Category
             </Text>
@@ -230,19 +242,19 @@ const m_newfollowup = () => {
                 }}
               />
             )}
-          </View>
+          </View> */}
           <View className="mb-4 flex flex-row gap-2">
-            <View className="flex-1">
+            {/* <View className="flex-1">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Doc No.
               </Text>
               <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
                 <Text>{form.DocumentNo}</Text>
               </View>
-            </View>
+            </View> */}
             <View className="flex-1 flex flex-col">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Doc. Date
+                Followup Date
               </Text>
               <Pressable
                 onPress={() => {
@@ -275,7 +287,7 @@ const m_newfollowup = () => {
               )}
             </View>
           </View>
-          <View className="mb-4 flex flex-row gap-2">
+          {/* <View className="mb-4 flex flex-row gap-2">
             <View className="flex-1">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Ref No.
@@ -301,7 +313,7 @@ const m_newfollowup = () => {
                 </Text>
               </View>
             </View>
-          </View>
+          </View> */}
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Machine name
@@ -318,15 +330,15 @@ const m_newfollowup = () => {
               <Text>{parsedData?.PartyName}</Text>
             </View>
           </View>
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Communication By
             </Text>
             <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
               <Text>{form.VisitorPerson}</Text>
             </View>
-          </View>
-          <View className="mb-4">
+          </View> */}
+          {/* <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Follow Up Start Date Time
             </Text>
@@ -477,10 +489,11 @@ const m_newfollowup = () => {
                 }}
               />
             )}
-          </View>
+          </View> */}
           {/* <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Communication With
+
             </Text>
             <TextInput
               autoCorrect={false}
@@ -557,7 +570,7 @@ const m_newfollowup = () => {
                 className="flex flex-row gap-3 font-acumin font-semibold"
               >
                 <RadioGroupItemWithLabel
-                  value="Personally"
+                  value="Visit"
                   onLabelPress={onLabelPressMode("Personally")}
                 />
                 {/* Expense Form */}
@@ -570,6 +583,70 @@ const m_newfollowup = () => {
                   onLabelPress={onLabelPressMode("By Mail")}
                 />
               </RadioGroup>
+            </View>
+          </View>
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Document Sent
+            </Text>
+            <View className="flex-row gap-4">
+              <CheckboxWithLabel
+                value="Offer"
+                checked={form.documentSent.offer}
+                onValueChange={(checked) => {
+                  setForm({
+                    ...form,
+                    documentSent: { ...form.documentSent, offer: checked },
+                  });
+                }}
+                onLabelPress={() => {
+                  setForm({
+                    ...form,
+                    documentSent: {
+                      ...form.documentSent,
+                      offer: !form.documentSent.offer,
+                    },
+                  });
+                }}
+              />
+              <CheckboxWithLabel
+                value="Layout"
+                checked={form.documentSent.layout}
+                onValueChange={(checked) => {
+                  setForm({
+                    ...form,
+                    documentSent: { ...form.documentSent, layout: checked },
+                  });
+                }}
+                onLabelPress={() => {
+                  setForm({
+                    ...form,
+                    documentSent: {
+                      ...form.documentSent,
+                      layout: !form.documentSent.layout,
+                    },
+                  });
+                }}
+              />
+              <CheckboxWithLabel
+                value="PI"
+                checked={form.documentSent.pi}
+                onValueChange={(checked) => {
+                  setForm({
+                    ...form,
+                    documentSent: { ...form.documentSent, pi: checked },
+                  });
+                }}
+                onLabelPress={() => {
+                  setForm({
+                    ...form,
+                    documentSent: {
+                      ...form.documentSent,
+                      pi: !form.documentSent.pi,
+                    },
+                  });
+                }}
+              />
             </View>
           </View>
           <View className="mb-4">
@@ -750,7 +827,7 @@ const m_newfollowup = () => {
                   </View>
                   <View className="">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                      Attention On
+                      Special Note
                     </Text>
                     <TextInput
                       editable
@@ -762,7 +839,7 @@ const m_newfollowup = () => {
                       onChangeText={(attentionon) =>
                         setForm({ ...form, AttentionDetails: attentionon })
                       }
-                      placeholder="Attention On"
+                      placeholder="Special Note"
                       placeholderTextColor="#6b7280"
                       className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.AttentionDetails}

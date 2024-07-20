@@ -133,7 +133,7 @@ const m_newfollowup = () => {
             </View>
             <View className="flex-1 flex flex-col">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Doc. Date
+                Doc Date
               </Text>
               <Pressable
                 onPress={() => {

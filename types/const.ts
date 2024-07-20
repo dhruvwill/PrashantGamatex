@@ -3,4 +3,6 @@ type ConstData = {
   TimeFrameOutput: string;
   CurrencyOutput: string;
   CategoryOutput: string;
+  ProductOutput: string;
+  ApplicationOutput: string;
 };

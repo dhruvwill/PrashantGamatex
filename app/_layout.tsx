@@ -13,6 +13,7 @@ import { useFonts } from "expo-font";
 import { useThemeStore } from "~/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -28,7 +29,7 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
-// Prevent the splash screen from auto-hiding before getting the color scheme.
+// Prevent the splash screen from auto-hiding before getting the color scheme. .
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -60,23 +61,25 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={selectedTheme}>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen
-            name="(marketing)"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="signin"
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack>
-        <Toast />
-        <PortalHost />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          <Stack>
+            <Stack.Screen
+              name="(marketing)"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="signin"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+          <Toast />
+          <PortalHost />
+        </GestureHandlerRootView>
       </ThemeProvider>
     </QueryClientProvider>
   );

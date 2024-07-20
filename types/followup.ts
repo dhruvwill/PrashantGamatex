@@ -127,9 +127,9 @@ export type QuotationFollowupInsert = {
   quantity: number;
 };
 export type SalesFollowupInsert = {
-  DocumentNo: number;
+  // DocumentNo: number;
   DocumentDate: Date;
-  CategoryName: string;
+  // CategoryName: string;
   SalesInquiryId: number;
   SalesInquiryDetailsId: number;
   SalesQuotationId: number;
@@ -139,6 +139,11 @@ export type SalesFollowupInsert = {
   FollowupDetails: string;
   FollowupStatus: string;
   ModeOfContact: string;
+  documentSent: {
+    offer: boolean;
+    layout: boolean;
+    pi: boolean;
+  };
   VisitTo: string;
   VisitorPerson: string;
   NextVisitDateTime: Date;

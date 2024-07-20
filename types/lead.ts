@@ -1,6 +1,7 @@
 export type LeadInsertData = {
-  category: string;
+  // category: string;
   currency: string;
+  documentDate: Date;
   customerCompanyName: string;
   contactPerson: string;
   designation: string;

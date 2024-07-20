@@ -13,7 +13,7 @@ import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useUpdateLead, useLeads } from "~/hooks/leads";
 import {
   Category,
@@ -21,11 +21,17 @@ import {
   Currency,
   TimeFrame,
 } from "~/constants/dropdowns";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 import { LeadData, LeadUpdateData } from "~/types/lead";
 import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
+import { useConstants } from "~/hooks/const";
+import { Contact } from "~/types/contacts";
+import ContactPickerModal from "~/components/ContactPickerModal";
+import { Textarea } from "~/components/ui/textarea";
 const m_editLead = () => {
+  const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
   const navigation = useNavigation();
 
@@ -98,6 +104,18 @@ const m_editLead = () => {
     return typeof value === "string";
   }
 
+  const [isContactPickerVisible, setIsContactPickerVisible] = useState(false);
+  const handleSelectContact = (contact: Contact) => {
+    if (contact.phoneNumbers && contact.phoneNumbers.length > 0) {
+      setForm((prev) => ({
+        ...prev,
+        mobileNo: contact.phoneNumbers![0].number || "",
+        contactPerson: `${contact.name}`.trim(),
+      }));
+    }
+    setIsContactPickerVisible(false);
+  };
+
   const handleSubmit = async () => {
     try {
       const validatedForm = leadFormSchema.parse(form);
@@ -155,7 +173,7 @@ const m_editLead = () => {
         {/* <Spinner visible={leadUpdate.isPending} /> */}
         <View className="flex h-full mx-3 my-5">
           <View className="px-3">
-            <View className="mb-4">
+            {/* <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Category
               </Text>
@@ -169,7 +187,7 @@ const m_editLead = () => {
                 className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                 value={currentLead?.CategoryName || ""}
               />
-            </View>
+            </View> */}
             <View className="mb-4 flex flex-row gap-2">
               <View className="flex-1">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -206,11 +224,33 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Currency
               </Text>
-              <CustomDropdown
-                title={currentLead?.CurrencyName || ""}
-                itemsList={Currency}
-                onValueChange={(value) => setForm({ ...form, currency: value })}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdownV2
+                    options={
+                      constants.data?.CurrencyOutput.split(",").map(
+                        (currency: any) => ({
+                          value: currency,
+                          label: currency,
+                        })
+                      ) || []
+                    }
+                    defaultValue={{
+                      value: currentLead?.CurrencyName || "",
+                      label: currentLead?.CurrencyName || "",
+                    }}
+                    placeholder="Currency"
+                    onChange={(value) => {
+                      setForm({ ...form, currency: value });
+                    }}
+                  />
+                </>
+              )}
               {errors.currency && (
                 <Text className="text-red-500 mt-1">{errors.currency}</Text>
               )}
@@ -242,19 +282,27 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Contact person
               </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(contactPerson) =>
-                  setForm({ ...form, contactPerson })
-                }
-                placeholder="Contact Person Name"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.contactPerson ? "border-red-500" : ""
-                }`}
-                value={form.contactPerson}
-              />
+              <View className="flex-row items-center justify-between gap-2">
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(contactPerson) =>
+                    setForm({ ...form, contactPerson })
+                  }
+                  placeholder="Contact Person Name"
+                  placeholderTextColor="#6b7280"
+                  className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
+                    errors.contactPerson ? "border-red-500" : ""
+                  } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
+                  value={form.contactPerson}
+                />
+                <Pressable
+                  onPress={() => setIsContactPickerVisible(true)}
+                  className="border p-2 px-3 rounded-lg flex items-center justify-center"
+                >
+                  <MaterialIcons name="contacts" size={24} color="black" />
+                </Pressable>
+              </View>
               {errors.contactPerson && (
                 <Text className="text-red-500 mt-1">
                   {errors.contactPerson}
@@ -325,17 +373,33 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Product
               </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(product) => setForm({ ...form, product })}
-                placeholder="Product"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.product ? "border-red-500" : ""
-                }`}
-                value={form.product}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdownV2
+                    options={
+                      constants.data?.ProductOutput.split(",").map(
+                        (product) => ({
+                          value: product,
+                          label: product,
+                        })
+                      ) || []
+                    }
+                    defaultValue={{
+                      value: form.product,
+                      label: form.product,
+                    }}
+                    placeholder="Products"
+                    onChange={(value) => {
+                      setForm({ ...form, product: value });
+                    }}
+                  />
+                </>
+              )}
               {errors.product && (
                 <Text className="text-red-500 mt-1">{errors.product}</Text>
               )}
@@ -436,19 +500,33 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Customer Application
               </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(customerApplication) =>
-                  setForm({ ...form, customerApplication })
-                }
-                placeholder="Enter Customer Application"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.customerApplication ? "border-red-500" : ""
-                }`}
-                value={form.customerApplication}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdownV2
+                    options={
+                      constants.data?.ApplicationOutput.split(",").map(
+                        (application) => ({
+                          value: application,
+                          label: application,
+                        })
+                      ) || []
+                    }
+                    defaultValue={{
+                      value: form.customerApplication,
+                      label: form.customerApplication,
+                    }}
+                    placeholder="Applications"
+                    onChange={(value) => {
+                      setForm({ ...form, customerApplication: value });
+                    }}
+                  />
+                </>
+              )}
               {errors.customerApplication && (
                 <Text className="text-red-500 mt-1">
                   {errors.customerApplication}
@@ -482,16 +560,17 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Lead Note
               </Text>
-              <TextInput
+              <Textarea
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(leadNote) => setForm({ ...form, leadNote })}
-                placeholder="Enter Lead Notes"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.leadNote ? "border-red-500" : ""
+                placeholder="Enter Lead Notes.."
+                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  errors.leadNote ? "border border-red-500" : ""
                 }`}
+                placeholderClassName="text-base text-muted"
                 value={form.leadNote}
+                onChangeText={(leadNote) => setForm({ ...form, leadNote })}
+                aria-labelledby="textareaLabel"
               />
               {errors.leadNote && (
                 <Text className="text-red-500 mt-1">{errors.leadNote}</Text>
@@ -515,6 +594,11 @@ const m_editLead = () => {
           </View>
         </View>
       </ScrollView>
+      <ContactPickerModal
+        isVisible={isContactPickerVisible}
+        onClose={() => setIsContactPickerVisible(false)}
+        onSelectContact={handleSelectContact}
+      />
     </KeyboardAvoidingView>
   );
 };

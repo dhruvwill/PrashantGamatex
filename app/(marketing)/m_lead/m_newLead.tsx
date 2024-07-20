@@ -32,10 +32,10 @@ import { LeadInsertData } from "~/types/lead";
 const m_newLead = () => {
   const constants = useConstants();
   const queryClient = useQueryClient();
-
+  const router = useRouter();
   const leadFormSchema = z.object({
-    category: z.string().min(1, "Category is required"),
     currency: z.string().min(1, "Currency is required"),
+    documentDate: z.date(),
     customerCompanyName: z.string().min(1, "Customer Company Name is required"),
     contactPerson: z.string().min(1, "Contact Person is required"),
     designation: z.string().min(1, "Designation is required"),
@@ -53,9 +53,6 @@ const m_newLead = () => {
   });
 
   const [form, setForm] = useState({
-    company: "",
-    category: "",
-    documentNo: "",
     documentDate: new Date(),
     currency: "",
     customerCompanyName: "",
@@ -76,9 +73,6 @@ const m_newLead = () => {
 
   const clearForm = () => {
     setForm({
-      company: "",
-      category: "",
-      documentNo: "",
       documentDate: new Date(),
       currency: "",
       customerCompanyName: "",
@@ -119,7 +113,7 @@ const m_newLead = () => {
       form.attachments.forEach((file: any, index: number) => {
         formData.append("attachments", {
           uri: file.uri,
-          type: file.mimeType || "image/jpeg", // You might want to determine the correct MIME type
+          type: file.mimeType,
           name: `attachment_${index}.jpg`,
         });
       });
@@ -153,16 +147,15 @@ const m_newLead = () => {
     }
   };
 
-  const doc = useDocumentNo(form.category);
-
-  useEffect(() => {
-    if (doc.data) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        documentNo: doc.data.DocumentNo || "",
-      }));
-    }
-  }, [doc.data]);
+  // const doc = useDocumentNo(form.category);
+  // useEffect(() => {
+  //   if (doc.data) {
+  //     setForm((prevForm) => ({
+  //       ...prevForm,
+  //       documentNo: doc.data.DocumentNo || "",
+  //     }));
+  //   }
+  // }, [doc.data]);
 
   const [isContactPickerVisible, setIsContactPickerVisible] = useState(false);
   const handleSelectContact = (contact: Contact) => {
@@ -226,7 +219,7 @@ const m_newLead = () => {
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />
           </View>
           <View className="px-3">
-            <View className="mb-4">
+            {/* <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Category
               </Text>
@@ -255,9 +248,9 @@ const m_newLead = () => {
               {errors.category && (
                 <Text className="text-red-500 mt-1">{errors.category}</Text>
               )}
-            </View>
+            </View> */}
             <View className="mb-4 flex flex-row gap-2">
-              <View className="flex-1">
+              {/* <View className="flex-1">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                   Doc No.
                 </Text>
@@ -274,7 +267,7 @@ const m_newLead = () => {
                   className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                   value={doc.data?.DocumentNo || form.documentNo}
                 />
-              </View>
+              </View> */}
               <View className="flex-1 flex flex-col">
                 <View className="flex flex-row">
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -311,6 +304,11 @@ const m_newLead = () => {
                     />
                   )}
                 </Pressable>
+                {errors.documentDate && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.documentDate}
+                  </Text>
+                )}
               </View>
             </View>
             <View className="mb-4">
@@ -335,14 +333,6 @@ const m_newLead = () => {
                           label: currency,
                         })
                       ) || []
-                    }
-                    defaultValue={
-                      constants.data?.CurrencyOutput.split(",").map(
-                        (currency) => ({
-                          value: currency,
-                          label: currency,
-                        })
-                      )[0]
                     }
                     placeholder="Currency"
                     onChange={(value) => {
@@ -492,17 +482,30 @@ const m_newLead = () => {
                 </Text>
                 <Text className="text-red-500">*</Text>
               </View>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(product) => setForm({ ...form, product })}
-                placeholder="Product"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.product ? "border-red-500" : ""
-                }`}
-                value={form.product}
-              />
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdownV2
+                    options={
+                      constants.data?.ProductOutput.split(",").map(
+                        (product) => ({
+                          value: product,
+                          label: product,
+                        })
+                      ) || []
+                    }
+                    placeholder="Products"
+                    onChange={(value) => {
+                      setForm({ ...form, product: value });
+                    }}
+                  />
+                </>
+              )}
+              {/* sdkfh */}
               {errors.product && (
                 <Text className="text-red-500 mt-1">{errors.product}</Text>
               )}
@@ -593,6 +596,7 @@ const m_newLead = () => {
                   errors.leadRemindDate ? "border-red-500" : ""
                 }`}
               >
+                {/*  */}
                 <Ionicons
                   name="calendar-clear-outline"
                   color={"#222222"}
@@ -623,22 +627,34 @@ const m_newLead = () => {
               )}
             </View>
             <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Customer Application
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(customerApplication) =>
-                  setForm({ ...form, customerApplication })
-                }
-                placeholder="Enter Customer Application"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.customerApplication ? "border-red-500" : ""
-                }`}
-                value={form.customerApplication}
-              />
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Customer Application
+                </Text>
+              </View>
+              {constants.isLoading ? (
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <ActivityIndicator />
+                  <Text>Fetching</Text>
+                </View>
+              ) : (
+                <>
+                  <CustomDropdownV2
+                    options={
+                      constants.data?.ApplicationOutput.split(",").map(
+                        (application) => ({
+                          value: application,
+                          label: application,
+                        })
+                      ) || []
+                    }
+                    placeholder="Applications"
+                    onChange={(value) => {
+                      setForm({ ...form, customerApplication: value });
+                    }}
+                  />
+                </>
+              )}
               {errors.customerApplication && (
                 <Text className="text-red-500 mt-1">
                   {errors.customerApplication}
