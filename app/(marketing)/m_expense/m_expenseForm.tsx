@@ -20,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import { ExpenseForm, ExpenseItem } from "~/types/expense";
 import { useExpenseInsert } from "~/hooks/expense";
 import { useConstants } from "~/hooks/const";
+import Toast from "react-native-toast-message";
 
 const M_ExpenseForm: React.FC = () => {
   const expense = useExpenseInsert();
@@ -70,8 +71,6 @@ const M_ExpenseForm: React.FC = () => {
           });
         }
       });
-
-      console.log("FormData created:", formData);
 
       await expense.mutateAsync(formData);
 

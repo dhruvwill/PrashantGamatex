@@ -112,7 +112,7 @@ const m_newfollowup = () => {
     VisitorPerson: store?.user?.data.name || "",
     NextVisitDateTime: new Date(),
     NextVisitPerson: "",
-    NextVisitorPerson: "",
+    NextVisitorPerson: store?.user?.data.name || "",
     AttentionDetails: "",
     OrderGoesParty: "",
     CloseReason: "",
@@ -786,7 +786,7 @@ const m_newfollowup = () => {
                       value={form.NextVisitPerson}
                     />
                   </View>
-                  <View className="mb-4">
+                  {/* <View className="mb-4">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                       Next Communication By
                     </Text>
@@ -808,7 +808,7 @@ const m_newfollowup = () => {
                       className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.NextVisitorPerson}
                     />
-                  </View>
+                  </View> */}
                   <View className="">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                       Special Note

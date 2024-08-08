@@ -101,6 +101,7 @@ export default function RootLayout() {
               marginLeft: -10,
             },
             drawerActiveTintColor: "steelblue",
+            swipeEdgeWidth: 100,
           }}
           initialRouteName="m_homepage"
           drawerContent={CustomDrawerContent}

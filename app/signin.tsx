@@ -32,15 +32,15 @@ export default function Example() {
 
   const companies = [
     {
-      name: "Prashant Gamatex",
+      name: "Prashant Gamatex Pvt. Ltd.",
       value: "PrashantGamatex",
     },
     {
-      name: "Prashant WestPoint",
+      name: "Prashant WestPoint Machinery Pvt. Ltd.",
       value: "WestPoint",
     },
     {
-      name: "Prashant Ferber",
+      name: "Prashant Ferber Logistics Pvt. Ltd.",
       value: "Ferber",
     },
   ];
