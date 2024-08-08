@@ -5,4 +5,5 @@ type ConstData = {
   CategoryOutput: string;
   ProductOutput: string;
   ApplicationOutput: string;
+  ExpenseOutput: string;
 };

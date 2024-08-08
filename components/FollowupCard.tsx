@@ -2,6 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { cn } from "~/lib/utils";
 
 const FollowupCard = ({
   partyName,
@@ -9,16 +10,23 @@ const FollowupCard = ({
   docNo,
   docDate,
   quantity,
+  className,
 }: {
   partyName: string;
   itemName: string;
   docNo: number;
   docDate: Date;
   quantity: number;
+  className?: string;
 }) => {
   const router = useRouter();
   return (
-    <View className="w-full bg-white shadow-md rounded-lg overflow-hidden border">
+    <View
+      className={cn(
+        "w-full bg-white shadow-md rounded-lg overflow-hidden border",
+        className
+      )}
+    >
       <View className="p-4">
         <View className="flex-row justify-between items-center mb-2">
           <Text className="text-xs text-gray-500 font-semibold">#{docNo}</Text>

@@ -10,7 +10,7 @@ const _layout = () => {
           height: 65,
           paddingBottom: 10,
           paddingTop: 10,
-          marginBottom:5,
+          marginBottom: 5,
         },
       }}
     >
@@ -26,6 +26,19 @@ const _layout = () => {
             ),
           headerShown: false,
           tabBarIconStyle: { marginBottom: 5 },
+        }}
+      />
+      <Tabs.Screen
+        name="m_expenseList"
+        options={{
+          title: "Expense List",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Ionicons name="document-text" size={size} />
+            ) : (
+              <Ionicons name="document-text-outline" size={size} />
+            ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen

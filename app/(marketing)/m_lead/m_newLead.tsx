@@ -73,17 +73,14 @@ const m_newLead = () => {
 
   const clearForm = () => {
     setForm({
+      ...form,
       documentDate: new Date(),
-      currency: "",
       customerCompanyName: "",
       contactPerson: "",
       designation: "",
       mobileNo: "",
       emailId: "",
-      product: "",
-      leadSource: "",
       competition: "",
-      timeFrame: "",
       leadNote: "",
       leadRemindDate: new Date(),
       customerApplication: "",

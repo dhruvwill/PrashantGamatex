@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, ScrollView } from "react-native";
+import { FlatList, Pressable, ScrollView } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator } from "~/components/ui/separator";
@@ -34,11 +34,11 @@ const m_followUpList = () => {
     setRefreshing(false);
   };
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+    <View
+    // keyboardShouldPersistTaps="handled"
+    // refreshControl={
+    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    // }
     >
       <View className="flex mx-3 my-5">
         <View className="px-3">
@@ -80,7 +80,7 @@ const m_followUpList = () => {
             </Pressable>
           </View>
         </View>
-        {/* <Tabs
+        <Tabs
           value={list}
           onValueChange={setList}
           className="w-full max-w-[400px] flex-col gap-1.5"
@@ -99,7 +99,7 @@ const m_followUpList = () => {
           <TabsContent value="quotation">
             <Text>List of Quotation Follow-ups</Text>
           </TabsContent>
-        </Tabs> */}
+        </Tabs>
         <View className="px-3 flex gap-3">
           {list == "inquiry" && (
             <>
@@ -130,7 +130,41 @@ const m_followUpList = () => {
                   </Text>
                 </View>
               ) : null}
-              {inquiryFollowups.data?.map((followup: any, index: any) => (
+              {inquiryFollowups.data?.length! > 0 && (
+                <FlatList
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      className="my-2"
+                    />
+                  }
+                  data={inquiryFollowups.data}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      onPress={() => {
+                        router.push({
+                          pathname:
+                            "m_followup/m_followUpList/newInquiryFollowup",
+                          params: { data: JSON.stringify(item) },
+                        });
+                      }}
+                    >
+                      <FollowupCard
+                        key={item.SalesInquiryId}
+                        partyName={item.PartyName}
+                        itemName={item.MachineName}
+                        quantity={item.Quantity}
+                        docNo={item.DocumentNo}
+                        docDate={new Date(item.DocumentDate)}
+                        className="my-2"
+                      />
+                    </Pressable>
+                  )}
+                />
+              )}
+              {/* {inquiryFollowups.data?.map((followup: any, index: any) => (
                 <Pressable
                   key={index}
                   onPress={() => {
@@ -149,7 +183,7 @@ const m_followUpList = () => {
                     docDate={new Date(followup.DocumentDate)}
                   />
                 </Pressable>
-              ))}
+              ))} */}
             </>
           )}
         </View>
@@ -183,32 +217,45 @@ const m_followUpList = () => {
                   </Text>
                 </View>
               ) : null}
-              {quotationFollowups.data?.map((followup: any, index: any) => (
-                <Pressable
-                  key={index}
-                  onPress={() => {
-                    router.push({
-                      pathname:
-                        "m_followup/m_followUpList/newQuotationFollowup",
-                      params: { data: JSON.stringify(followup) },
-                    });
-                  }}
-                >
-                  <FollowupCard
-                    key={followup.SalesQuotationId}
-                    partyName={followup.PartyName}
-                    itemName={followup.MachineName}
-                    quantity={followup.Quantity}
-                    docNo={followup.DocumentNo}
-                    docDate={new Date(followup.DocumentDate)}
-                  />
-                </Pressable>
-              ))}
+              {quotationFollowups.data?.length! > 0 && (
+                <FlatList
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      className="my-2"
+                    />
+                  }
+                  data={quotationFollowups.data}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      onPress={() => {
+                        router.push({
+                          pathname:
+                            "m_followup/m_followUpList/newQuotationFollowup",
+                          params: { data: JSON.stringify(item) },
+                        });
+                      }}
+                    >
+                      <FollowupCard
+                        key={item.SalesQuotationId}
+                        partyName={item.PartyName}
+                        itemName={item.MachineName}
+                        quantity={item.Quantity}
+                        docNo={item.DocumentNo}
+                        docDate={new Date(item.DocumentDate)}
+                        className="my-2"
+                      />
+                    </Pressable>
+                  )}
+                />
+              )}
             </>
           )}
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

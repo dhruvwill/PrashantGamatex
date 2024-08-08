@@ -36,12 +36,12 @@ export default function Example() {
       value: "PrashantGamatex",
     },
     {
-      name: "West Point",
+      name: "Prashant WestPoint",
       value: "WestPoint",
     },
     {
-      name: "Serber",
-      value: "Serber",
+      name: "Prashant Ferber",
+      value: "Ferber",
     },
   ];
 
