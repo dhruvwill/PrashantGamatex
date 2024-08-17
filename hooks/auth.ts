@@ -24,7 +24,7 @@ export const useLogin = () => {
         },
         token: data.token,
       });
-      router.replace("m_homepage");
+      router.replace("/m_homepage");
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });
@@ -44,7 +44,7 @@ export const useLogout = () => {
   const logout = () => {
     clearUser();
     clearToken();
-    router.replace("signin");
+    router.replace("/signin");
   };
 
   return logout;
@@ -59,7 +59,7 @@ export const useAuth = () => {
     if (user && user.token) {
       setIsAuthenticated(true);
     } else {
-      router.replace("signin");
+      router.replace("/signin");
     }
   }, [user]);
 

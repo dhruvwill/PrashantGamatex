@@ -3,23 +3,18 @@ import {
   FlatList,
   Pressable,
   ScrollView,
-  SafeAreaView,
   KeyboardAvoidingView,
 } from "react-native";
 import { View } from "react-native";
 import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Text } from "~/components/ui/text";
-import { Label } from "~/components/ui/label";
 import { RefreshControl } from "react-native";
 import FollowupCard from "~/components/FollowupCard";
-import { TouchableOpacity } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInquiryFollowup, useQuotationFollowup } from "~/hooks/followup";
 import { ActivityIndicator } from "react-native";
-import { set } from "zod";
-import { SalesInquiryFollowup, SalesQuotationFollowup } from "~/types/followup";
 
 const m_followUpList = () => {
   const router = useRouter();
@@ -106,7 +101,7 @@ const m_followUpList = () => {
               <Text>List of Quotation Follow-ups</Text>
             </TabsContent>
           </Tabs>
-          <View className="px-3 pb-10 flex-grow gap-3 h-max">
+          <View className="px-3 pb-10 flex-grow gap-3">
             {list == "inquiry" && (
               <>
                 {inquiryFollowups.isLoading ? (
@@ -153,7 +148,7 @@ const m_followUpList = () => {
                         onPress={() => {
                           router.push({
                             pathname:
-                              "m_followup/m_followUpList/newInquiryFollowup",
+                              "/(marketing)/m_followup/m_followUpList/newInquiryFollowup",
                             params: { data: JSON.stringify(item) },
                           });
                         }}
@@ -220,7 +215,7 @@ const m_followUpList = () => {
                         onPress={() => {
                           router.push({
                             pathname:
-                              "m_followup/m_followUpList/newQuotationFollowup",
+                              "/(marketing)/m_followup/m_followUpList/newQuotationFollowup",
                             params: { data: JSON.stringify(item) },
                           });
                         }}

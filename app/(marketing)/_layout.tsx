@@ -82,7 +82,7 @@ export default function RootLayout() {
             source={require("~/assets/images/logo.png")}
             style={{ width: 200, height: 200 }}
           />
-          <Link href="signin" style={{ marginTop: 20 }}>
+          <Link href="/signin" style={{ marginTop: 20 }}>
             <FontAwesome name="sign-in" size={30} color="steelblue" />
           </Link>
         </View>
@@ -221,7 +221,7 @@ export default function RootLayout() {
                 ),
             }}
           />
-          <Drawer.Screen
+          {/* <Drawer.Screen
             name="VisualizeAsync"
             options={{
               drawerLabel: "Async",
@@ -243,7 +243,7 @@ export default function RootLayout() {
                   <Ionicons name="notifications-outline" size={size} />
                 ),
             }}
-          />
+          /> */}
         </Drawer>
       </GestureHandlerRootView>
       <PortalHost />
