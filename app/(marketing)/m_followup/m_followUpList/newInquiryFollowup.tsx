@@ -12,9 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { z } from "zod";
 import CustomDropdown from "~/components/CustomDropdown";
-import RNDateTimePicker, {
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";

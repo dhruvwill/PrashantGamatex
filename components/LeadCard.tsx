@@ -22,7 +22,7 @@ const LeadCard = ({
       className="w-full bg-white shadow-md rounded-lg overflow-hidden mb-4 border"
       onPress={() => {
         router.push({
-          pathname: "m_lead/m_leadList/[leadId]",
+          pathname: "/(marketing)/m_lead/m_leadList/[leadId]",
           params: { leadId: leadId },
         });
       }}

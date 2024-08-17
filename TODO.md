@@ -55,3 +55,9 @@
   5. Followup Start date,
   6. Follow up End date.
 - Change "Document Date" to "Date"
+
+### Changes after 13/8 (based on call)
+
+- Create a screen for supervisors so that they can view leads, followups of peoples working under them
+- Create a list for marketing person so that they can see previous added followups.
+- Try EXPO push notifications
