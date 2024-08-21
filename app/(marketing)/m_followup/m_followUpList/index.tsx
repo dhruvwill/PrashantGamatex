@@ -148,7 +148,7 @@ const m_followUpList = () => {
                         onPress={() => {
                           router.push({
                             pathname:
-                              "/(marketing)/m_followup/m_followUpList/newInquiryFollowup",
+                              "/(marketing)/m_followup/m_followUpList/inquiryFollowupTimeline",
                             params: { data: JSON.stringify(item) },
                           });
                         }}
@@ -215,7 +215,7 @@ const m_followUpList = () => {
                         onPress={() => {
                           router.push({
                             pathname:
-                              "/(marketing)/m_followup/m_followUpList/newQuotationFollowup",
+                              "/(marketing)/m_followup/m_followUpList/quotationFollowupTimeline",
                             params: { data: JSON.stringify(item) },
                           });
                         }}

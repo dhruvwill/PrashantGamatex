@@ -117,3 +117,32 @@ export const getCategories = async (token: string | undefined) => {
     }
   }
 };
+
+export const getFollowupList = async (
+  SalesInquiryId: number,
+  SalesQuotationId: number,
+  type: string
+) => {
+  try {
+    const response = await client.get("/user/followup/get", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+      params: {
+        SalesInquiryId,
+        SalesQuotationId,
+        type,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      console.log("error", error.response.data.error);
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      console.log("error", error.message);
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};

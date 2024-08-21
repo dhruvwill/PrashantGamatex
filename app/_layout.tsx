@@ -2,7 +2,7 @@ import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { SplashScreen, Stack } from "expo-router";
+import { Redirect, SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
@@ -63,15 +63,16 @@ export default function RootLayout() {
       <ThemeProvider value={selectedTheme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-          <Stack>
+          {/* <Redirect href="/signin" /> */}
+          <Stack initialRouteName="signin">
             <Stack.Screen
-              name="(marketing)"
+              name="signin"
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name="signin"
+              name="(marketing)"
               options={{
                 headerShown: false,
               }}

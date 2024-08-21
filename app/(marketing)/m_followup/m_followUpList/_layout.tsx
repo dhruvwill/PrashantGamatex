@@ -47,6 +47,32 @@ const _layout = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="inquiryFollowupTimeline"
+        options={{
+          headerTitle: "Inquiry Follow-Up Timeline",
+          headerTitleStyle: {
+            fontFamily: "acumin",
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "steelblue",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="quotationFollowupTimeline"
+        options={{
+          headerTitle: "Quotation Follow-Up Timeline",
+          headerTitleStyle: {
+            fontFamily: "acumin",
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "steelblue",
+          },
+        }}
+      />
     </Stack>
   );
 };
