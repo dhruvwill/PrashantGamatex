@@ -7,6 +7,6 @@ export const inProduction = process.env.NODE_ENV === "production";
 // export const API_URL = "http://192.168.88.68:3000";
 // export const API_URL = "https://pgplcrm.prasadsos.co:8091";
 export const API_URL =
-  "https://80da-2409-40c1-1033-1a3f-ede0-b60-7f64-276e.ngrok-free.app";
+  "https://77b2-110-226-27-207.ngrok-free.app";
 
 console.log("API_URL", API_URL);
