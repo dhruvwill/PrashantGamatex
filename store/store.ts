@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Timeframe } from "~/types/dashboard";
 
 type User = {
   data: {
@@ -18,6 +19,11 @@ type UserStore = {
   clearUser: () => void;
   setToken: (token: string) => void;
   clearToken: () => void;
+};
+
+type AppStore = {
+  timeframe: Timeframe;
+  setTimeframe: (timeframe: Timeframe) => void;
 };
 
 type ThemeStore = {
@@ -70,4 +76,12 @@ const useUserStore = create<UserStore>()(
   )
 );
 
-export { useUserStore, useThemeStore, User };
+const useAppStore = create<AppStore>((set) => ({
+  timeframe: {
+    value: "1D",
+    label: "1 Day",
+  },
+  setTimeframe: (timeframe: Timeframe) => set({ timeframe }),
+}));
+
+export { useUserStore, useThemeStore, useAppStore, User };

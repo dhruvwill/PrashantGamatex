@@ -1,15 +1,15 @@
-import { getDashboard } from './../services/dashboard';
+import { getDashboard } from "./../services/dashboard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ErrorResponse } from "~/types/query";
-import { useUserStore } from "~/store/store";
+import { useAppStore, useUserStore } from "~/store/store";
 
 export const useDashboard = () => {
-  const queryClient = useQueryClient();
+  console.log("useDashboard hook");
   const token = useUserStore((state) => state.user?.token);
-
-  return useQuery<any, ErrorResponse, DashboardData>({
+  const timeframe = useAppStore((state) => state.timeframe);
+  return useQuery<any, ErrorResponse, any>({
     queryKey: ["getDashboard"],
-    queryFn: () => getDashboard(token),
+    queryFn: () => getDashboard(token, timeframe),
     enabled: !!token,
   });
 };
