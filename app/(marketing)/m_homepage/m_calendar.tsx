@@ -1,85 +1,109 @@
-import React, { useState, useRef, useCallback } from "react";
-import { View, Text, ScrollView, RefreshControl } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useQueryClient } from "@tanstack/react-query";
-import { Separator } from "~/components/ui/separator";
-import {
-  ExpandableCalendar,
-  AgendaList,
-  CalendarProvider,
-  WeekCalendar,
-} from "react-native-calendars";
+import React, { useState, useCallback } from "react";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { Calendar, DateData } from "react-native-calendars";
 
-// Assuming you have these imports and functions defined elsewhere
-import { agendaItems, getMarkedDates } from "~/mocks/agendaItems";
-import AgendaItem from "~/mocks/AgendaItem";
-import { getTheme, themeColor, lightThemeColor } from "~/mocks/theme";
+interface Event {
+  title: string;
+  time: string;
+}
 
-const ITEMS: any[] = agendaItems;
+interface EventsData {
+  [date: string]: Event[];
+}
 
-const Calendar = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const [weekView, setWeekView] = useState(false);
-  const queryClient = useQueryClient();
-  const marked = useRef(getMarkedDates());
-  const theme = useRef(getTheme());
-  const todayBtnTheme = useRef({
-    todayButtonTextColor: themeColor,
+const SimplifiedCalendar: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [events, setEvents] = useState<EventsData>({
+    "2024-08-24": [
+      { title: "Meeting with client", time: "10:00 AM" },
+      { title: "Meeting with client", time: "10:00 AM" },
+    ],
+    "2024-08-25": [{ title: "Team lunch", time: "12:30 PM" }],
   });
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    queryClient.invalidateQueries({
-      queryKey: ["getTasks"],
-    });
-    setRefreshing(false);
-  };
-
-  const renderItem = useCallback(({ item }: any) => {
-    return <AgendaItem item={item} />;
+  const onDayPress = useCallback((day: DateData) => {
+    setSelectedDate(day.dateString);
   }, []);
 
-  return (
-    <ScrollView
-      className="flex-1"
-      keyboardShouldPersistTaps="handled"
-      // refreshControl={
-      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      // }
-    >
-      <View className="flex mx-3 my-5">
-        <View className="px-3">
-          <Text className="text-3xl font-acumin_bold">Calendar</Text>
-          <Text className="text-muted text-sm text-gray-500 font-acumin">
-            List of All Tasks
+  const renderEvents = () => {
+    const dayEvents = events[selectedDate] || [];
+
+    if (dayEvents.length === 0) {
+      return (
+        <View className="py-5 items-center">
+          <Text className="text-gray-500 text-base">
+            No events planned for this day
           </Text>
         </View>
+      );
+    }
+
+    return dayEvents.map((event: Event, index: number) => (
+      <TouchableOpacity
+        key={index}
+        className="bg-white p-4 mb-3 rounded-lg shadow"
+      >
+        <Text className="text-gray-500 text-sm">{event.time}</Text>
+        <Text className="text-black font-semibold text-base mt-1">
+          {event.title}
+        </Text>
+      </TouchableOpacity>
+    ));
+  };
+
+  return (
+    <ScrollView className="flex-1 bg-gray-100">
+      <View className="px-5 py-6">
+        <Text className="text-3xl font-bold">Calendar</Text>
+        <Text className="text-gray-500 text-sm mt-1">List of All Events</Text>
       </View>
-      <View className="flex-col gap-2">
-        <CalendarProvider
-          date={ITEMS[1]?.title}
-          showTodayButton
-          theme={todayBtnTheme.current}
-        >
-          {weekView ? (
-            <WeekCalendar firstDay={1} markedDates={marked.current} />
-          ) : (
-            <ExpandableCalendar
-              firstDay={1}
-              markedDates={marked.current}
-              theme={theme.current}
-            />
-          )}
-          <AgendaList
-            sections={ITEMS}
-            renderItem={renderItem}
-            className="bg-gray-100 text-gray-600 capitalize"
-            // sectionStyle="bg-gray-100 text-gray-600 capitalize"
-          />
-        </CalendarProvider>
+
+      <Calendar
+        onDayPress={onDayPress}
+        markedDates={{
+          [selectedDate]: { selected: true, selectedColor: "#007AFF" },
+          ...Object.keys(events).reduce(
+            (
+              acc: { [key: string]: { marked: boolean; dotColor: string } },
+              date: string
+            ) => {
+              acc[date] = { marked: true, dotColor: "#007AFF" };
+              return acc;
+            },
+            {}
+          ),
+        }}
+        theme={{
+          backgroundColor: "#ffffff",
+          calendarBackground: "#ffffff",
+          textSectionTitleColor: "#b6c1cd",
+          selectedDayBackgroundColor: "#007AFF",
+          selectedDayTextColor: "#ffffff",
+          todayTextColor: "#007AFF",
+          dayTextColor: "#2d4150",
+          textDisabledColor: "#d9e1e8",
+          dotColor: "#007AFF",
+          selectedDotColor: "#ffffff",
+          arrowColor: "#007AFF",
+          monthTextColor: "#2d4150",
+          indicatorColor: "#007AFF",
+          textDayFontWeight: "300",
+          textMonthFontWeight: "bold",
+          textDayHeaderFontWeight: "300",
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 16,
+        }}
+      />
+
+      <View className="px-5 py-6">
+        <Text className="text-xl font-semibold mb-4">
+          Events for {selectedDate}
+        </Text>
+        {renderEvents()}
       </View>
     </ScrollView>
   );
 };
 
-export default Calendar;
+export default SimplifiedCalendar;
