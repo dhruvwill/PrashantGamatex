@@ -12,7 +12,6 @@ import { useAuth } from "~/hooks/auth"; // Make sure this path is correct
 
 const CustomDrawerContent = (props: any) => {
   const handleLogout = () => {
-    console.log("Logout");
     router.replace("/signin");
   };
   const { top, bottom } = useSafeAreaInsets();

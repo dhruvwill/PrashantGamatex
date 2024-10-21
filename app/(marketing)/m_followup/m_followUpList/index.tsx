@@ -34,11 +34,6 @@ const m_followUpList = () => {
     setRefreshing(false);
   };
 
-  // useEffect(() => {
-  //   console.log("Inquiry Followups:: ", JSON.stringify(inquiryFollowups));
-  //   console.log("Quotation Followups:: ", JSON.stringify(quotationFollowups));
-  // }, [inquiryFollowups, quotationFollowups]);
-
   return (
     <KeyboardAvoidingView behavior="padding">
       <ScrollView

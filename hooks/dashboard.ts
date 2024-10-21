@@ -4,7 +4,6 @@ import { ErrorResponse } from "~/types/query";
 import { useAppStore, useUserStore } from "~/store/store";
 
 export const useDashboard = () => {
-  console.log("useDashboard hook");
   const token = useUserStore((state) => state.user?.token);
   const timeframe = useAppStore((state) => state.timeframe);
   return useQuery<any, ErrorResponse, any>({

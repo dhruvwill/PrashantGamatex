@@ -186,7 +186,6 @@ const inquiryFollowupTimeline = () =>
             {tab == "images" && (
               <View className="flex flex-row flex-wrap gap-3">
                 {IMAGES.map((image, index) => {
-                  console.log("Image:: ", API_URL + "/user/images/" + image);
                   return (
                     <TouchableOpacity
                       key={index}

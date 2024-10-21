@@ -62,7 +62,6 @@ const Dashboard = () => {
 
   const handleTimeframeChange = (timeframe: any) => {
     setTimeframe(timeframe as Timeframe);
-    console.log(timeframe);
     setTimeout(() => {
       queryClient.invalidateQueries({
         queryKey: ["getDashboard"],

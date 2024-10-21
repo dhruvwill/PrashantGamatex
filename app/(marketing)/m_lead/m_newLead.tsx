@@ -115,7 +115,6 @@ const m_newLead = () => {
         });
       });
 
-      console.log("Form: ", formData);
       await leadSubmit.mutateAsync(formData);
       if (!leadSubmit.isError) {
         clearForm();
@@ -132,7 +131,6 @@ const m_newLead = () => {
           text1: "Error",
           text2: "Please fill all the required fields",
         });
-        console.log("Validation Errors: ", newErrors);
         setErrors(newErrors);
       } else {
         Toast.show({

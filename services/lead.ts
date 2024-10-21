@@ -39,7 +39,6 @@ export const insertLead = async (
   data: LeadInsertData & FormData
 ): Promise<any> => {
   try {
-    console.log("sending data: ", data);
     const response = await client.post("/user/lead/insert", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -49,7 +48,6 @@ export const insertLead = async (
         return data;
       },
     });
-    console.log("response", response);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.data) {

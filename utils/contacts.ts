@@ -5,7 +5,6 @@ export const loadContacts = async () => {
     const { data } = await Contacts.getContactsAsync();
     return data;
   } else {
-    console.log("Permission Denied");
     return [];
   }
 };

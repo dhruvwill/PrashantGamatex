@@ -155,7 +155,6 @@ export const getImage = async (image: string) => {
         Authorization: "Bearer " + useUserStore.getState().user?.token,
       },
     });
-    console.log("response from image", response.data);
     return response.data;
   } catch (error: any) {
     throw { errorMessage: error.message } as ErrorResponse;

@@ -16,10 +16,8 @@ export const getDashboard = async (
         timeframe: timeframe.value,
       },
     });
-    console.log("response from service: ", response.data);
     return response.data;
   } catch (error: any) {
-    console.log("service error block");
     if (error.response && error.response.data) {
       throw { errorMessage: error.response.data.error } as ErrorResponse;
     } else {
