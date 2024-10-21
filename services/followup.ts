@@ -146,3 +146,18 @@ export const getFollowupList = async (
     }
   }
 };
+
+export const getImage = async (image: string) => {
+  try {
+    const response = await client.get("/user/images/" + image, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+    console.log("response from image", response.data);
+    return response.data;
+  } catch (error: any) {
+    throw { errorMessage: error.message } as ErrorResponse;
+  }
+};

@@ -210,7 +210,7 @@ const Dashboard = () => {
                               100
                           ),
                           color: "blue",
-                          label: "Pending Lead",
+                          label: `Pending Lead (${dashboardData.data[0].pending_lead || 0})`,
                         },
                         {
                           percentage:
@@ -221,7 +221,7 @@ const Dashboard = () => {
                                 100
                             ),
                           color: "lightblue",
-                          label: "Inquired Lead",
+                          label: `Inquired Lead (${dashboardData.data[0].total_lead - dashboardData.data[0].pending_lead || 0})`,
                         },
                       ]}
                       radius={100}
@@ -250,23 +250,23 @@ const Dashboard = () => {
                       sections={[
                         {
                           percentage: Math.round(
-                            (dashboardData.data[0].pending_inquiry ||
-                              0 / dashboardData.data[0].total_inquiry ||
-                              1) * 100
+                            ((dashboardData.data[0].pending_inquiry ||
+                              0) / (dashboardData.data[0].total_inquiry ||
+                              1)) * 100
                           ),
                           color: "green",
-                          label: "Pending Inquiries",
+                          label: `Pending Inquiries (${dashboardData.data[0].pending_inquiry || 0})`,
                         },
                         {
                           percentage: Math.round(
                             100 -
-                              (dashboardData.data[0].pending_inquiry ||
-                                0 / dashboardData.data[0].total_inquiry ||
-                                1) *
+                              ((dashboardData.data[0].pending_inquiry ||
+                                0 )/ (dashboardData.data[0].total_inquiry ||
+                                1)) *
                                 100
                           ),
                           color: "lightgreen",
-                          label: "Quotation Send",
+                          label: `Quotation Send (${dashboardData.data[0].total_inquiry - dashboardData.data[0].pending_inquiry || 0})`,
                         },
                       ]}
                       radius={100}
@@ -294,23 +294,23 @@ const Dashboard = () => {
                       sections={[
                         {
                           percentage: Math.round(
-                            (dashboardData.data[0].pending_quotation ||
-                              0 / dashboardData.data[0].total_quotation ||
-                              1) * 100
+                            ((dashboardData.data[0].pending_quotation ||
+                              0 )/ (dashboardData.data[0].total_quotation ||
+                              1)) * 100
                           ),
                           color: "red",
-                          label: "Pending Quotations",
+                          label: `Pending Quotations (${dashboardData.data[0].pending_quotation || 0})`,
                         },
                         {
                           percentage:
                             100 -
                             Math.round(
-                              (dashboardData.data[0].pending_quotation /
-                                dashboardData.data[0].total_quotation) *
+                              ((dashboardData.data[0].pending_quotation || 0)/
+                                (dashboardData.data[0].total_quotation || 1)) *
                                 100
                             ),
                           color: "tomato",
-                          label: "Order Send",
+                          label: `Order Send (${dashboardData.data[0].total_quotation - dashboardData.data[0].pending_quotation || 0})`,
                         },
                       ]}
                       radius={100}

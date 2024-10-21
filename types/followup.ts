@@ -34,6 +34,7 @@ export type SalesInquiryFollowup = {
   TransactionMode: string;
   Unit: string;
   UnitQuantity: number;
+  ImageName: string;
 };
 export type SalesQuotationFollowup = {
   AdditionalDiscountRate: number;
@@ -111,6 +112,7 @@ export type SalesQuotationFollowup = {
   TransactionMode: string;
   Unit: string;
   UnitQuantity: number;
+  ImageName: string;
 };
 export type InquiryFollowupInsert = {
   partyName: string;
