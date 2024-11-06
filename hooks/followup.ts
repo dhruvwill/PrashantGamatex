@@ -37,7 +37,13 @@ export const useInsertInquiryFollowup = () => {
     mutationKey: ["insertInquiryFollowup"],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
+        // queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
+        predicate: (query) =>
+          query.queryKey.every((key) =>
+            ["getQuotationFollowups", "getInquiryFollowups"].includes(
+              key as string
+            )
+          ),
       });
       Toast.show({
         type: "success",
@@ -67,7 +73,13 @@ export const useInsertQuotationFollowup = () => {
     mutationKey: ["insertQuotationFollowup"],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
+        // queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
+        predicate: (query) =>
+          query.queryKey.every((key) =>
+            ["getQuotationFollowups", "getInquiryFollowups"].includes(
+              key as string
+            )
+          ),
       });
       Toast.show({
         type: "success",

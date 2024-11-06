@@ -24,8 +24,15 @@ export const useInsertLead = () => {
     mutationKey: ["insertLead"],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["getAllLeads", "getLeadDocumentNo"],
-      });
+        // queries: [
+        //   { queryKey: ["getAllLeads"] },
+        //   { queryKey: ["getLeadDocumentNo"] },
+        // ],
+        predicate: (query) =>
+          query.queryKey.every((key) =>
+            ["getAllLeads", "getLeadDocumentNo"].includes(key as string)
+          ),
+      }); 
       Toast.show({
         type: "success",
         text1: "Success",

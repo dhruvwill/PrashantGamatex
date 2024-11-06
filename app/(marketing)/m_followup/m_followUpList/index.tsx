@@ -82,7 +82,7 @@ const m_followUpList = () => {
               </Pressable>
             </View>
           </View>
-          <Tabs
+          {/* <Tabs
             value={list}
             onValueChange={setList}
             className="w-full max-w-[400px] flex-col gap-1.5"
@@ -101,7 +101,7 @@ const m_followUpList = () => {
             <TabsContent value="quotation">
               <Text>List of Quotation Follow-ups</Text>
             </TabsContent>
-          </Tabs>
+          </Tabs> */}
           <View className="px-3 pb-10 flex-grow gap-3">
             {list == "inquiry" && (
               <>
