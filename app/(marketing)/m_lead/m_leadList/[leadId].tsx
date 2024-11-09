@@ -64,6 +64,7 @@ const m_editLead = () => {
     contactPerson: z.string().min(1, "Contact Person is required"),
     designation: z.string().min(1, "Designation is required"),
     mobileNo: z.string().min(10, "Mobile number must be at least 10 digits"),
+    address: z.string().optional(),
     emailId: z.string().email("Invalid email address"),
     product: z.string().min(1, "Product is required"),
     leadSource: z.string().min(1, "Lead Source is required"),
@@ -81,6 +82,7 @@ const m_editLead = () => {
     contactPerson: currentLead?.UDF_ContactPerson_2361 || "",
     designation: currentLead?.UDF_Designation_2361 || "",
     mobileNo: currentLead?.UDF_MobileNo_2361 || "",
+    address: currentLead?.UDF_CustomerAdd_2361 || "",
     emailId: currentLead?.UDF_EmailId_2361 || "",
     product: currentLead?.UDF_Product_2361 || "",
     leadSource: currentLead?.UDF_LeadSource_2361 || "",
@@ -128,6 +130,7 @@ const m_editLead = () => {
         contactPerson: form.contactPerson,
         designation: form.designation,
         mobileNo: form.mobileNo,
+        address: form.address,
         emailId: form.emailId,
         product: form.product,
         leadSource: form.leadSource,
@@ -348,6 +351,33 @@ const m_editLead = () => {
               />
               {errors.mobileNo && (
                 <Text className="text-red-500 mt-1">{errors.mobileNo}</Text>
+              )}
+            </View>
+            <View className="mb-4">
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Address
+                </Text>
+              </View>
+              <Textarea
+                autoCorrect={false}
+                editable
+                multiline
+                numberOfLines={4}
+                clearButtonMode="while-editing"
+                placeholder="Enter Address"
+                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  errors.address ? "border border-red-500" : ""
+                }`}
+                placeholderClassName="text-base text-muted"
+                value={form.address}
+                onChangeText={(value) => setForm({ ...form, address: value })}
+                aria-labelledby="followup details"
+              />
+              {errors.address && (
+                <Text className="text-red-500 text-sm mt-1">
+                  {errors.address}
+                </Text>
               )}
             </View>
             <View className="mb-4">

@@ -163,7 +163,7 @@ export default function Example() {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               // handle link
             }}
@@ -171,7 +171,7 @@ export default function Example() {
             <Text className="text-base font-medium color-[#222] dark:text-gray-400 text-center">
               Don't have an account? <Text className="underline">Sign up</Text>
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>

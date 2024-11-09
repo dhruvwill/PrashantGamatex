@@ -428,20 +428,20 @@ const Dashboard = () => {
           </View>
         </View> */}
 
-        <View className="p-4 rounded-lg shadow-lg w-full bg-slate-100">
+        {/* <View className="p-4 rounded-lg shadow-lg w-full bg-slate-100">
           <View className="flex-col">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
                 <Text className="text-2xl font-acumin_bold text-gray-600">
                   Companies
                 </Text>
-                {/* <View className="bg-gray-400 px-2 py-1 rounded-full">
+                <View className="bg-gray-400 px-2 py-1 rounded-full">
                   <Text className="text-white">3</Text>
-                </View> */}
+                </View>
               </View>
-              {/* <Pressable>
+              <Pressable>
                 <Text className="text-blue-600 font-acumin_bold">View All</Text>
-              </Pressable> */}
+              </Pressable>
             </View>
             <View className="flex-col gap-5">
               <View className="flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5 mt-6">
@@ -479,7 +479,7 @@ const Dashboard = () => {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );

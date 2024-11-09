@@ -59,6 +59,7 @@ const m_newLead = () => {
     contactPerson: "",
     designation: "",
     mobileNo: "",
+    address:"",
     emailId: "",
     product: "",
     leadSource: "",
@@ -79,6 +80,7 @@ const m_newLead = () => {
       contactPerson: "",
       designation: "",
       mobileNo: "",
+      address:"",
       emailId: "",
       competition: "",
       leadNote: "",
@@ -451,23 +453,53 @@ const m_newLead = () => {
             <View className="mb-4">
               <View className="flex flex-row">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Email Id
+                  Mobile No.
                 </Text>
                 <Text className="text-red-500">*</Text>
               </View>
               <TextInput
+                keyboardType="phone-pad"
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(emailId) => setForm({ ...form, emailId })}
-                placeholder="Email"
+                onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
+                placeholder="Phone"
                 placeholderTextColor="#6b7280"
                 className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.emailId ? "border-red-500" : ""
+                  errors.mobileNo ? "border-red-500" : ""
                 }`}
-                value={form.emailId}
+                value={form.mobileNo}
               />
-              {errors.emailId && (
-                <Text className="text-red-500 mt-1">{errors.emailId}</Text>
+              {errors.mobileNo && (
+                <Text className="text-red-500 mt-1">{errors.mobileNo}</Text>
+              )}
+            </View>
+            <View className="mb-4">
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Address
+                </Text>
+              </View>
+              <Textarea
+                autoCorrect={false}
+                editable
+                multiline
+                numberOfLines={4}
+                clearButtonMode="while-editing"
+                placeholder="Enter Address"
+                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  errors.address ? "border border-red-500" : ""
+                }`}
+                placeholderClassName="text-base text-muted"
+                value={form.address}
+                onChangeText={(value) =>
+                  setForm({ ...form, address: value })
+                }
+                aria-labelledby="followup details"
+              />
+              {errors.address && (
+                <Text className="text-red-500 text-sm mt-1">
+                  {errors.address}
+                </Text>
               )}
             </View>
             <View className="mb-4">

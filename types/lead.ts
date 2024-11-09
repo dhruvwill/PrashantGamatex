@@ -6,6 +6,7 @@ export type LeadInsertData = {
   contactPerson: string;
   designation: string;
   mobileNo: string;
+  address: string;
   emailId: string;
   product: string;
   leadSource: string;
@@ -24,6 +25,7 @@ export type LeadUpdateData = {
   contactPerson: string;
   designation: string;
   mobileNo: string;
+  address: string;
   emailId: string;
   product: string;
   leadSource: string;
@@ -46,6 +48,7 @@ export type LeadData = {
   UDF_ContactPerson_2361: string;
   UDF_Designation_2361: string;
   UDF_MobileNo_2361: string;
+  UDF_CustomerAdd_2361: string;
   UDF_EmailId_2361: string;
   UDF_Product_2361: string;
   UDF_LeadSource_2361: string;
