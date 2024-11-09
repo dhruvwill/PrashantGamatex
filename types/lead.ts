@@ -59,4 +59,5 @@ export type LeadData = {
   UDF_CustomerExistingMachine_2361: string;
   UDF_LeadNotes_2361: string;
   UDF_InquiryStatus_2361: number;
+  ImageName: string;
 };

@@ -6,16 +6,40 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Search } from "lucide-react-native";
 import LeadCard from "~/components/LeadCard";
 import { Separator } from "~/components/ui/separator";
 import { useLeads } from "~/hooks/leads";
 
+interface Lead {
+  ReferenceTransaction_2361Id: string;
+  UDF_CompanyName_2361: string;
+  UDF_Product_2361: string;
+  UDF_TimeFrame_2361: string;
+  DocumentDate: string;
+}
+
 const m_leadList = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const allLeads = useLeads();
   const queryClient = useQueryClient();
+
+  const filterLeads = (leads: any | undefined) => {
+    if (!leads) return [];
+    return leads.filter((lead:any) => {
+      const searchTerm = searchQuery.toLowerCase();
+      return (
+        lead.UDF_CompanyName_2361.toLowerCase().includes(searchTerm) ||
+        lead.UDF_Product_2361.toLowerCase().includes(searchTerm)
+      );
+    });
+  };
+
+  const filteredLeads = filterLeads(allLeads.data);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -24,7 +48,7 @@ const m_leadList = () => {
     });
     setRefreshing(false);
   };
-
+  
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
@@ -40,11 +64,27 @@ const m_leadList = () => {
           </Text>
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
         </View>
+
+        {/* Search Bar */}
+        <View className="px-3 mb-4">
+          <View className="flex flex-row items-center px-4 py-2 bg-gray-100 rounded-lg border border-gray-200">
+            <Search size={20} color="#666666" />
+            <TextInput
+              className="flex-1 ml-2 text-base font-acumin"
+              placeholder="Search by company or product..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholderTextColor="#666666"
+            />
+          </View>
+        </View>
+
         {allLeads.isLoading ? (
           <View className="flex-1 justify-center items-center">
             <ActivityIndicator size="large" color="#00ff00" />
           </View>
         ) : null}
+
         {allLeads.error ? (
           <View className="flex-1 justify-center px-3 my-3">
             <Text className="text-lg text-red-500 font-semibold">Error</Text>
@@ -54,20 +94,24 @@ const m_leadList = () => {
             </Text>
           </View>
         ) : null}
-        {allLeads.data?.length === 0 ? (
+
+        {filteredLeads.length === 0 && !allLeads.isLoading ? (
           <View className="flex-1 justify-center px-3 my-3">
             <Text className="text-lg text-gray-500 font-semibold">
               No Leads Found
             </Text>
             <Text className="text-md text-gray-500">
-              No leads found, Please add some leads to view them here.
+              {searchQuery
+                ? "No matches found for your search. Try different keywords."
+                : "No leads found, Please add some leads to view them here."}
             </Text>
           </View>
         ) : null}
+
         <View className="px-3 flex-col gap-2">
-          {allLeads.data?.map((lead: any, index: any) => (
+          {filteredLeads.map((lead: Lead, index:number) => (
             <LeadCard
-              key={lead.ReferenceTransaction_2361Id}
+              key={index}
               leadId={lead.ReferenceTransaction_2361Id}
               companyName={lead.UDF_CompanyName_2361}
               productList={lead.UDF_Product_2361}
