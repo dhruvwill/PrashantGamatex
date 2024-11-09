@@ -4,10 +4,10 @@ import {
   Pressable,
   ScrollView,
   KeyboardAvoidingView,
+  TextInput,
 } from "react-native";
 import { View } from "react-native";
 import { Separator } from "~/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Text } from "~/components/ui/text";
 import { RefreshControl } from "react-native";
 import FollowupCard from "~/components/FollowupCard";
@@ -15,16 +15,42 @@ import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInquiryFollowup, useQuotationFollowup } from "~/hooks/followup";
 import { ActivityIndicator } from "react-native";
+import { Search } from "lucide-react-native";
+
+interface FollowupItem {
+  SalesInquiryId?: string;
+  SalesQuotationId?: string;
+  PartyName: string;
+  MachineName: string;
+  Quantity: number;
+  DocumentNo: string;
+  DocumentDate: string;
+}
 
 const m_followUpList = () => {
   const router = useRouter();
-
   const [refreshing, setRefreshing] = useState(false);
   const [list, setList] = useState("inquiry");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const inquiryFollowups = useInquiryFollowup();
   const quotationFollowups = useQuotationFollowup();
   const queryClient = useQueryClient();
+
+  const filterData = (data: any | undefined) => {
+    if (!data) return [];
+    return data.filter((item:any) => {
+      const searchTerm = searchQuery.toLowerCase();
+      return (
+        item.PartyName.toLowerCase().includes(searchTerm) ||
+        item.MachineName.toLowerCase().includes(searchTerm) ||
+        item.DocumentNo.toString().includes(searchTerm)
+      );
+    });
+  };
+
+  const filteredInquiries = filterData(inquiryFollowups.data);
+  const filteredQuotations = filterData(quotationFollowups.data);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -50,8 +76,23 @@ const m_followUpList = () => {
             </Text>
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />
           </View>
+
+          {/* Search Bar */}
+          <View className="px-3 mb-4">
+            <View className="flex flex-row items-center px-4 py-2 bg-gray-100 rounded-lg border border-gray-200">
+              <Search size={20} color="#666666" />
+              <TextInput
+                className="flex-1 ml-2 text-base font-acumin"
+                placeholder="Search by party, machine or document no..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                placeholderTextColor="#666666"
+              />
+            </View>
+          </View>
+
           <View className="px-3">
-            <View className="flex flex-row justify-between gap-2 mb-4 px-3 py-2 w-full rounded-lg bg-gray-200 relative">
+            <View className="flex flex-row flex-nowrap justify-between gap-2 mb-4 px-3 py-2 w-full rounded-lg bg-gray-200 relative">
               <Pressable
                 className={`${
                   list == "inquiry" && "bg-gray-800"
@@ -82,26 +123,7 @@ const m_followUpList = () => {
               </Pressable>
             </View>
           </View>
-          {/* <Tabs
-            value={list}
-            onValueChange={setList}
-            className="w-full max-w-[400px] flex-col gap-1.5"
-          >
-            <TabsList className="flex-row w-full">
-              <TabsTrigger value="inquiry" className="flex-1">
-                <Text>Inquiry</Text>
-              </TabsTrigger>
-              <TabsTrigger value="quotation" className="flex-1">
-                <Text>Quotation</Text>
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="inquiry">
-              <Text> List of Inquiry Follow-ups</Text>
-            </TabsContent>
-            <TabsContent value="quotation">
-              <Text>List of Quotation Follow-ups</Text>
-            </TabsContent>
-          </Tabs> */}
+
           <View className="px-3 pb-10 flex-grow gap-3">
             {list == "inquiry" && (
               <>
@@ -121,18 +143,20 @@ const m_followUpList = () => {
                     </Text>
                   </View>
                 ) : null}
-                {inquiryFollowups.data?.length === 0 ? (
+                {filteredInquiries.length === 0 &&
+                !inquiryFollowups.isLoading ? (
                   <View className="flex-1 justify-center px-3 my-3">
                     <Text className="text-lg text-gray-500 font-semibold">
                       No Inquiry Followups Found
                     </Text>
                     <Text className="text-md text-gray-500">
-                      No Inquiry Followups found, Please add some Followups to
-                      view them here.
+                      {searchQuery
+                        ? "No matches found for your search. Try different keywords."
+                        : "No Inquiry Followups found, Please add some Followups to view them here."}
                     </Text>
                   </View>
                 ) : null}
-                {inquiryFollowups.data?.length! > 0 && (
+                {filteredInquiries.length > 0 && (
                   <FlatList
                     refreshControl={
                       <RefreshControl
@@ -142,7 +166,7 @@ const m_followUpList = () => {
                       />
                     }
                     scrollEnabled={false}
-                    data={inquiryFollowups.data}
+                    data={filteredInquiries}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                       <Pressable
@@ -187,18 +211,20 @@ const m_followUpList = () => {
                     </Text>
                   </View>
                 ) : null}
-                {quotationFollowups.data?.length === 0 ? (
+                {filteredQuotations.length === 0 &&
+                !quotationFollowups.isLoading ? (
                   <View className="flex-1 justify-center px-3 my-3">
                     <Text className="text-lg text-gray-500 font-semibold">
-                      No Inquiry Followups Found
+                      No Quotation Followups Found
                     </Text>
                     <Text className="text-md text-gray-500">
-                      No Inquiry Followups found, Please add some Followups to
-                      view them here.
+                      {searchQuery
+                        ? "No matches found for your search. Try different keywords."
+                        : "No Quotation Followups found, Please add some Followups to view them here."}
                     </Text>
                   </View>
                 ) : null}
-                {quotationFollowups.data?.length! > 0 && (
+                {filteredQuotations.length > 0 && (
                   <FlatList
                     className="h-full"
                     refreshControl={
@@ -209,7 +235,7 @@ const m_followUpList = () => {
                       />
                     }
                     scrollEnabled={false}
-                    data={quotationFollowups.data}
+                    data={filteredQuotations}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                       <Pressable
