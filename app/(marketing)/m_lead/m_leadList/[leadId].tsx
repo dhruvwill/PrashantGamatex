@@ -30,7 +30,11 @@ import { useConstants } from "~/hooks/const";
 import { Contact } from "~/types/contacts";
 import ContactPickerModal from "~/components/ContactPickerModal";
 import { Textarea } from "~/components/ui/textarea";
+import { usePreventScreenCapture } from "expo-screen-capture";
+
 const m_editLead = () => {
+  usePreventScreenCapture();
+  
   const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
   const navigation = useNavigation();

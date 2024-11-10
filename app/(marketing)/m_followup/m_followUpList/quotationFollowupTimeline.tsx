@@ -30,10 +30,13 @@ import { API_URL } from "~/constants/api";
 import { Separator } from "~/components/ui/separator";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
+import { usePreventScreenCapture } from "expo-screen-capture";
 
 const inquiryFollowupTimeline = () =>
   // { followups, inquiryDetails }
   {
+    usePreventScreenCapture();
+    
     const router = useRouter();
     const userToken = useUserStore((state) => state.user?.token);
 
