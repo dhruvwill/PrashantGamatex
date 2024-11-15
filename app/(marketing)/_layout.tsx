@@ -2,7 +2,7 @@ import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, SplashScreen, useNavigation } from "expo-router";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -14,9 +14,7 @@ import { ThemeToggle } from "~/components/ThemeToggle";
 import CustomDrawerContent from "~/components/CustomDrawerContent";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import MenuIcon from "~/components/MenuIcon";
 import Logo from "~/components/Logo";
-import CustomHeader from "~/components/CustomHeader";
 import { useAuth } from "~/hooks/auth";
 
 const LIGHT_THEME: Theme = {
@@ -195,6 +193,29 @@ export default function RootLayout() {
                   <Ionicons name="wallet" size={size} />
                 ) : (
                   <Ionicons name="wallet-outline" size={size} />
+                ),
+            }}
+          />
+          <Drawer.Screen
+            name="changepassword"
+            options={{
+              drawerLabel: "Change Password",
+              headerStyle: {
+                borderWidth: 1,
+                borderColor: "#f0f0f0",
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              headerTitle: () => <Logo />,
+              headerTitleAlign: "center",
+              headerTitleContainerStyle: {
+                height: "auto",
+              },
+              drawerIcon: ({ focused, color, size }) =>
+                focused ? (
+                  <MaterialIcons name="password" size={size} />
+                ) : (
+                  <MaterialIcons name="password" size={size} />
                 ),
             }}
           />

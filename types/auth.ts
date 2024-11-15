@@ -14,3 +14,9 @@ export type AuthResponse = {
   };
   token: string;
 };
+
+export type ChangePasswordData = { 
+  currentPassword: string;
+  confirmCurrentPassword: string;
+  newPassword: string;
+};

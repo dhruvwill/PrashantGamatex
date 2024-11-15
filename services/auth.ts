@@ -1,5 +1,6 @@
 import client from "~/api/client";
-import { AuthResponse, LoginData } from "~/types/auth";
+import { useUserStore } from "~/store";
+import { AuthResponse, ChangePasswordData, LoginData } from "~/types/auth";
 import { ErrorResponse } from "~/types/query";
 
 export const login = async (data: LoginData): Promise<AuthResponse> => {
@@ -22,3 +23,21 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
     }
   }
 };
+
+export const changePassword = async (data: ChangePasswordData): Promise<any> => {
+  try {
+    const response = await client.patch("/user/password", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.name } as ErrorResponse;
+    }
+  }
+}

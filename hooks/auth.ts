@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login } from "~/services/auth";
+import { changePassword, login } from "~/services/auth";
 import { useUserStore } from "~/store";
 import { useState, useEffect } from "react";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { AuthResponse, LoginData } from "~/types/auth";
 import { ErrorResponse } from "~/types/query";
+import Toast from "react-native-toast-message";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
@@ -65,3 +66,25 @@ export const useAuth = () => {
 
   return { isAuthenticated, user };
 };
+
+export const useChangePassword = () => {
+  return useMutation<unknown, ErrorResponse, any>({
+    mutationKey: ["changePassword"],
+    mutationFn: changePassword,
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Password changed successfully",
+      });
+      router.replace("/(marketing)/m_homepage");
+    },
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error.errorMessage,
+      });
+    },
+  });
+}
