@@ -20,12 +20,14 @@ import {
 } from "~/components/ui/select";
 import { useLogin } from "~/hooks/auth";
 import { LoginData } from "~/types/auth";
+import * as Device from "expo-device";
 
 export default function Example() {
   const [form, setForm] = useState<LoginData>({
     username: "",
     password: "",
     company: "PrashantGamatex",
+    DeviceName: `${Device.deviceName} : ${Device.brand} (${Device.modelName}, ${Device.productName})`,
   });
   const router = useRouter();
   const login = useLogin();

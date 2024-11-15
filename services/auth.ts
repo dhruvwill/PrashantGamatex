@@ -8,6 +8,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
       username: data.username,
       password: data.password,
       company: data.company,
+      DeviceName: data.DeviceName
     };
     const response = await client.post("/auth/login", {
       user,

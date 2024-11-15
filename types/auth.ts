@@ -2,6 +2,7 @@ export type LoginData = {
   username: string;
   password: string;
   company: "PrashantGamatex" | "WestPoint" | "Serber";
+  DeviceName: string;
 };
 
 export type AuthResponse = {

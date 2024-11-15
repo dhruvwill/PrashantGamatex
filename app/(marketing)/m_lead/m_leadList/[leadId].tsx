@@ -31,10 +31,14 @@ import { Contact } from "~/types/contacts";
 import ContactPickerModal from "~/components/ContactPickerModal";
 import { Textarea } from "~/components/ui/textarea";
 import { usePreventScreenCapture } from "expo-screen-capture";
+import { API_URL } from "~/constants/api";
+import { useUserStore } from "~/store";
+import { Image } from "expo-image";
 
 const m_editLead = () => {
   usePreventScreenCapture();
   
+  const userToken = useUserStore((state) => state.user?.token);
   const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
   const navigation = useNavigation();
@@ -61,6 +65,14 @@ const m_editLead = () => {
       },
     });
   }, [leadId]);
+
+  const getLeadImageUri = (imageName: string) => {
+    console.log("Image Name: ", `${API_URL}/user/lead/images/${imageName}`);
+    return {
+      uri: `${API_URL}/user/lead/images/${imageName}`,
+      headers: { Authorization: `Bearer ${userToken}` },
+    };
+  };
 
   const leadFormSchema = z.object({
     currency: z.string().min(1, "Currency is required"),
@@ -608,6 +620,29 @@ const m_editLead = () => {
               />
               {errors.leadNote && (
                 <Text className="text-red-500 mt-1">{errors.leadNote}</Text>
+              )}
+            </View>
+            <View className="mb-4">
+              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                Attachments
+              </Text>
+              {currentLead?.ImageName &&
+              currentLead.ImageName.split(",").length > 0 ? (
+                <ScrollView horizontal className="mt-4">
+                  {currentLead.ImageName.split(",").map(
+                    (image: string, index: number) => (
+                      <View key={index} className="mr-4 bg-black">
+                        <Image
+                          source={getLeadImageUri(image)}
+                          className="w-20 h-20 rounded-md"
+                          style={{ width: 80, height: 80 }}
+                        />
+                      </View>
+                    )
+                  )}
+                </ScrollView>
+              ) : (
+                <Text className="text-gray-500 italic">No attachments</Text>
               )}
             </View>
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />
