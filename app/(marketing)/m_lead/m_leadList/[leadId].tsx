@@ -7,6 +7,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
@@ -37,7 +38,7 @@ import { Image } from "expo-image";
 
 const m_editLead = () => {
   usePreventScreenCapture();
-  
+
   const userToken = useUserStore((state) => state.user?.token);
   const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
@@ -67,7 +68,6 @@ const m_editLead = () => {
   }, [leadId]);
 
   const getLeadImageUri = (imageName: string) => {
-    console.log("Image Name: ", `${API_URL}/user/lead/images/${imageName}`);
     return {
       uri: `${API_URL}/user/lead/images/${imageName}`,
       headers: { Authorization: `Bearer ${userToken}` },
@@ -114,6 +114,7 @@ const m_editLead = () => {
   const [errors, setErrors] = useState<any>({});
 
   const [isLeadRemindDate, setLeadRemindDate] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const router = useRouter();
   const leadUpdate = useUpdateLead();
@@ -631,13 +632,25 @@ const m_editLead = () => {
                 <ScrollView horizontal className="mt-4">
                   {currentLead.ImageName.split(",").map(
                     (image: string, index: number) => (
-                      <View key={index} className="mr-4 bg-black">
-                        <Image
-                          source={getLeadImageUri(image)}
-                          className="w-20 h-20 rounded-md"
-                          style={{ width: 80, height: 80 }}
-                        />
-                      </View>
+                      // <View key={index} className="mr-4 bg-black rounded-md">
+                      //   <Image
+                      //     source={getLeadImageUri(image)}
+                      //     className="w-20 h-20 rounded-md"
+                      //     style={{ width: 80, height: 80 }}
+                      //   />
+                      // </View>
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => setSelectedImage(image)}
+                      >
+                        <View className="mr-2 rounded-md">
+                          <Image
+                            source={getLeadImageUri(image)}
+                            className="w-20 h-20 rounded-md"
+                            style={{ width: 80, height: 80 }}
+                          />
+                        </View>
+                      </TouchableOpacity>
                     )
                   )}
                 </ScrollView>
@@ -662,6 +675,23 @@ const m_editLead = () => {
             </View>
           </View>
         </View>
+        <Modal visible={!!selectedImage} animationType="fade">
+          <View className="flex-1 w-full bg-black bg-opacity-90 justify-center items-center">
+            {selectedImage && (
+              <Image
+                source={getLeadImageUri(selectedImage)}
+                style={{ width: 350, height: 500 }}
+                contentFit="contain"
+              />
+            )}
+            <TouchableOpacity
+              className="absolute top-10 right-10 z-10 self-end"
+              onPress={() => setSelectedImage(null)}
+            >
+              <Ionicons name="close" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </ScrollView>
       <ContactPickerModal
         isVisible={isContactPickerVisible}

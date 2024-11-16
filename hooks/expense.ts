@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import { getAllExpenses, insertExpense } from "~/services/expense";
 import { useUserStore } from "~/store";
@@ -20,6 +21,7 @@ export const useExpenseInsert = () => {
         text2: "Expense Inserted Successfully",
         visibilityTime: 3000,
       });
+      router.navigate("/(marketing)/m_expense/m_expenseList");
     },
     onError: (error) => {
       Toast.show({

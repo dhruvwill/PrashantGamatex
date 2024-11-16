@@ -9,6 +9,7 @@ import { ErrorResponse } from "~/types/query";
 import Toast from "react-native-toast-message";
 import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
 import { useUserStore } from "~/store";
+import { router } from "expo-router";
 
 export const useLeads = () => {
   return useQuery<any, ErrorResponse, LeadData[]>({
@@ -39,6 +40,7 @@ export const useInsertLead = () => {
         text2: "Lead Added Successfully",
         visibilityTime: 3000,
       });
+      router.navigate("/(marketing)/m_lead/m_leadList/");
     },
     onError: (error) => {
       Toast.show({
@@ -76,6 +78,7 @@ export const useUpdateLead = () => {
         text2: "Lead Updated Successfully",
         visibilityTime: 3000,
       });
+      router.navigate("/(marketing)/m_followup/m_followUpList/");
     },
     onError: (error) => {
       Toast.show({

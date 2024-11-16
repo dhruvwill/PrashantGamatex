@@ -21,6 +21,7 @@ import {
 import { useLogin } from "~/hooks/auth";
 import { LoginData } from "~/types/auth";
 import * as Device from "expo-device";
+import Feather from "@expo/vector-icons/Feather";
 
 export default function Example() {
   const [form, setForm] = useState<LoginData>({
@@ -32,6 +33,8 @@ export default function Example() {
   const router = useRouter();
   const login = useLogin();
   const insets = useSafeAreaInsets();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const companies = [
     {
@@ -84,16 +87,39 @@ export default function Example() {
             <Text className="color-[#222] dark:text-gray-300 font-semibold mb-2 text-lg">
               Password
             </Text>
-            <TextInput
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              onChangeText={(password) => setForm({ ...form, password })}
-              placeholder="Enter your Password"
-              placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
-              secureTextEntry={true}
-              value={form.password}
-            />
+            <View className="flex flex-row items-center w-full h-10 native:h-12 border dark:bg-gray-800 ps-4 pr-9 rounded-lg text-base font-medium text-[#222] dark:text-gray-100">
+              <TextInput
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                onChangeText={(password) => setForm({ ...form, password })}
+                placeholder="Enter your Password"
+                placeholderTextColor="#6b7280"
+                className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
+                secureTextEntry={showPassword}
+                value={form.password}
+              />
+              {showPassword ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowPassword(false);
+                  }}
+                >
+                  <View className="h-10 native:h-12 flex items-center justify-center">
+                    <Feather name="eye" size={20} color="gray" />
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowPassword(true);
+                  }}
+                >
+                  <View className="h-10 native:h-12 flex items-center justify-center">
+                    <Feather name="eye-off" size={20} color="gray" />
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 font-semibold mb-2 text-lg">

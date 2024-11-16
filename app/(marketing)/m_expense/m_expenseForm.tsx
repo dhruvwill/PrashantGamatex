@@ -20,11 +20,27 @@ import * as ImagePicker from "expo-image-picker";
 import { ExpenseForm, ExpenseItem } from "~/types/expense";
 import { useExpenseInsert } from "~/hooks/expense";
 import { useConstants } from "~/hooks/const";
+import { z } from "zod";
 import Toast from "react-native-toast-message";
 
 const M_ExpenseForm: React.FC = () => {
   const expense = useExpenseInsert();
   const constants = useConstants();
+
+  const expenseFormSchema = z.object({
+    customerCompany: z.string().min(1, "Customer Company is required"),
+    visitDate: z.date(),
+    expenseItems: z.array(
+      z.object({
+        type: z.string(),
+        amount: z.string().min(1, "Amount is required"),
+        description: z.string(),
+        attachment: z.any().nullable(),
+      })
+    ),
+  });
+
+  const [errors, setErrors] = useState<any>({});
 
   const [form, setForm] = useState<ExpenseForm>({
     customerCompany: "",
@@ -40,22 +56,15 @@ const M_ExpenseForm: React.FC = () => {
   });
   const [isVisitDate, setVisitDate] = useState<boolean>(false);
 
-  const expenseTypes: { value: string; label: string }[] = [
-    { value: "fare", label: "Fare" },
-    { value: "conveyance", label: "Conveyance" },
-    { value: "lodging", label: "Lodging" },
-    { value: "other", label: "Other" },
-  ];
-
   const handleSubmit = async () => {
     try {
+      const validatedForm = expenseFormSchema.parse(form);
+      setErrors({});
       const formData: any = new FormData();
 
-      // Add basic form fields
       formData.append("customerCompany", form.customerCompany);
       formData.append("visitDate", form.visitDate.toISOString());
 
-      // Add expense items
       form.expenseItems.forEach((item, index) => {
         formData.append(`expenseItems[${index}][type]`, item.type);
         formData.append(`expenseItems[${index}][amount]`, item.amount);
@@ -77,8 +86,39 @@ const M_ExpenseForm: React.FC = () => {
       if (!expense.isError) {
         clearForm();
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        const newErrors: any = {};
+        error.errors.forEach((err) => {
+          // Handle array errors
+          if (err.path.length > 1) {
+            // For array items, create nested error structure
+            const [arrayName, index, field] = err.path;
+            if (!newErrors[arrayName]) {
+              newErrors[arrayName] = [];
+            }
+            if (!newErrors[arrayName][index]) {
+              newErrors[arrayName][index] = {};
+            }
+            newErrors[arrayName][index][field] = err.message;
+          } else {
+            // For non-array fields
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Please check the form for errors",
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: error.message,
+        });
+      }
     }
   };
 
@@ -169,9 +209,16 @@ const M_ExpenseForm: React.FC = () => {
                 }
                 placeholder="Enter Customer Company Name"
                 placeholderTextColor="#6b7280"
-                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  errors.customerCompany ? "border-red-500" : ""
+                }`}
                 value={form.customerCompany}
               />
+              {errors.customerCompany && (
+                <Text className="text-red-500 mt-1">
+                  {errors.customerCompany}
+                </Text>
+              )}
             </View>
             <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
@@ -263,9 +310,18 @@ const M_ExpenseForm: React.FC = () => {
                     }
                     placeholder="₹ 0.00"
                     placeholderTextColor="#6b7280"
-                    className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+                    className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                      errors.expenseItems?.[index]?.amount
+                        ? "border-red-500"
+                        : ""
+                    }`}
                     value={item.amount}
                   />
+                  {errors.expenseItems?.[index]?.amount && (
+                    <Text className="text-red-500 mt-1">
+                      {errors.expenseItems[index].amount}
+                    </Text>
+                  )}
                 </View>
                 <View className="mb-2">
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">

@@ -14,14 +14,15 @@ import Toast from "react-native-toast-message";
 import { z } from "zod";
 import { useChangePassword } from "~/hooks/auth";
 import { ErrorResponse } from "~/types/query";
+import Feather from "@expo/vector-icons/Feather";
 
 const PasswordChangePage = () => {
   const router = useRouter();
 
   const [form, setForm] = useState({
     currentPassword: "",
-    confirmCurrentPassword: "",
     newPassword: "",
+    confirmNewPassword: "",
   });
 
   const passwordChangeSchema = z
@@ -29,7 +30,7 @@ const PasswordChangePage = () => {
       currentPassword: z
         .string()
         .min(8, "Password must be at least 8 characters"),
-      confirmCurrentPassword: z
+      confirmNewPassword: z
         .string()
         .min(8, "Password must be at least 8 characters"),
       newPassword: z
@@ -40,9 +41,9 @@ const PasswordChangePage = () => {
           "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
         ),
     })
-    .refine((data) => data.currentPassword === data.confirmCurrentPassword, {
+    .refine((data) => data.newPassword === data.confirmNewPassword, {
       message: "Passwords don't match",
-      path: ["confirmCurrentPassword"],
+      path: ["confirmNewPassword"],
     });
 
   const [errors, setErrors] = useState<any>({});
@@ -52,20 +53,27 @@ const PasswordChangePage = () => {
     isSuccess,
   } = useChangePassword();
 
+  const [showPassword, setShowPassword] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
+  });
+
   const handleSubmit = async () => {
     setErrors({});
     try {
       const validatedForm = passwordChangeSchema.parse(form);
       setErrors({});
-
+      console.log("Changing Password");
       await mutateAsync(validatedForm);
       if (isSuccess) {
         setForm({
           currentPassword: "",
-          confirmCurrentPassword: "",
           newPassword: "",
+          confirmNewPassword: "",
         });
       }
+      console.log("Password Changed");
       router.replace("/(marketing)/m_homepage");
     } catch (error:any) {
         if (error instanceof z.ZodError) {
@@ -116,51 +124,50 @@ const PasswordChangePage = () => {
                 </Text>
                 <Text className="text-red-500">*</Text>
               </View>
-              <TextInput
-                secureTextEntry
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(currentPassword) =>
-                  setForm({ ...form, currentPassword })
-                }
-                placeholder="Enter current password"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.currentPassword ? "border-red-500" : ""
-                }`}
-                value={form.currentPassword}
-              />
+              <View className="flex flex-row items-center w-full h-10 native:h-12 border dark:bg-gray-800 ps-4 pr-9 rounded-lg text-base font-medium text-[#222] dark:text-gray-100">
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(currentPassword) =>
+                    setForm({ ...form, currentPassword })
+                  }
+                  placeholder="Enter your Password"
+                  placeholderTextColor="#6b7280"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
+                  secureTextEntry={showPassword.currentPassword}
+                  value={form.currentPassword}
+                />
+                {showPassword.currentPassword ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        currentPassword: false,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        currentPassword: true,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye-off" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
               {errors.currentPassword && (
                 <Text className="text-red-500 mt-1">
                   {errors.currentPassword}
-                </Text>
-              )}
-            </View>
-
-            <View className="mb-4">
-              <View className="flex flex-row">
-                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Confirm Current Password
-                </Text>
-                <Text className="text-red-500">*</Text>
-              </View>
-              <TextInput
-                secureTextEntry
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(confirmCurrentPassword) =>
-                  setForm({ ...form, confirmCurrentPassword })
-                }
-                placeholder="Confirm current password"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.confirmCurrentPassword ? "border-red-500" : ""
-                }`}
-                value={form.confirmCurrentPassword}
-              />
-              {errors.confirmCurrentPassword && (
-                <Text className="text-red-500 mt-1">
-                  {errors.confirmCurrentPassword}
                 </Text>
               )}
             </View>
@@ -172,22 +179,104 @@ const PasswordChangePage = () => {
                 </Text>
                 <Text className="text-red-500">*</Text>
               </View>
-              <TextInput
-                secureTextEntry
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(newPassword) =>
-                  setForm({ ...form, newPassword })
-                }
-                placeholder="Enter new password"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.newPassword ? "border-red-500" : ""
-                }`}
-                value={form.newPassword}
-              />
+              <View className="flex flex-row items-center w-full h-10 native:h-12 border dark:bg-gray-800 ps-4 pr-9 rounded-lg text-base font-medium text-[#222] dark:text-gray-100">
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(newPassword) =>
+                    setForm({ ...form, newPassword })
+                  }
+                  placeholder="Enter your Password"
+                  placeholderTextColor="#6b7280"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
+                  secureTextEntry={showPassword.newPassword}
+                  value={form.newPassword}
+                />
+                {showPassword.newPassword ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        newPassword: false,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        newPassword: true,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye-off" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
               {errors.newPassword && (
                 <Text className="text-red-500 mt-1">{errors.newPassword}</Text>
+              )}
+            </View>
+
+            <View className="mb-4">
+              <View className="flex flex-row">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Confirm New Password
+                </Text>
+                <Text className="text-red-500">*</Text>
+              </View>
+              <View className="flex flex-row items-center w-full h-10 native:h-12 border dark:bg-gray-800 ps-4 pr-9 rounded-lg text-base font-medium text-[#222] dark:text-gray-100">
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(confirmNewPassword) =>
+                    setForm({ ...form, confirmNewPassword })
+                  }
+                  placeholder="Enter your Password"
+                  placeholderTextColor="#6b7280"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
+                  secureTextEntry={showPassword.confirmNewPassword}
+                  value={form.confirmNewPassword}
+                />
+                {showPassword.confirmNewPassword ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        confirmNewPassword: false,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPassword({
+                        ...showPassword,
+                        confirmNewPassword: true,
+                      });
+                    }}
+                  >
+                    <View className="h-10 native:h-12 flex items-center justify-center">
+                      <Feather name="eye-off" size={20} color="gray" />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
+              {errors.confirmNewPassword && (
+                <Text className="text-red-500 mt-1">
+                  {errors.confirmNewPassword}
+                </Text>
               )}
             </View>
 

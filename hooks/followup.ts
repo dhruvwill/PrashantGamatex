@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import {
   getCategories,
@@ -51,6 +52,7 @@ export const useInsertInquiryFollowup = () => {
         text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
+      router.navigate("/(marketing)/m_followup/m_followUpList/")
     },
     onError: (error) => {
       Toast.show({
@@ -87,6 +89,7 @@ export const useInsertQuotationFollowup = () => {
         text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
+      router.navigate("/(marketing)/m_followup/m_followUpList/");
     },
     onError: (error) => {
       Toast.show({
