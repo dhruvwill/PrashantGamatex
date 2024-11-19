@@ -131,7 +131,7 @@ const PasswordChangePage = () => {
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
-                  secureTextEntry={showPassword.currentPassword}
+                  secureTextEntry={!showPassword.currentPassword}
                   value={form.currentPassword}
                 />
                 {showPassword.currentPassword ? (
@@ -144,7 +144,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -157,7 +157,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -186,7 +186,7 @@ const PasswordChangePage = () => {
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
-                  secureTextEntry={showPassword.newPassword}
+                  secureTextEntry={!showPassword.newPassword}
                   value={form.newPassword}
                 />
                 {showPassword.newPassword ? (
@@ -199,7 +199,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -212,7 +212,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -239,7 +239,7 @@ const PasswordChangePage = () => {
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
                   className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
-                  secureTextEntry={showPassword.confirmNewPassword}
+                  secureTextEntry={!showPassword.confirmNewPassword}
                   value={form.confirmNewPassword}
                 />
                 {showPassword.confirmNewPassword ? (
@@ -252,7 +252,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -265,7 +265,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}

@@ -41,7 +41,7 @@ const CustomDrawerContent = (props: any) => {
             </View>
             <View>
               <Text className="text-lg font-bold">
-                {user?.data.name || "Prashant Shah"}{" "}
+                {user?.data.name}
               </Text>
               <Text className="text-sm text-gray-600">
                 {user?.data.company || "@prashant"}

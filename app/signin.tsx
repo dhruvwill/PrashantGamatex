@@ -95,13 +95,13 @@ export default function Example() {
                 placeholder="Enter your Password"
                 placeholderTextColor="#6b7280"
                 className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
-                secureTextEntry={showPassword}
+                secureTextEntry={!showPassword}
                 value={form.password}
               />
-              {showPassword ? (
+              {!showPassword ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setShowPassword(false);
+                    setShowPassword(true);
                   }}
                 >
                   <View className="h-10 native:h-12 flex items-center justify-center">
@@ -111,7 +111,7 @@ export default function Example() {
               ) : (
                 <TouchableOpacity
                   onPress={() => {
-                    setShowPassword(true);
+                    setShowPassword(false);
                   }}
                 >
                   <View className="h-10 native:h-12 flex items-center justify-center">
