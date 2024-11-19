@@ -64,7 +64,6 @@ const PasswordChangePage = () => {
     try {
       const validatedForm = passwordChangeSchema.parse(form);
       setErrors({});
-      console.log("Changing Password");
       await mutateAsync(validatedForm);
       if (isSuccess) {
         setForm({
@@ -73,8 +72,6 @@ const PasswordChangePage = () => {
           confirmNewPassword: "",
         });
       }
-      console.log("Password Changed");
-      router.replace("/(marketing)/m_homepage");
     } catch (error:any) {
         if (error instanceof z.ZodError) {
             const newErrors: any = {};
@@ -147,7 +144,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -160,7 +157,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -202,7 +199,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -215,7 +212,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -255,7 +252,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye" size={20} color="gray" />
+                      <Feather name="eye-off" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 ) : (
@@ -268,7 +265,7 @@ const PasswordChangePage = () => {
                     }}
                   >
                     <View className="h-10 native:h-12 flex items-center justify-center">
-                      <Feather name="eye-off" size={20} color="gray" />
+                      <Feather name="eye" size={20} color="gray" />
                     </View>
                   </TouchableOpacity>
                 )}

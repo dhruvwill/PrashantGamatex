@@ -453,24 +453,24 @@ const m_newLead = () => {
             <View className="mb-4">
               <View className="flex flex-row">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Mobile No.
+                  Email
                 </Text>
                 <Text className="text-red-500">*</Text>
               </View>
               <TextInput
-                keyboardType="phone-pad"
+                keyboardType="email-address"
                 autoCorrect={false}
                 clearButtonMode="while-editing"
-                onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
+                onChangeText={(emailId) => setForm({ ...form, emailId })}
                 placeholder="Phone"
                 placeholderTextColor="#6b7280"
                 className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.mobileNo ? "border-red-500" : ""
+                  errors.emailId ? "border-red-500" : ""
                 }`}
-                value={form.mobileNo}
+                value={form.emailId}
               />
-              {errors.mobileNo && (
-                <Text className="text-red-500 mt-1">{errors.mobileNo}</Text>
+              {errors.emailId && (
+                <Text className="text-red-500 mt-1">{errors.emailId}</Text>
               )}
             </View>
             <View className="mb-4">
@@ -491,9 +491,7 @@ const m_newLead = () => {
                 }`}
                 placeholderClassName="text-base text-muted"
                 value={form.address}
-                onChangeText={(value) =>
-                  setForm({ ...form, address: value })
-                }
+                onChangeText={(value) => setForm({ ...form, address: value })}
                 aria-labelledby="followup details"
               />
               {errors.address && (

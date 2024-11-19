@@ -105,7 +105,7 @@ export default function Example() {
                   }}
                 >
                   <View className="h-10 native:h-12 flex items-center justify-center">
-                    <Feather name="eye" size={20} color="gray" />
+                    <Feather name="eye-off" size={20} color="gray" />
                   </View>
                 </TouchableOpacity>
               ) : (
@@ -115,7 +115,7 @@ export default function Example() {
                   }}
                 >
                   <View className="h-10 native:h-12 flex items-center justify-center">
-                    <Feather name="eye-off" size={20} color="gray" />
+                    <Feather name="eye" size={20} color="gray" />
                   </View>
                 </TouchableOpacity>
               )}
