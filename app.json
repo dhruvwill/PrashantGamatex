@@ -3,16 +3,11 @@
     "name": "Prashant Group",
     "slug": "prashant-group",
     "version": "1.0.0",
-    "runtimeVersion": "1.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
