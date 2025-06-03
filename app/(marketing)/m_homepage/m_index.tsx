@@ -195,9 +195,7 @@ const Dashboard = () => {
                 graph.value === "Leads" && (
                   <Pressable
                     onPress={() => {
-                      router.push({
-                        pathname: "/(marketing)/m_lead/m_leadList/",
-                      });
+                      router.push("/(marketing)/m_lead/m_leadList/");
                     }}
                   >
                     <DonutChart
@@ -240,9 +238,9 @@ const Dashboard = () => {
                 graph.value === "Inquiries" && (
                   <Pressable
                     onPress={() => {
-                      router.push({
-                        pathname: "/(marketing)/m_followup/m_followUpList/",
-                      });
+                      // router.push(
+                      //   "/(marketing)/m_followup/m_followUpList/",
+                      // );
                     }}
                   >
                     <DonutChart
@@ -284,9 +282,9 @@ const Dashboard = () => {
                 graph.value === "Quotations" && (
                   <Pressable
                     onPress={() => {
-                      router.push({
-                        pathname: "/(marketing)/m_followup/m_followUpList/",
-                      });
+                      // router.push({
+                      //   pathname: "/(marketing)/m_followup/m_followUpList/",
+                      // });
                     }}
                   >
                     <DonutChart

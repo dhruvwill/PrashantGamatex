@@ -8,7 +8,6 @@ import {
   RefreshControl,
   TextInput,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import LeadCard from "~/components/LeadCard";
 import { Separator } from "~/components/ui/separator";

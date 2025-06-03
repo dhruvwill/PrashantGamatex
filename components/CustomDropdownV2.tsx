@@ -45,7 +45,7 @@ export default function CustomDropdown({
           }
         }}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full border border-input">
           <SelectValue
             className="text-foreground text-sm native:text-lg"
             placeholder={"Select " + placeholder}

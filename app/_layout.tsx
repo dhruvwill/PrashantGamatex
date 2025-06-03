@@ -19,10 +19,10 @@ const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
   fonts: {
-    regular: { fontFamily: "System", fontWeight: "400" },
-    medium: { fontFamily: "System", fontWeight: "500" },
-    bold: { fontFamily: "System", fontWeight: "700" },
-    heavy: { fontFamily: "System", fontWeight: "900" },
+    regular: { fontFamily: "acumin", fontWeight: "400" },
+    medium: { fontFamily: "acumin", fontWeight: "400" },
+    bold: { fontFamily: "acumin_bold", fontWeight: "700" },
+    heavy: { fontFamily: "acumin_bold", fontWeight: "900" },
   },
 };
 
@@ -30,10 +30,10 @@ const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
   fonts: {
-    regular: { fontFamily: "System", fontWeight: "400" },
-    medium: { fontFamily: "System", fontWeight: "500" },
-    bold: { fontFamily: "System", fontWeight: "700" },
-    heavy: { fontFamily: "System", fontWeight: "900" },
+    regular: { fontFamily: "acumin", fontWeight: "400" },
+    medium: { fontFamily: "acumin", fontWeight: "400" },
+    bold: { fontFamily: "acumin_bold", fontWeight: "700" },
+    heavy: { fontFamily: "acumin_bold", fontWeight: "900" },
   },
 };
 
@@ -75,7 +75,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={selectedTheme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
           {/* <Redirect href="/signin" /> */}
           <Stack initialRouteName="signin">
             <Stack.Screen

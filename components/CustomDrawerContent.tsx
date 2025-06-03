@@ -19,7 +19,7 @@ const CustomDrawerContent = (props: any) => {
   const { user } = useAuth();
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 justify-between">
       <DrawerContentScrollView
         {...props}
         scrollEnabled={false}
@@ -30,37 +30,35 @@ const CustomDrawerContent = (props: any) => {
             <Image source={require("~/assets/images/logoWithHeading.png")} />
           </View>
           <View>
-            <DrawerItemList {...props} />
+            <DrawerItemList {...props}  />
           </View>
-        </View>
-        <View style={{ paddingBottom: bottom }}>
-          {/* Profile Information */}
-          <View className="px-5 py-4 border-b border-gray-200 flex-row items-center">
-            <View className="w-12 h-12 bg-gray-300 rounded-full justify-center items-center mr-3">
-              <FontAwesome name="user" size={24} color="white" />
-            </View>
-            <View>
-              <Text className="text-lg font-bold">
-                {user?.data.name}
-              </Text>
-              <Text className="text-sm text-gray-600">
-                {user?.data.company || "@prashant"}
-              </Text>
-            </View>
-          </View>
-          {/* Logout Button */}
-          <DrawerItem
-            icon={({ color, size }) => (
-              <Text style={{ color: color, fontSize: size }}>
-                <FontAwesome size={24} name="sign-out" color={"red"} />
-              </Text>
-            )}
-            label={"Logout"}
-            labelStyle={{ color: "red" }}
-            onPress={() => handleLogout()}
-          />
         </View>
       </DrawerContentScrollView>
+      <View style={{ paddingBottom: bottom }}>
+        {/* Profile Information */}
+        <View className="px-5 py-4 border-b border-gray-200 flex-row items-center">
+          <View className="w-12 h-12 bg-gray-300 rounded-full justify-center items-center mr-3">
+            <FontAwesome name="user" size={24} color="white" />
+          </View>
+          <View>
+            <Text className="text-lg font-bold">{user?.data.name}</Text>
+            <Text className="text-sm text-gray-600">
+              {user?.data.company || "@prashant"}
+            </Text>
+          </View>
+        </View>
+        {/* Logout Button */}
+        <DrawerItem
+          icon={({ color, size }) => (
+            <Text style={{ color: color, fontSize: size }}>
+              <FontAwesome size={24} name="sign-out" color={"red"} />
+            </Text>
+          )}
+          label={"Logout"}
+          labelStyle={{ color: "red" }}
+          onPress={() => handleLogout()}
+        />
+      </View>
     </View>
   );
 };

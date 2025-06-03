@@ -6,13 +6,7 @@ const _layout = () => {
   return (
     <Stack
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#f4511e",
-        },
         headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
       }}
     >
       <Stack.Screen
@@ -28,10 +22,9 @@ const _layout = () => {
           headerTitleStyle: {
             fontFamily: "acumin",
           },
-          headerTitleAlign: "center",
           headerStyle: {
-            backgroundColor: "steelblue",
           },
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

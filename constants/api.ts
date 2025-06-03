@@ -5,8 +5,8 @@ export const inProduction = process.env.NODE_ENV === "production";
 //   : process.env.EXPO_PUBLIC_API_URL;
 
 // export const API_URL = "http://192.168.50.199:3000";
-export const API_URL = "https://pgplcrm.prasadsos.co:8091";
-// export const API_URL =
-//   "https://5b72-2409-40c1-26-4eee-a947-88cb-73a-5235.ngrok-free.app";
+// export const API_URL = "https://pgplcrm.prasadsos.co:8091";
+export const API_URL =
+  "https://28a7-2409-40c1-9-3b2f-4448-dcbd-43e3-41b7.ngrok-free.app";
 
 console.log("API_URL", API_URL);

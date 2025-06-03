@@ -20,10 +20,22 @@ import { useAuth } from "~/hooks/auth";
 const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
+  fonts: {
+    regular: { fontFamily: "acumin", fontWeight: "400" },
+    medium: { fontFamily: "acumin", fontWeight: "400" },
+    bold: { fontFamily: "acumin_bold", fontWeight: "700" },
+    heavy: { fontFamily: "acumin_bold", fontWeight: "900" },
+  },
 };
 const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
+  fonts: {
+    regular: { fontFamily: "acumin", fontWeight: "400" },
+    medium: { fontFamily: "acumin", fontWeight: "400" },
+    bold: { fontFamily: "acumin_bold", fontWeight: "700" },
+    heavy: { fontFamily: "acumin_bold", fontWeight: "900" },
+  },
 };
 
 export {
@@ -99,6 +111,7 @@ export default function RootLayout() {
               marginLeft: -10,
             },
             drawerActiveTintColor: "steelblue",
+            drawerHideStatusBarOnOpen: true,
             swipeEdgeWidth: 100,
           }}
           initialRouteName="m_homepage"
@@ -108,6 +121,9 @@ export default function RootLayout() {
             name="m_homepage"
             options={{
               drawerLabel: "Homepage",
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               headerStyle: {
                 borderWidth: 1,
                 borderColor: "#f0f0f0",
@@ -121,15 +137,18 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="home" size={size} />
+                  <Ionicons color={color} name="home" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="home-outline" size={size} />
+                  <Ionicons color={color} name="home-outline" size={size} className="pr-2" />
                 ),
             }}
           />
           <Drawer.Screen
             name="m_lead"
             options={{
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               drawerLabel: "Lead",
               headerStyle: {
                 borderWidth: 1,
@@ -144,15 +163,18 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="person" size={size} />
+                  <Ionicons color={color} name="person" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="person-outline" size={size} />
+                  <Ionicons color={color} name="person-outline" size={size} className="pr-2" />
                 ),
             }}
           />
           <Drawer.Screen
             name="m_followup"
             options={{
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               drawerLabel: "Follow Up",
               headerStyle: {
                 borderWidth: 1,
@@ -167,15 +189,18 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="notifications" size={size} />
+                  <Ionicons color={color} name="notifications" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="notifications-outline" size={size} />
+                  <Ionicons color={color} name="notifications-outline" size={size} className="pr-2" />
                 ),
             }}
           />
           <Drawer.Screen
             name="m_expense"
             options={{
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               drawerLabel: "Expense & Travel",
               headerStyle: {
                 borderWidth: 1,
@@ -190,15 +215,18 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="wallet" size={size} />
+                  <Ionicons color={color} name="wallet" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="wallet-outline" size={size} />
+                  <Ionicons color={color} name="wallet-outline" size={size} className="pr-2" />
                 ),
             }}
           />
           <Drawer.Screen
             name="changepassword"
             options={{
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               drawerLabel: "Change Password",
               headerStyle: {
                 borderWidth: 1,
@@ -213,15 +241,18 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <MaterialIcons name="password" size={size} />
+                  <MaterialIcons color={color} name="password" size={size} className="pr-2" />
                 ) : (
-                  <MaterialIcons name="password" size={size} />
+                  <MaterialIcons color={color} name="password" size={size} className="pr-2" />
                 ),
             }}
           />
           <Drawer.Screen
             name="about"
             options={{
+              drawerItemStyle: {
+                borderRadius: 5
+              },
               drawerLabel: "About",
               headerStyle: {
                 borderWidth: 1,
@@ -236,9 +267,9 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="information-circle" size={size} />
+                  <Ionicons color={color} name="information-circle" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="information-circle-outline" size={size} />
+                  <Ionicons color={color} name="information-circle-outline" size={size} className="pr-2" />
                 ),
             }}
           />
@@ -259,9 +290,9 @@ export default function RootLayout() {
               },
               drawerIcon: ({ focused, color, size }) =>
                 focused ? (
-                  <Ionicons name="notifications" size={size} />
+                  <Ionicons name="notifications" size={size} className="pr-2" />
                 ) : (
-                  <Ionicons name="notifications-outline" size={size} />
+                  <Ionicons name="notifications-outline" size={size} className="pr-2" />
                 ),
             }}
           /> */}

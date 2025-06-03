@@ -54,7 +54,7 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
   const renderContactItem = ({ item }: { item: Contact }) => (
     <TouchableOpacity
       onPress={() => onSelectContact(item)}
-      className="m-4 bg-red-500"
+      className="m-4"
     >
       <View className={"flex-row items-center p-4 border-b border-gray-200"}>
         {item.imageAvailable ? (
