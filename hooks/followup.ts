@@ -4,6 +4,7 @@ import Toast from "react-native-toast-message";
 import {
   getCategories,
   getDocumentNo,
+  getFollowupFilters,
   getInquiryFollowups,
   getQuotationFollowups,
   insertInquiryFollowup,
@@ -122,5 +123,15 @@ export const useDocumentNo = (categoryName: string) => {
     queryKey: ["getFollowupDocumentNo"],
     queryFn: () => getDocumentNo(token, categoryName),
     enabled: !!token && !!categoryName,
+  });
+};
+
+export const useFollowupFilters = () => {
+  const token = useUserStore((state) => state.user?.token);
+
+  return useQuery<any, ErrorResponse, any>({
+    queryKey: ["getFollowupFilters"],
+    queryFn: () => getFollowupFilters(token),
+    enabled: !!token,
   });
 };

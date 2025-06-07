@@ -11,47 +11,69 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { PortalHost } from "~/components/primitives/portal";
 import SimpleDropdown from "./SimpleDropdown";
+import { useConstants } from "~/hooks/const";
 import { useLeadFilters } from "~/hooks/leads";
 
-export interface FollowupFilterOptions {
+export interface LeadFilterOptions {
   person?: string;
-  partyName?: string;
-  machineName?: string;
+  leadSource?: string;
+  timeFrame?: string;
+  currency?: string;
   fromDate?: Date;
   toDate?: Date;
-  minQuantity?: number;
-  maxQuantity?: number;
+  customerApplication?: string;
 }
 
-interface FollowupFilterSheetProps {
+interface LeadFilterSheetProps {
   isVisible: boolean;
   onClose: () => void;
-  onApplyFilter: (filters: FollowupFilterOptions) => void;
+  onApplyFilter: (filters: LeadFilterOptions) => void;
   onClearFilter: () => void;
-  currentFilters: FollowupFilterOptions;
+  currentFilters: LeadFilterOptions;
   title?: string;
 }
 
-const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
+const LeadFilterSheet: React.FC<LeadFilterSheetProps> = ({
   isVisible,
   onClose,
   onApplyFilter,
   onClearFilter,
   currentFilters,
-  title = "Filter Followups",
+  title = "Filter Leads",
 }) => {
-  const [filters, setFilters] = useState<FollowupFilterOptions>(currentFilters);
+  const [filters, setFilters] = useState<LeadFilterOptions>(currentFilters);
   const [showFromDatePicker, setShowFromDatePicker] = useState(false);
   const [showToDatePicker, setShowToDatePicker] = useState(false);
-
+  
+  const constants = useConstants();
   const associatedUsers = useLeadFilters();
 
-  // Generate dropdown options from users
+  // Generate dropdown options from constants
+
   const associatedUsersOptions = associatedUsers.data?.map((user: any) => ({
     value: user.UserCode,
     label: user.UserIdentification,
+  })) || [];
+
+  const leadSourceOptions = constants.data?.LeadSourceOutput?.split(",").map((source: string) => ({
+    value: source.trim(),
+    label: source.trim(),
+  })) || [];
+
+  const timeFrameOptions = constants.data?.TimeFrameOutput?.split(",").map((timeFrame: string) => ({
+    value: timeFrame.trim(),
+    label: timeFrame.trim(),
+  })) || [];
+
+  const currencyOptions = constants.data?.CurrencyOutput?.split(",").map((currency: string) => ({
+    value: currency.trim(),
+    label: currency.trim(),
+  })) || [];
+
+  const customerApplicationOptions = constants.data?.ApplicationOutput?.split(",").map((application: string) => ({
+    value: application.trim(),
+    label: application.trim(),
   })) || [];
 
   useEffect(() => {
@@ -64,18 +86,15 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
   };
 
   const handleClearFilter = () => {
-    const emptyFilters: FollowupFilterOptions = {};
+    const emptyFilters: LeadFilterOptions = {};
     setFilters(emptyFilters);
     onClearFilter();
     onClose();
   };
 
   const hasActiveFilters = () => {
-    return Object.values(filters).some(value => 
-      value !== undefined && 
-      value !== null && 
-      value !== "" && 
-      (typeof value !== 'number' || !isNaN(value))
+    return Object.values(filters).some(
+      (value) => value !== undefined && value !== null && value !== ""
     );
   };
 
@@ -84,9 +103,12 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
   };
 
   return (
-    <Modal visible={isVisible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={isVisible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <SafeAreaView className="flex-1 bg-white">
-        <PortalHost name="followup-filter-portal" />
         {/* Header */}
         <View className="flex-row items-center justify-between p-4 border-b border-gray-200">
           <Text className="text-xl font-acumin_bold">{title}</Text>
@@ -124,41 +146,101 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                 />
               </View>
 
-              {/* Party Name Filter */}
+            </>
+          )}
+
+          {constants.isLoading ? (
+            <View className="flex-1 justify-center items-center py-8">
+              <ActivityIndicator size="large" color="#007aff" />
+              <Text className="text-gray-500 mt-2 font-acumin">Loading filter options...</Text>
+            </View>
+          ) : constants.error ? (
+            <View className="flex-1 justify-center items-center py-8">
+              <Text className="text-red-500 text-center font-acumin">
+                Error loading filters: {(constants.error as any)?.errorMessage || "Failed to load filter options"}
+              </Text>
+            </View>
+          ) : (
+            <>
+              {/* Lead Source Filter */}
               <View className="mb-4">
-                <Text className="text-lg font-acumin mb-2 text-gray-700">Party Name</Text>
-                <TextInput
-                  className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                  placeholder="Enter party name..."
-                  value={filters.partyName || ""}
-                  onChangeText={(text) => setFilters(prev => ({ ...prev, partyName: text }))}
-                  placeholderTextColor="#666666"
+                <Text className="text-lg font-acumin mb-2 text-gray-700">
+                  Lead Source
+                </Text>
+                <SimpleDropdown
+                  options={leadSourceOptions}
+                  placeholder="Select lead source"
+                  value={filters.leadSource}
+                  onChange={(value) => {
+                    setFilters((prev) => ({ ...prev, leadSource: value }));
+                  }}
                 />
               </View>
 
-              {/* Machine Name Filter */}
+              {/* Time Frame Filter */}
               <View className="mb-4">
-                <Text className="text-lg font-acumin mb-2 text-gray-700">Machine Name</Text>
-                <TextInput
-                  className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                  placeholder="Enter machine name..."
-                  value={filters.machineName || ""}
-                  onChangeText={(text) => setFilters(prev => ({ ...prev, machineName: text }))}
-                  placeholderTextColor="#666666"
+                <Text className="text-lg font-acumin mb-2 text-gray-700">
+                  Time Frame
+                </Text>
+                <SimpleDropdown
+                  options={timeFrameOptions}
+                  placeholder="Select time frame"
+                  value={filters.timeFrame}
+                  onChange={(value) => {
+                    setFilters((prev) => ({ ...prev, timeFrame: value }));
+                  }}
+                />
+              </View>
+
+              {/* Currency Filter */}
+              <View className="mb-4">
+                <Text className="text-lg font-acumin mb-2 text-gray-700">
+                  Currency
+                </Text>
+                <SimpleDropdown
+                  options={currencyOptions}
+                  placeholder="Select currency"
+                  value={filters.currency}
+                  onChange={(value) => {
+                    setFilters((prev) => ({ ...prev, currency: value }));
+                  }}
+                />
+              </View>
+
+              {/* Customer Application Filter */}
+              <View className="mb-4">
+                <Text className="text-lg font-acumin mb-2 text-gray-700">
+                  Customer Application
+                </Text>
+                <SimpleDropdown
+                  options={customerApplicationOptions}
+                  placeholder="Select customer application"
+                  value={filters.customerApplication}
+                  onChange={(value) => {
+                    setFilters((prev) => ({ ...prev, customerApplication: value }));
+                  }}
                 />
               </View>
 
               {/* Date Range Filter */}
               <View className="mb-4">
-                <Text className="text-lg font-acumin mb-2 text-gray-700">Document Date Range</Text>
-                
+                <Text className="text-lg font-acumin mb-2 text-gray-700">
+                  Document Date Range
+                </Text>
+
                 {/* From Date */}
                 <TouchableOpacity
                   onPress={() => setShowFromDatePicker(true)}
                   className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 flex-row items-center justify-between mb-2"
                 >
-                  <Text className={`font-acumin ${filters.fromDate ? 'text-black' : 'text-gray-600'}`}>
-                    {filters.fromDate ? `From: ${formatDate(filters.fromDate)}` : "Select from date"}
+                  <Text
+                    className={`font-acumin ${
+                      filters.fromDate ? "text-black" : "text-gray-600"
+                    }`}
+                  >
+                    {filters.fromDate
+                      ? `From: ${formatDate(filters.fromDate)}`
+                      : "Select from date"}
                   </Text>
                   <Ionicons name="calendar-outline" size={20} color="#666666" />
                 </TouchableOpacity>
@@ -168,8 +250,14 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                   onPress={() => setShowToDatePicker(true)}
                   className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 flex-row items-center justify-between"
                 >
-                  <Text className={`font-acumin ${filters.toDate ? 'text-black' : 'text-gray-600'}`}>
-                    {filters.toDate ? `To: ${formatDate(filters.toDate)}` : "Select to date"}
+                  <Text
+                    className={`font-acumin ${
+                      filters.toDate ? "text-black" : "text-gray-600"
+                    }`}
+                  >
+                    {filters.toDate
+                      ? `To: ${formatDate(filters.toDate)}`
+                      : "Select to date"}
                   </Text>
                   <Ionicons name="calendar-outline" size={20} color="#666666" />
                 </TouchableOpacity>
@@ -183,7 +271,7 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                     onChange={(event, selectedDate) => {
                       setShowFromDatePicker(false);
                       if (selectedDate) {
-                        setFilters(prev => ({ ...prev, fromDate: selectedDate }));
+                        setFilters((prev) => ({ ...prev, fromDate: selectedDate }));
                       }
                     }}
                   />
@@ -197,52 +285,11 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                     onChange={(event, selectedDate) => {
                       setShowToDatePicker(false);
                       if (selectedDate) {
-                        setFilters(prev => ({ ...prev, toDate: selectedDate }));
+                        setFilters((prev) => ({ ...prev, toDate: selectedDate }));
                       }
                     }}
                   />
                 )}
-              </View>
-
-              {/* Quantity Range Filter */}
-              <View className="mb-4">
-                <Text className="text-lg font-acumin mb-2 text-gray-700">Quantity Range</Text>
-                
-                <View className="flex-row gap-2">
-                  <View className="flex-1">
-                    <TextInput
-                      className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                      placeholder="Min quantity"
-                      value={filters.minQuantity?.toString() || ""}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        setFilters(prev => ({ 
-                          ...prev, 
-                          minQuantity: isNaN(num) ? undefined : num 
-                        }));
-                      }}
-                      keyboardType="numeric"
-                      placeholderTextColor="#666666"
-                    />
-                  </View>
-                  
-                  <View className="flex-1">
-                    <TextInput
-                      className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                      placeholder="Max quantity"
-                      value={filters.maxQuantity?.toString() || ""}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        setFilters(prev => ({ 
-                          ...prev, 
-                          maxQuantity: isNaN(num) ? undefined : num 
-                        }));
-                      }}
-                      keyboardType="numeric"
-                      placeholderTextColor="#666666"
-                    />
-                  </View>
-                </View>
               </View>
             </>
           )}
@@ -256,7 +303,11 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
               className="flex-1 h-12 border border-gray-300 rounded-lg flex-row items-center justify-center"
               disabled={!hasActiveFilters()}
             >
-              <Text className={`text-base font-acumin ${hasActiveFilters() ? 'text-gray-700' : 'text-gray-400'}`}>
+              <Text
+                className={`text-base font-acumin ${
+                  hasActiveFilters() ? "text-gray-700" : "text-gray-400"
+                }`}
+              >
                 Clear All
               </Text>
             </TouchableOpacity>
@@ -274,12 +325,12 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
           {/* Active filters count */}
           {hasActiveFilters() && (
             <Text className="text-center text-sm text-gray-500 mt-2 font-acumin">
-              {Object.values(filters).filter(v => 
-                v !== undefined && 
-                v !== null && 
-                v !== "" && 
-                (typeof v !== 'number' || !isNaN(v))
-              ).length} filter(s) active
+              {
+                Object.values(filters).filter(
+                  (v) => v !== undefined && v !== null && v !== ""
+                ).length
+              }{" "}
+              filter(s) active
             </Text>
           )}
         </View>
@@ -288,4 +339,4 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
   );
 };
 
-export default FollowupFilterSheet; 
+export default LeadFilterSheet;

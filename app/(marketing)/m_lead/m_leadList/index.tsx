@@ -15,7 +15,7 @@ import LeadCard from "~/components/LeadCard";
 import { Separator } from "~/components/ui/separator";
 import { useLeads } from "~/hooks/leads";
 import { usePreventScreenCapture } from "expo-screen-capture";
-import FilterSheet, { FilterOptions } from "~/components/FilterSheet";
+import LeadFilterSheet, { LeadFilterOptions } from "~/components/LeadFilterSheet";
 import { LeadData } from "~/types/lead";
 
 const m_leadList = () => {
@@ -24,7 +24,7 @@ const m_leadList = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterSheetVisible, setIsFilterSheetVisible] = useState(false);
-  const [activeFilters, setActiveFilters] = useState<FilterOptions>({});
+  const [activeFilters, setActiveFilters] = useState<LeadFilterOptions>({});
   const allLeads = useLeads();
   const queryClient = useQueryClient();
 
@@ -41,19 +41,46 @@ const m_leadList = () => {
 
       if (!matchesSearch) return false;
 
-      // Apply selected filter (you can customize this logic based on what the filter should match)
-      if (activeFilters.selectedFilter) {
-        // Example: filter could match against multiple fields - customize as needed
-        const filterValue = activeFilters.selectedFilter.toLowerCase();
-        const matchesFilter = 
-          lead.UDF_CompanyName_2361.toLowerCase().includes(filterValue) ||
-          lead.UDF_Product_2361.toLowerCase().includes(filterValue) ||
-          lead.UDF_LeadSource_2361.toLowerCase().includes(filterValue) ||
-          lead.UDF_TimeFrame_2361.toLowerCase().includes(filterValue) ||
-          lead.UDF_CustomerApplication_2361?.toLowerCase().includes(filterValue) ||
-          lead.CurrencyName.toLowerCase().includes(filterValue);
+      // Lead Source filter
+      if (activeFilters.leadSource) {
+        if (lead.UDF_LeadSource_2361 !== activeFilters.leadSource) {
+          return false;
+        }
+      }
+
+      // Time Frame filter
+      if (activeFilters.timeFrame) {
+        if (lead.UDF_TimeFrame_2361 !== activeFilters.timeFrame) {
+          return false;
+        }
+      }
+
+      // Currency filter
+      if (activeFilters.currency) {
+        if (lead.CurrencyName !== activeFilters.currency) {
+          return false;
+        }
+      }
+
+      // Customer Application filter
+      if (activeFilters.customerApplication) {
+        const appFilter = activeFilters.customerApplication.toLowerCase();
+        if (!lead.UDF_CustomerApplication_2361?.toLowerCase().includes(appFilter)) {
+          return false;
+        }
+      }
+
+      // Date range filter
+      if (activeFilters.fromDate || activeFilters.toDate) {
+        const leadDate = new Date(lead.DocumentDate);
         
-        if (!matchesFilter) return false;
+        if (activeFilters.fromDate && leadDate < activeFilters.fromDate) {
+          return false;
+        }
+        
+        if (activeFilters.toDate && leadDate > activeFilters.toDate) {
+          return false;
+        }
       }
 
       return true;
@@ -70,7 +97,7 @@ const m_leadList = () => {
     setRefreshing(false);
   };
 
-  const handleApplyFilter = (filters: FilterOptions) => {
+  const handleApplyFilter = (filters: LeadFilterOptions) => {
     setActiveFilters(filters);
   };
 
@@ -92,24 +119,25 @@ const m_leadList = () => {
       <View className="flex mx-3 my-5">
         <View className="px-3">
           <Text className="text-3xl font-acumin_bold">Leads</Text>
-          <Text className="text-muted text-sm font-acumin">
+          <Text className="text-gray-900 text-sm font-acumin">
             List of All Leads
           </Text>
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />
         </View>
 
-        {/* Search Bar */}
+        {/* Search Bar with Filter Button */}
         <View className="px-3 mb-4 flex flex-row justify-between gap-3">
           <View className="flex flex-grow flex-row items-center px-4 py-2 bg-gray-100 rounded-lg border border-gray-200">
             <Search size={20} color="#666666" />
             <TextInput
               className="flex-1 ml-2 text-base font-acumin"
-              placeholder="Search by company or product..."
+              placeholder="company, product or contact..."
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholderTextColor="#666666"
             />
           </View>
+          
           <TouchableOpacity
             onPress={() => setIsFilterSheetVisible(true)}
             className={`flex flex-row items-center px-4 py-2 rounded-lg border border-gray-200 ${
@@ -139,7 +167,21 @@ const m_leadList = () => {
                 if (!value) return null;
                 
                 let displayValue = value;
-                let displayLabel = key === 'selectedFilter' ? 'Filter' : key;
+                let displayLabel = key;
+
+                // Format display values
+                if (key === 'leadSource') displayLabel = 'Source';
+                else if (key === 'timeFrame') displayLabel = 'Time Frame';
+                else if (key === 'currency') displayLabel = 'Currency';
+                else if (key === 'customerApplication') displayLabel = 'Application';
+                else if (key === 'fromDate') {
+                  displayLabel = 'From';
+                  displayValue = (value as Date).toLocaleDateString();
+                }
+                else if (key === 'toDate') {
+                  displayLabel = 'To';
+                  displayValue = (value as Date).toLocaleDateString();
+                }
 
                 return (
                   <View key={key} className="bg-blue-100 px-3 py-1 rounded-full border border-blue-300 flex-row items-center">
@@ -149,7 +191,7 @@ const m_leadList = () => {
                     <TouchableOpacity
                       onPress={() => {
                         const newFilters = { ...activeFilters };
-                        delete newFilters[key as keyof FilterOptions];
+                        delete newFilters[key as keyof LeadFilterOptions];
                         setActiveFilters(newFilters);
                       }}
                     >
@@ -205,7 +247,7 @@ const m_leadList = () => {
         </View>
       </View>
 
-      <FilterSheet
+      <LeadFilterSheet
         isVisible={isFilterSheetVisible}
         onClose={() => setIsFilterSheetVisible(false)}
         onApplyFilter={handleApplyFilter}

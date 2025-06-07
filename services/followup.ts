@@ -160,3 +160,23 @@ export const getImage = async (image: string) => {
     throw { errorMessage: error.message } as ErrorResponse;
   }
 };
+
+export const getFollowupFilters = async (
+  token: string | undefined
+): Promise<any> => {
+  try {
+    const response = await client.get("/const/followup/associatedusers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};

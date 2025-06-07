@@ -45,7 +45,7 @@ export default function CustomDropdown({
           }
         }}
       >
-        <SelectTrigger className="w-full border border-input">
+        <SelectTrigger className="w-full border border-gray-900">
           <SelectValue
             className="text-foreground text-sm native:text-lg"
             placeholder={"Select " + placeholder}
@@ -53,7 +53,7 @@ export default function CustomDropdown({
         </SelectTrigger>
         <SelectContent
           insets={contentInsets}
-          className="bg-white dark:bg-black border-0 my-1 w-full mx-3"
+          className="bg-white dark:bg-black border border-input shadow-md my-1 w-full mx-3"
         >
           <ScrollView className="max-h-60">
             <SelectGroup>

@@ -138,7 +138,7 @@ const m_followUpList = () => {
             <Text className="text-3xl font-acumin_bold">
               List of Inquiry/Quotations
             </Text>
-            <Text className="text-muted text-sm font-acumin">
+            <Text className="text-gray-900 text-sm font-acumin">
               Add a Follow up
             </Text>
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />
