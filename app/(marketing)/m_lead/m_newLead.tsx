@@ -325,7 +325,7 @@ const m_newLead = () => {
                   <CustomDropdownV2
                     options={
                       constants.data?.CurrencyOutput.split(",").map(
-                        (currency) => ({
+                        (currency: string) => ({
                           value: currency,
                           label: currency,
                         })
@@ -517,7 +517,7 @@ const m_newLead = () => {
                   <CustomDropdownV2
                     options={
                       constants.data?.ProductOutput.split(",").map(
-                        (product) => ({
+                        (product: string) => ({
                           value: product,
                           label: product,
                         })
@@ -667,7 +667,7 @@ const m_newLead = () => {
                   <CustomDropdownV2
                     options={
                       constants.data?.ApplicationOutput.split(",").map(
-                        (application) => ({
+                        (application: string) => ({
                           value: application,
                           label: application,
                         })

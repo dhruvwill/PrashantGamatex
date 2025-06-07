@@ -61,3 +61,9 @@ export type LeadData = {
   UDF_InquiryStatus_2361: number;
   ImageName: string;
 };
+
+export type LeadFilterData = {
+  UserIdentification: string;
+  UserCode: string;
+  CategoryName: string;
+};

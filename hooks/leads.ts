@@ -2,12 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getAllLeads,
   getDocumentNo,
+  getLeadFilters,
   insertLead,
   updateLead,
 } from "~/services/lead";
 import { ErrorResponse } from "~/types/query";
 import Toast from "react-native-toast-message";
-import { LeadInsertData, LeadData, LeadUpdateData } from "~/types/lead";
+import { LeadInsertData, LeadData, LeadUpdateData, LeadFilterData } from "~/types/lead";
 import { useUserStore } from "~/store";
 import { router } from "expo-router";
 
@@ -101,5 +102,15 @@ export const useDocumentNo = (categoryName: string) => {
     queryKey: ["getLeadDocumentNo"],
     queryFn: () => getDocumentNo(token, categoryName),
     enabled: !!token && !!categoryName,
+  });
+};
+
+export const useLeadFilters = () => {
+  const token = useUserStore((state) => state.user?.token);
+
+  return useQuery<any, ErrorResponse, LeadFilterData[]>({
+    queryKey: ["getLeadFilters"],
+    queryFn: () => getLeadFilters(token),
+    enabled: !!token,
   });
 };

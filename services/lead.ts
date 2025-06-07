@@ -101,3 +101,23 @@ export const getDocumentNo = async (
     }
   }
 };
+
+export const getLeadFilters = async (
+  token: string | undefined
+): Promise<any> => {
+  try {
+    const response = await client.get("/const/lead/associatedusers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};
