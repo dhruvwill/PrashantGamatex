@@ -14,9 +14,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import SimpleDropdown from "./SimpleDropdown";
 import { useConstants } from "~/hooks/const";
 import { useLeadFilters } from "~/hooks/leads";
+import { Person } from "~/types/user";
 
 export interface LeadFilterOptions {
-  person?: string;
+  person?: Person;
   leadSource?: string;
   timeFrame?: string;
   currency?: string;
@@ -139,9 +140,18 @@ const LeadFilterSheet: React.FC<LeadFilterSheetProps> = ({
                 <SimpleDropdown
                   options={associatedUsersOptions}
                   placeholder="Select Person"
-                  value={filters.person}
+                  value={filters.person?.UserCode}
                   onChange={(value) => {
-                    setFilters((prev) => ({ ...prev, person: value }));
+                    const selectedUser = associatedUsers.data?.find(user => user.UserCode === value);
+                    if (selectedUser) {
+                      setFilters((prev) => ({ 
+                        ...prev, 
+                        person: { 
+                          UserName: selectedUser.UserIdentification, 
+                          UserCode: selectedUser.UserCode 
+                        } 
+                      }));
+                    }
                   }}
                 />
               </View>

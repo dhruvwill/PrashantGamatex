@@ -9,12 +9,14 @@ const LeadCard = ({
   productList,
   timeFrame,
   docDate,
+  userName,
 }: {
   leadId: string;
   companyName: string;
   productList: string;
   timeFrame: string;
   docDate: Date;
+  userName: string;
 }) => {
   const router = useRouter();
   return (
@@ -41,9 +43,13 @@ const LeadCard = ({
           <Ionicons name="cube-outline" size={16} color="#4B5563" />
           <Text className="text-md text-gray-700 ml-2">{productList}</Text>
         </View>
-        <View className="flex-row items-center">
+        <View className="flex-row items-center mb-2">
           <Ionicons name="time-outline" size={16} color="#4B5563" />
           <Text className="text-sm text-gray-600 ml-2">{timeFrame}</Text>
+        </View>
+        <View className="flex-row items-center">
+          <Ionicons name="person-outline" size={16} color="#4B5563" />
+          <Text className="text-sm text-gray-600 ml-2">{userName}</Text>
         </View>
       </View>
       <View className="bg-gray-100 p-3 flex-row justify-end items-center">

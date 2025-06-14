@@ -42,6 +42,8 @@ export type LeadData = {
   DocumentNo: number;
   CategoryName: string;
   CurrencyName: string;
+  UserName: string;
+  UserCode: string;
   ReferenceTransaction_2361UDFId: number;
   ReferenceTransaction_2361Id: number;
   UDF_CompanyName_2361: string;
@@ -60,6 +62,9 @@ export type LeadData = {
   UDF_LeadNotes_2361: string;
   UDF_InquiryStatus_2361: number;
   ImageName: string;
+  UDF_Year_0: number;
+  UDF_Month_0: number;
+  UDF_Category_0: string;
 };
 
 export type LeadFilterData = {

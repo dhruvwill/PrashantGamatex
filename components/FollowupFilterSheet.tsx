@@ -14,9 +14,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { PortalHost } from "~/components/primitives/portal";
 import SimpleDropdown from "./SimpleDropdown";
 import { useLeadFilters } from "~/hooks/leads";
+import { Person } from "~/types/user";
 
 export interface FollowupFilterOptions {
-  person?: string;
+  person?: Person;
   partyName?: string;
   machineName?: string;
   fromDate?: Date;
@@ -117,9 +118,18 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                 <SimpleDropdown
                   options={associatedUsersOptions}
                   placeholder="Select Person"
-                  value={filters.person}
+                  value={filters.person?.UserCode}
                   onChange={(value) => {
-                    setFilters((prev) => ({ ...prev, person: value }));
+                    const selectedUser = associatedUsers.data?.find(user => user.UserCode === value);
+                    if (selectedUser) {
+                      setFilters((prev) => ({ 
+                        ...prev, 
+                        person: { 
+                          UserName: selectedUser.UserIdentification, 
+                          UserCode: selectedUser.UserCode 
+                        } 
+                      }));
+                    }
                   }}
                 />
               </View>

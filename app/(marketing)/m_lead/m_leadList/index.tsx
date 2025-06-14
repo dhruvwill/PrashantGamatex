@@ -17,6 +17,7 @@ import { useLeads } from "~/hooks/leads";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import LeadFilterSheet, { LeadFilterOptions } from "~/components/LeadFilterSheet";
 import { LeadData } from "~/types/lead";
+import { Person } from "~/types/user";
 
 const m_leadList = () => {
   usePreventScreenCapture();
@@ -182,6 +183,10 @@ const m_leadList = () => {
                   displayLabel = 'To';
                   displayValue = (value as Date).toLocaleDateString();
                 }
+                else if (key === 'person') {
+                  displayLabel = 'Person';
+                  displayValue = (value as Person).UserName;
+                }
 
                 return (
                   <View key={key} className="bg-blue-100 px-3 py-1 rounded-full border border-blue-300 flex-row items-center">
@@ -242,6 +247,7 @@ const m_leadList = () => {
               productList={lead.UDF_Product_2361}
               timeFrame={lead.UDF_TimeFrame_2361}
               docDate={new Date(lead.DocumentDate)}
+              userName={lead.UserName}
             />
           ))}
         </View>

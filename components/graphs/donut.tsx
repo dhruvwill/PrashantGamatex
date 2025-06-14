@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { View, Text } from "react-native";
-import Svg, { Circle } from "react-native-svg";
+import { Pie, PolarChart } from "victory-native";
 
 interface Section {
   percentage: number;
@@ -36,34 +36,14 @@ const DonutChart: React.FC<DonutChartProps> = ({
     }));
   }, [sections]);
 
-  const chartRadius = radius - strokeWidth / 2;
-  const circumference = 2 * Math.PI * chartRadius;
-
-  const renderSections = () => {
-    let cumulativePercentage = 0;
-    return normalizedSections.map((section, index) => {
-      const strokeDasharray = `${
-        (section.percentage / 100) * circumference
-      } ${circumference}`;
-      const rotation = (cumulativePercentage / 100) * 360;
-      cumulativePercentage += section.percentage;
-
-      return (
-        <Circle
-          key={index}
-          cx={radius}
-          cy={radius}
-          r={chartRadius}
-          fill="none"
-          stroke={section.color}
-          strokeWidth={strokeWidth}
-          strokeDasharray={strokeDasharray}
-          rotation={rotation}
-          origin={`${radius}, ${radius}`}
-        />
-      );
-    });
-  };
+  // Transform sections data for Victory Native XL
+  const victoryData = useMemo(() => {
+    return normalizedSections.map((section, index) => ({
+      label: section.label,
+      value: section.percentage,
+      color: section.color,
+    }));
+  }, [normalizedSections]);
 
   const renderLegend = () => {
     return normalizedSections.map((section, index) => (
@@ -95,22 +75,15 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   return (
     <View className="flex items-center p-5">
-      <View className="mb-5">
-        <Svg
-          width={radius * 2}
-          height={radius * 2}
-          viewBox={`0 0 ${radius * 2} ${radius * 2}`}
+      <View className="mb-5" style={{ height: radius * 2, width: radius * 2 }}>
+        <PolarChart
+          data={victoryData}
+          labelKey="label"
+          valueKey="value"
+          colorKey="color"
         >
-          <Circle
-            cx={radius}
-            cy={radius}
-            r={chartRadius}
-            fill="none"
-            stroke={backgroundColor}
-            strokeWidth={strokeWidth}
-          />
-          {renderSections()}
-        </Svg>
+          <Pie.Chart innerRadius={`${((radius - strokeWidth) / radius) * 100}%`} />
+        </PolarChart>
       </View>
       <View className="flex items-start">{renderLegend()}</View>
     </View>

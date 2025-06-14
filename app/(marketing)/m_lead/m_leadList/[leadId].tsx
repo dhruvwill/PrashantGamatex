@@ -430,7 +430,7 @@ const m_editLead = () => {
                   <CustomDropdownV2
                     options={
                       constants.data?.ProductOutput.split(",").map(
-                        (product) => ({
+                        (product: any) => ({
                           value: product,
                           label: product,
                         })
@@ -557,7 +557,7 @@ const m_editLead = () => {
                   <CustomDropdownV2
                     options={
                       constants.data?.ApplicationOutput.split(",").map(
-                        (application) => ({
+                        (application: any) => ({
                           value: application,
                           label: application,
                         })

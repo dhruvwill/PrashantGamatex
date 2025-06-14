@@ -20,6 +20,7 @@ import { Search } from "lucide-react-native";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { Ionicons } from "@expo/vector-icons";
 import FollowupFilterSheet, { FollowupFilterOptions } from "~/components/FollowupFilterSheet";
+import { Person } from "~/types/user";
 
 interface FollowupItem {
   SalesInquiryId?: string;
@@ -206,6 +207,10 @@ const m_followUpList = () => {
                   }
                   else if (key === 'minQuantity') displayLabel = 'Min Qty';
                   else if (key === 'maxQuantity') displayLabel = 'Max Qty';
+                  else if (key === 'person') {
+                    displayLabel = 'Person';
+                    displayValue = (value as Person).UserName;
+                  }
 
                   return (
                     <View key={key} className="bg-blue-100 px-3 py-1 rounded-full border border-blue-300 flex-row items-center">
