@@ -151,7 +151,7 @@ const m_followUpList = () => {
               <Search size={20} color="#666666" />
               <TextInput
                 className="flex-1 ml-2 text-base font-acumin"
-                placeholder="Search by party, machine or document no..."
+                placeholder="party, machine or document no..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 placeholderTextColor="#666666"
