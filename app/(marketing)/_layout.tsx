@@ -47,31 +47,15 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
-
   const { isAuthenticated } = useAuth();
 
   React.useEffect(() => {
     (async () => {
-      const theme = await AsyncStorage.getItem("theme");
       if (Platform.OS === "web") {
         // Adds the background color to the html element to prevent white background on overscroll.
         document.documentElement.classList.add("bg-background");
       }
-      if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme);
-        setIsColorSchemeLoaded(true);
-        return;
-      }
-      // const colorTheme = theme === "dark" ? "dark" : "light";
-      // if (colorTheme !== colorScheme) {
-      //   setColorScheme(colorTheme);
-
-      //   setIsColorSchemeLoaded(true);
-      //   return;
-      // }
-      setColorScheme("light");
       setIsColorSchemeLoaded(true);
     })().finally(() => {
       SplashScreen.hideAsync();
@@ -84,7 +68,7 @@ export default function RootLayout() {
 
   if (!isAuthenticated) {
     return (
-      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+      <ThemeProvider value={LIGHT_THEME}>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -101,7 +85,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+    <ThemeProvider value={LIGHT_THEME}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Drawer
           screenOptions={{

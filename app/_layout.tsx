@@ -46,8 +46,6 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { theme, setTheme } = useThemeStore();
-  const { colorScheme, setColorScheme } = useColorScheme();
   const [fontsLoaded] = useFonts({
     acumin: require("../assets/fonts/Acumin.otf"),
     acumin_italic: require("../assets/fonts/Acumin_italic.otf"),
@@ -60,23 +58,20 @@ export default function RootLayout() {
       // Adds the background color to the html element to prevent white background on overscroll.
       document.documentElement.classList.add("bg-background");
     }
-    setColorScheme(theme);
     SplashScreen.hideAsync();
-  }, [theme, setColorScheme]);
+  }, []);
 
   if (!fontsLoaded) {
     return null;
   }
 
-  const selectedTheme = colorScheme === "dark" ? DARK_THEME : LIGHT_THEME;
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={selectedTheme}>
+      <ThemeProvider value={LIGHT_THEME}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
-          {/* <Redirect href="/signin" /> */}
+          <StatusBar style="light"/>
           <Stack initialRouteName="signin">
             <Stack.Screen
               name="signin"
