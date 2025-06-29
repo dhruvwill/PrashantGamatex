@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Contacts from "expo-contacts";
 import { Contact, ContactPickerModalProps } from "~/types/contacts";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Input } from "./ui/input";
 
 const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
   isVisible,
@@ -54,9 +55,9 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
   const renderContactItem = ({ item }: { item: Contact }) => (
     <TouchableOpacity
       onPress={() => onSelectContact(item)}
-      className="m-4"
+      // className="m-4"
     >
-      <View className={"flex-row items-center p-4 border-b border-gray-200"}>
+      <View className={"flex-row items-center p-4"}>
         {item.imageAvailable ? (
           <Image
             src={item.image?.uri}
@@ -69,7 +70,7 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
           />
         )}
         <View className={"flex-1"}>
-          <Text className={"text-lg font-acumin text-background"}>
+          <Text className={"text-lg font-acumin text-gray-900"}>
             {item.name}
           </Text>
           {item.phoneNumbers && item.phoneNumbers[0] && (
@@ -92,7 +93,7 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
           </TouchableOpacity>
         </View>
         <View className="p-4 border-b border-gray-200">
-          <TextInput
+          <Input
             className="h-10 px-4 border border-gray-300 rounded-md"
             placeholder="Search contacts..."
             value={searchQuery}
@@ -108,6 +109,9 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
             data={filteredContacts}
             renderItem={renderContactItem}
             keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => (
+              <View className="h-[0.5] w-full bg-gray-200" />
+            )}
           />
         )}
       </SafeAreaView>

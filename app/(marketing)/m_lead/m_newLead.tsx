@@ -331,6 +331,7 @@ const m_newLead = () => {
                         })
                       ) || []
                     }
+                    defaultValue={{ value: "Rs.", label: "Rs." }}
                     placeholder="Currency"
                     onChange={(value) => {
                       setForm({ ...form, currency: value });

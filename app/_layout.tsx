@@ -4,16 +4,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { Redirect, SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "~/components/primitives/portal";
 import { useFonts } from "expo-font";
-import { useThemeStore } from "~/store";
+import { useThemeStore, useUserStore } from "~/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "~/utils/notification";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -46,6 +48,11 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
+
   const [fontsLoaded] = useFonts({
     acumin: require("../assets/fonts/Acumin.otf"),
     acumin_italic: require("../assets/fonts/Acumin_italic.otf"),
@@ -53,13 +60,38 @@ export default function RootLayout() {
     acumin_bolditalic: require("../assets/fonts/Acumin_bolditalic.otf"),
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (Platform.OS === "web") {
       // Adds the background color to the html element to prevent white background on overscroll.
       document.documentElement.classList.add("bg-background");
     }
-    SplashScreen.hideAsync();
+    SplashScreen.hide();
   }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      registerForPushNotificationsAsync()
+        .then((token: any) => setExpoPushToken(token ?? ""))
+        .catch((error: any) => setExpoPushToken(`${error}`));
+
+      const notificationListener = Notifications.addNotificationReceivedListener(
+        (notification) => {
+          setNotification(notification);
+        }
+      );
+
+      const responseListener =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response);
+        });
+
+      return () => {
+        notificationListener.remove();
+        responseListener.remove();
+        useUserStore.getState().clearFcmToken();
+      };
+    }
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
@@ -71,7 +103,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={LIGHT_THEME}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar style="light"/>
+          <StatusBar style="light" />
           <Stack initialRouteName="signin">
             <Stack.Screen
               name="signin"

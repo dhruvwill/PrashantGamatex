@@ -15,10 +15,13 @@ type User = {
 
 type UserStore = {
   user: User | null;
+  fcmToken: string | null;
   setUser: (user: User) => void;
   clearUser: () => void;
   setToken: (token: string) => void;
   clearToken: () => void;
+  setFcmToken: (fcmToken: string) => void;
+  clearFcmToken: () => void;
 };
 
 type AppStore = {
@@ -36,7 +39,7 @@ const useThemeStore = create<ThemeStore>()(
     persist(
       (set) => ({
         theme: "light",
-        setTheme: (theme) => set({ theme }),
+        setTheme: (theme: any) => set({ theme }),
       }),
       {
         name: "themeStore",
@@ -54,16 +57,30 @@ const useUserStore = create<UserStore>()(
         setUser: (user: User) => set({ user }),
         clearUser: () => set({ user: null }),
         setToken: (token: string) =>
-          set((state) => {
+          set((state: any) => {
             if (state.user) {
               return { user: { ...state.user, token } };
             }
             return state;
           }),
         clearToken: () =>
-          set((state) => {
+          set((state: any) => {
             if (state.user) {
               return { user: { ...state.user, token: "" } };
+            }
+            return state;
+          }),
+        setFcmToken: (fcmToken: string) =>
+          set((state: any) => {
+            if (state.user) {
+              return { user: { ...state.user, fcmToken } };
+            }
+            return state;
+          }),
+        clearFcmToken: () =>
+          set((state: any) => {
+            if (state.user) {
+              return { user: { ...state.user, fcmToken: "" } };
             }
             return state;
           }),
@@ -76,7 +93,7 @@ const useUserStore = create<UserStore>()(
   )
 );
 
-const useAppStore = create<AppStore>((set) => ({
+const useAppStore = create<AppStore>((set: any) => ({
   timeframe: {
     value: "1D",
     label: "1 Day",

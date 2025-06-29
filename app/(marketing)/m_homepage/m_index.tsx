@@ -23,6 +23,7 @@ import { useDashboard } from "~/hooks/dashboard";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppStore } from "~/store/store";
 import { Timeframe } from "~/types/dashboard";
+import { Button } from "~/components/ui/button";
 
 const Dashboard = () => {
   const queryClient = useQueryClient();
@@ -44,8 +45,7 @@ const Dashboard = () => {
       label: "1 Year",
     },
   ];
-  const { timeframe, setTimeframe } = useAppStore((state) => state);
-  const [graph, setGraph] = useState({ value: "Leads", label: "Leads" });
+  const { timeframe, setTimeframe } = useAppStore((state: any) => state);
 
   const graphs = ["Leads", "Inquiries", "Quotations"];
   const dashboardData = useDashboard();
@@ -70,10 +70,6 @@ const Dashboard = () => {
     // queryClient.invalidateQueries({
     //   queryKey: ["getDashboard"],
     // });
-  };
-
-  const handleGraphChange = (item: any) => {
-    setGraph(item);
   };
 
   return (
@@ -141,343 +137,160 @@ const Dashboard = () => {
           </View>
         </View>
 
-        <View className="p-4 rounded-lg shadow-lg mb-6 w-full bg-slate-100">
-          <View className="w-full">
-            <View className="flex flex-row items-center justify-between">
-              <View className="">
-                <Text className="text-2xl font-acumin_bold text-gray-600">
-                  Overview
-                </Text>
+        <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
+          {dashboardData.isLoading && !dashboardData.isError ? (
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+              <ActivityIndicator />
+              <Text>Fetching</Text>
+            </View>
+          ) : (
+            <View className="flex justify-between">
+              <View className="border-b border-gray-300 p-4 w-full">
+                <Text className="text-xl font-bold text-gray-600">Leads</Text>
               </View>
-              <View className="w-[150px]">
-                <Select
-                  defaultValue={{ value: graphs[0], label: graphs[0] }}
-                  onValueChange={handleGraphChange}
+              <DonutChart
+                className="bg-gray-200"
+                sections={[
+                  {
+                    percentage: Math.round(
+                      ((dashboardData.data[0].pending_lead || 0) /
+                        (dashboardData.data[0].total_lead || 1)) *
+                        100
+                    ),
+                    color: "blue",
+                    label: `Pending Lead (${
+                      dashboardData.data[0].pending_lead || 0
+                    })`,
+                  },
+                  {
+                    percentage:
+                      100 -
+                      Math.round(
+                        ((dashboardData.data?.[0]?.pending_lead || 0) /
+                          (dashboardData.data?.[0]?.total_lead || 1)) *
+                          100
+                      ),
+                    color: "lightblue",
+                    label: `Inquired Lead (${
+                      dashboardData.data[0].total_lead -
+                        dashboardData.data[0].pending_lead || 0
+                    })`,
+                  },
+                ]}
+                radius={100}
+                strokeWidth={15}
+                textColor="black"
+              />
+              <View className="border-t border-gray-300 p-4 w-full">
+                <Button
+                  className="text-xl font-bold bg-blue-200"
+                  onPress={() => {
+                    router.push("/(marketing)/m_lead/m_leadList/");
+                  }}
                 >
-                  <SelectTrigger className="w-full">
-                    <View className="flex-row items-center">
-                      <Ionicons
-                        name="calendar-outline"
-                        size={18}
-                        color="#000"
-                      />
-                      <SelectValue
-                        className="text-foreground text-sm native:text-lg ml-2"
-                        placeholder="Select a timeframe"
-                      >
-                        {graphs[0]}
-                      </SelectValue>
-                    </View>
-                  </SelectTrigger>
-                  <SelectContent insets={contentInsets} className="bg-white">
-                    <SelectGroup>
-                      {graphs.map((graph) => (
-                        <SelectItem key={graph} label={graph} value={graph}>
-                          <View className="flex-row items-center">
-                            <Ionicons
-                              name="calendar-outline"
-                              size={18}
-                              color="#000"
-                            />
-                            <Text className="ml-2">{graph}</Text>
-                          </View>
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                  <Text> View All Leads</Text>
+                </Button>
               </View>
             </View>
-            <View className="flex items-center">
-              {dashboardData.isLoading && !dashboardData.isError ? (
-                <ActivityIndicator />
-              ) : (
-                graph.value === "Leads" && (
-                  <Pressable
-                    onPress={() => {
-                      router.push("/(marketing)/m_lead/m_leadList/");
-                    }}
-                  >
-                    <DonutChart
-                      sections={[
-                        {
-                          percentage: Math.round(
-                            ((dashboardData.data[0].pending_lead || 0) /
-                              (dashboardData.data[0].total_lead || 1)) *
-                              100
-                          ),
-                          color: "blue",
-                          label: `Pending Lead (${dashboardData.data[0].pending_lead || 0})`,
-                        },
-                        {
-                          percentage:
-                            100 -
-                            Math.round(
-                              ((dashboardData.data?.[0]?.pending_lead || 0) /
-                                (dashboardData.data?.[0]?.total_lead || 1)) *
-                                100
-                            ),
-                          color: "lightblue",
-                          label: `Inquired Lead (${dashboardData.data[0].total_lead - dashboardData.data[0].pending_lead || 0})`,
-                        },
-                      ]}
-                      radius={100}
-                      strokeWidth={15}
-                      textColor="black"
-                    />
-                  </Pressable>
-                )
-              )}
-
-              {dashboardData.isLoading && !dashboardData.isError ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <ActivityIndicator />
-                  <Text>Fetching</Text>
-                </View>
-              ) : (
-                graph.value === "Inquiries" && (
-                  <Pressable
-                    onPress={() => {
-                      // router.push(
-                      //   "/(marketing)/m_followup/m_followUpList/",
-                      // );
-                    }}
-                  >
-                    <DonutChart
-                      sections={[
-                        {
-                          percentage: Math.round(
-                            ((dashboardData.data[0].pending_inquiry ||
-                              0) / (dashboardData.data[0].total_inquiry ||
-                              1)) * 100
-                          ),
-                          color: "green",
-                          label: `Pending Inquiries (${dashboardData.data[0].pending_inquiry || 0})`,
-                        },
-                        {
-                          percentage: Math.round(
-                            100 -
-                              ((dashboardData.data[0].pending_inquiry ||
-                                0 )/ (dashboardData.data[0].total_inquiry ||
-                                1)) *
-                                100
-                          ),
-                          color: "lightgreen",
-                          label: `Quotation Send (${dashboardData.data[0].total_inquiry - dashboardData.data[0].pending_inquiry || 0})`,
-                        },
-                      ]}
-                      radius={100}
-                      strokeWidth={15}
-                      textColor="black"
-                    />
-                  </Pressable>
-                )
-              )}
-              {dashboardData.isLoading && !dashboardData.isError ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <ActivityIndicator />
-                  <Text>Fetching</Text>
-                </View>
-              ) : (
-                graph.value === "Quotations" && (
-                  <Pressable
-                    onPress={() => {
-                      // router.push({
-                      //   pathname: "/(marketing)/m_followup/m_followUpList/",
-                      // });
-                    }}
-                  >
-                    <DonutChart
-                      sections={[
-                        {
-                          percentage: Math.round(
-                            ((dashboardData.data[0].pending_quotation ||
-                              0 )/ (dashboardData.data[0].total_quotation ||
-                              1)) * 100
-                          ),
-                          color: "red",
-                          label: `Pending Quotations (${dashboardData.data[0].pending_quotation || 0})`,
-                        },
-                        {
-                          percentage:
-                            100 -
-                            Math.round(
-                              ((dashboardData.data[0].pending_quotation || 0)/
-                                (dashboardData.data[0].total_quotation || 1)) *
-                                100
-                            ),
-                          color: "tomato",
-                          label: `Order Send (${dashboardData.data[0].total_quotation - dashboardData.data[0].pending_quotation || 0})`,
-                        },
-                      ]}
-                      radius={100}
-                      strokeWidth={15}
-                      textColor="black"
-                    />
-                  </Pressable>
-                )
-              )}
-            </View>
-          </View>
+          )}
         </View>
 
-        {/* <View className="p-4 rounded-lg shadow-lg mb-6 w-full bg-slate-100">
-          <View className="w-full">
-            <Text className="text-2xl font-acumin_bold text-gray-600">
-              Tasks Overview
-            </Text>
-            <View className="flex-col mt-6 px-4">
-              <View className="flex-row w-full items-center">
-                <View className="flex-1">
-                  <Text className="text-lg text-blue-600 font-acumin_bold">
-                    Created
-                  </Text>
-                  <Text className="text-3xl font-acumin_bold text-gray-900">
-                    10/20
-                  </Text>
-                </View>
-                <View className="h-16 w-[1px] bg-gray-300 mx-4"></View>
-                <View className="flex-1">
-                  <Text className="text-lg text-green-500 font-acumin_bold">
-                    Started
-                  </Text>
-                  <Text className="text-3xl font-acumin_bold text-gray-900">
-                    10/30
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row w-full items-center mt-5">
-                <View className="flex-1">
-                  <Text className="text-lg text-green-700 font-acumin_bold">
-                    Completed
-                  </Text>
-                  <Text className="text-3xl font-acumin_bold text-gray-900">
-                    5/10
-                  </Text>
-                </View>
-                <View className="h-16 w-[1px] bg-gray-300 mx-4"></View>
-                <View className="flex-1">
-                  <Text className="text-lg text-orange-400 font-acumin_bold">
-                    Failed
-                  </Text>
-                  <Text className="text-3xl font-acumin_bold text-gray-900">
-                    9/19
-                  </Text>
-                </View>
-              </View>
+        <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
+          {dashboardData.isLoading && !dashboardData.isError ? (
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+              <ActivityIndicator />
+              <Text>Fetching</Text>
             </View>
-          </View>
-        </View> */}
-
-        {/* <View className='p-4 rounded-lg mb-6 shadow-lg w-full bg-slate-100'>
-          <View className='flex flex-row items-center m-4'>
-            <View className='flex-1'>
-              <Text className="text-lg text-gray-600 font-acumin_bold">Total Contacts</Text>
-              <Text className="text-4xl font-acumin_bold text-gray-900">1000</Text>
-            </View>
-            <View className='flex-1'>
-              <Text className="text-lg text-gray-600 font-acumin_bold">Total Companies</Text>
-              <Text className="text-4xl font-acumin_bold text-gray-900">100</Text>
-            </View>
-          </View>
-        </View> */}
-
-        {/* <View className='p-4 rounded-lg mb-6 shadow-lg w-full bg-slate-100'>
-          <Text className='font-acumin_bold text-xl text-gray-600'>Opportunities Overview</Text>
-          <View><Text>Graph can be shown here</Text></View>
-        </View> */}
-
-        {/* <View className='p-4 rounded-lg mb-6 shadow-lg w-full bg-slate-100'>
-          <View className='flex-col'>
-            <View className='flex-row items-center justify-between'>
-              <View className='flex-row items-center gap-3'>
-                <Text className='text-xl font-acumin_bold text-gray-600'>
-                  Contacts
+          ) : (
+            <View className="flex justify-between">
+              <View className="border-b border-gray-300 p-4 w-full">
+                <Text className="text-xl font-bold text-gray-600">
+                  Quotations
                 </Text>
-                <View className='bg-gray-400 px-2 py-1 rounded-full'><Text className='text-white'>1000</Text></View>
               </View>
-              <Pressable>
-                <Text className='text-blue-600 font-acumin_bold'>View All</Text>
-              </Pressable>
+              <DonutChart
+                className="bg-gray-200"
+                sections={[
+                  {
+                    percentage: Math.round(
+                      ((dashboardData.data[0].pending_quotation || 0) /
+                        (dashboardData.data[0].total_quotation || 1)) *
+                        100
+                    ),
+                    color: "lightgreen",
+                    label: `Pending Quotations (${
+                      dashboardData.data[0].pending_quotation || 0
+                    })`,
+                  },
+                  {
+                    percentage:
+                      100 -
+                      Math.round(
+                        ((dashboardData.data[0].pending_quotation || 0) /
+                          (dashboardData.data[0].total_quotation || 1)) *
+                          100
+                      ),
+                    color: "green",
+                    label: `Order Send (${
+                      dashboardData.data[0].total_quotation -
+                        dashboardData.data[0].pending_quotation || 0
+                    })`,
+                  },
+                ]}
+                radius={100}
+                strokeWidth={15}
+                textColor="black"
+              />
+              <View className="border-t border-gray-300 p-4 w-full">
+                <Button
+                  className="text-xl font-bold bg-green-300"
+                  onPress={() => {
+                    router.push("/(marketing)/m_followup/m_followUpList");
+                  }}
+                >
+                  <Text> View All Quotations</Text>
+                </Button>
+              </View>
             </View>
-            <View className='flex-col gap-5'>
-              <View className='flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5 mt-6'>
-                <Ionicons name="person" size={20} />
-                <View className='flex-col'>
-                  <Text className='text-gray-600 font-acumin text-lg'>Dev Panchal</Text>
-                  <Text className='text-gray-600 font-acumin text-lg'>1234567890</Text>
-                </View>
-              </View>
-              <View className='flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5'>
-                <Ionicons name="person" size={20} />
-                <View className='flex-col'>
-                  <Text className='text-gray-600 font-acumin text-lg'>Dev Panchal</Text>
-                  <Text className='text-gray-600 font-acumin text-lg'>1234567890</Text>
-                </View>
-              </View>
-              <View className='flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5'>
-                <Ionicons name="person" size={20} />
-                <View className='flex-col'>
-                  <Text className='text-gray-600 font-acumin text-lg'>Dev Panchal</Text>
-                  <Text className='text-gray-600 font-acumin text-lg'>1234567890</Text>
-                </View>
-              </View>
+          )}
+        </View>
+        <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
+          {dashboardData.isLoading && !dashboardData.isError ? (
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+              <ActivityIndicator />
+              <Text>Fetching</Text>
             </View>
-          </View>
-        </View> */}
-
-        {/* <View className="p-4 rounded-lg shadow-lg w-full bg-slate-100">
-          <View className="flex-col">
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center gap-3">
-                <Text className="text-2xl font-acumin_bold text-gray-600">
-                  Companies
+          ) : (
+            <View className="flex justify-between">
+              <View className="border-b border-gray-300 p-4 w-full">
+                <Text className="text-xl font-bold text-gray-600">
+                  Upcoming Tasks (3 days)
                 </Text>
-                <View className="bg-gray-400 px-2 py-1 rounded-full">
-                  <Text className="text-white">3</Text>
+              </View>
+              <View className="bg-gray-200 flex items-center justify-between">
+                <View className="flex-1 p-3 border-l-2 border-l-green-500 w-full">
+                  <Text>Task 1</Text>
+                </View>
+                <View className="flex-1 p-3 border-l-2 border-l-red-500 w-full">
+                  <Text>Task 1</Text>
+                </View>
+                <View className="flex-1 p-3 border-l-2 border-l-yellow-500 w-full">
+                  <Text>Task 1</Text>
                 </View>
               </View>
-              <Pressable>
-                <Text className="text-blue-600 font-acumin_bold">View All</Text>
-              </Pressable>
-            </View>
-            <View className="flex-col gap-5">
-              <View className="flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5 mt-6">
-                <Ionicons name="person" size={20} />
-                <View className="flex-col">
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Prashant Gamatex pvt. ltd.
-                  </Text>
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Ahmedabad, Gujarat
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5">
-                <Ionicons name="person" size={20} />
-                <View className="flex-col">
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Prashant Ferber pvt. ltd.
-                  </Text>
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Ahmedabad,Gujarat
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center border-[1px] border-gray-400 rounded-lg p-4 gap-5">
-                <Ionicons name="person" size={20} />
-                <View className="flex-col">
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Prashant Westpoint pvt. ltd.
-                  </Text>
-                  <Text className="text-gray-600 font-acumin text-lg">
-                    Ahmedabad, Gujarat
-                  </Text>
-                </View>
+              <View className="border-t border-gray-300 p-4 w-full">
+                <Button
+                  className="text-xl font-bold bg-gray-300"
+                  onPress={() => {
+                    router.push("/(marketing)/m_homepage/m_calendar");
+                  }}
+                >
+                  <Text> View All Tasks</Text>
+                </Button>
               </View>
             </View>
-          </View>
-        </View> */}
+          )}
+        </View>
       </View>
     </ScrollView>
   );

@@ -13,9 +13,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -27,7 +25,8 @@
         "android.permission.WRITE_CONTACTS",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.dhruvwill.prashantgroup"
+      "package": "com.dhruvwill.prashantgroup",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -47,6 +46,26 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let upload photos."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/logo.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+            "./assets/sounds/notification.wav"
+          ],
+          "enableBackgroundRemoteNotifications": true
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#232323",
+          "image": "./assets/splash.png",
+          "imageWidth": 200
         }
       ]
     ],

@@ -10,10 +10,14 @@ import Toast from "react-native-toast-message";
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
+  const store = useUserStore((state:any) => state);
+  const setUser = useUserStore((state:any) => state.setUser);
 
   return useMutation<AuthResponse, ErrorResponse, LoginData>({
-    mutationFn: login,
+    mutationFn: (data: LoginData) => {
+      const fcmToken = store.user?.fcmToken;
+      return login(data, fcmToken || undefined);
+    },
     mutationKey: undefined,
     onSuccess: (data) => {
       setUser({
@@ -25,7 +29,7 @@ export const useLogin = () => {
         },
         token: data.token,
       });
-      router.replace("/m_homepage");
+      router.replace("/(marketing)/m_homepage/m_index");
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });
@@ -34,8 +38,8 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
-  const clearUser = useUserStore((state) => state.clearUser);
-  const clearToken = useUserStore((state) => state.clearToken);
+  const clearUser = useUserStore((state:any) => state.clearUser);
+  const clearToken = useUserStore((state:any) => state.clearToken);
   const router = useRouter();
   const queryClient = useQueryClient();
   queryClient.invalidateQueries({
@@ -53,7 +57,7 @@ export const useLogout = () => {
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const user = useUserStore((state) => state.user);
+  const user = useUserStore((state:any) => state.user);
   const router = useRouter();
 
   useEffect(() => {

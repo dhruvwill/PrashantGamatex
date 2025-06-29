@@ -3,14 +3,23 @@ import { useUserStore } from "~/store";
 import { AuthResponse, ChangePasswordData, LoginData } from "~/types/auth";
 import { ErrorResponse } from "~/types/query";
 
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const login = async (data: LoginData, pushToken?: string): Promise<AuthResponse> => {
   try {
     const user = {
       username: data.username,
       password: data.password,
       company: data.company,
-      DeviceName: data.DeviceName
+      deviceName: data.DeviceName,
+      ...(pushToken && { pushToken }),
     };
+    
+    console.log("Login request with FCM token:", {
+      username: data.username,
+      company: data.company,
+      hasFCMToken: !!pushToken,
+      fcmToken: pushToken ? `${pushToken.substring(0, 20)}...` : "null",
+    });
+    
     const response = await client.post("/auth/login", {
       user,
     });

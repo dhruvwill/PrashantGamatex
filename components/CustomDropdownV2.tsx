@@ -8,6 +8,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
@@ -59,13 +60,16 @@ export default function CustomDropdown({
             <SelectGroup>
               {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
               {options.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  label={option.label}
-                  value={option.value}
-                >
-                  {option.label}
-                </SelectItem>
+                <>
+                  <SelectItem
+                    key={option.value}
+                    label={option.label}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </SelectItem>
+                  <SelectSeparator className="bg-gray-200" />
+                </>
               ))}
             </SelectGroup>
           </ScrollView>

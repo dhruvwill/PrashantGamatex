@@ -13,7 +13,7 @@ interface DonutChartProps {
   radius: number;
   strokeWidth: number;
   textColor: string;
-  backgroundColor?: string;
+  className?: string;
 }
 
 const DonutChart: React.FC<DonutChartProps> = ({
@@ -21,7 +21,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   radius,
   strokeWidth,
   textColor,
-  backgroundColor = "#f0f0f0",
+  className,
 }) => {
   const normalizedSections = useMemo(() => {
     const total = sections.reduce(
@@ -74,7 +74,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   }
 
   return (
-    <View className="flex items-center p-5">
+    <View className={`flex items-center p-5 ${className}`}>
       <View className="mb-5" style={{ height: radius * 2, width: radius * 2 }}>
         <PolarChart
           data={victoryData}
