@@ -38,7 +38,7 @@ const inquiryFollowupTimeline = () =>
     usePreventScreenCapture();
     
     const router = useRouter();
-    const userToken = useUserStore((state) => state.user?.token);
+    const userToken = useUserStore((state: any) => state.user?.token);
 
     const { data } = useLocalSearchParams<{ data: string }>();
     const parsedData: SalesQuotationFollowup = JSON.parse(data || "{}");

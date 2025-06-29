@@ -64,17 +64,17 @@ const AboutPage = () => {
           </Text>
           <View className="flex-row justify-around">
             <Pressable
-              onPress={() => openLink("https://twitter.com/ourcompany")}
+              onPress={() => openLink("https://www.prashantgroup.com/")}
             >
               <Ionicons name={"logo-twitter"} size={32} color="#4F46E5" />
             </Pressable>
             <Pressable
-              onPress={() => openLink("https://twitter.com/ourcompany")}
+              onPress={() => openLink("https://www.prashantgroup.com/")}
             >
               <Ionicons name={"logo-linkedin"} size={32} color="#4F46E5" />
             </Pressable>
             <Pressable
-              onPress={() => openLink("https://twitter.com/ourcompany")}
+              onPress={() => openLink("https://www.prashantgroup.com/")}
             >
               <Ionicons name={"logo-instagram"} size={32} color="#4F46E5" />
             </Pressable>
@@ -83,7 +83,7 @@ const AboutPage = () => {
 
         <Pressable
           className="bg-indigo-600 py-3 px-6 rounded-full self-center"
-          onPress={() => openLink("https://ourcompany.com/contact")}
+          onPress={() => openLink("https://www.prashantgroup.com/")}
         >
           <Text className="text-white font-semibold text-lg">Contact Us</Text>
         </Pressable>

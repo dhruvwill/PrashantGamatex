@@ -42,7 +42,12 @@ const m_leadList = () => {
 
       if (!matchesSearch) return false;
 
-      // Lead Source filter
+      if (activeFilters.person) {
+        if (lead.UserName !== activeFilters.person.UserName) {
+          return false;
+        }
+      }
+
       if (activeFilters.leadSource) {
         if (lead.UDF_LeadSource_2361 !== activeFilters.leadSource) {
           return false;

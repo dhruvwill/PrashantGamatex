@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import CustomDropdown from "~/components/CustomDropdown";
 import { Textarea } from "~/components/ui/textarea";
 import CustomDropdownV2 from "~/components/CustomDropdownV2";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -226,7 +225,7 @@ const m_newLead = () => {
                   <Text>Fetching</Text>
                 </View>
               ) : (
-                <CustomDropdown
+                <CustomDropdownv2
                   title="Category"
                   // itemsList={Category}
                   itemsList={constants.data?.CategoryOutput.split(",") || []}
@@ -549,10 +548,15 @@ const m_newLead = () => {
                   <Text>Fetching</Text>
                 </View>
               ) : (
-                <CustomDropdown
-                  title="Lead Source"
-                  itemsList={constants.data?.LeadSourceOutput.split(",") || []}
-                  onValueChange={(value) =>
+                <CustomDropdownV2
+                  options={constants.data?.LeadSourceOutput.split(",").map(
+                    (leadSource: string) => ({
+                      value: leadSource,
+                      label: leadSource,
+                    })
+                  ) || []}
+                  placeholder="Lead Source"
+                  onChange={(value: any) =>
                     setForm({ ...form, leadSource: value })
                   }
                 />
@@ -595,10 +599,15 @@ const m_newLead = () => {
                   <Text>Fetching</Text>
                 </View>
               ) : (
-                <CustomDropdown
-                  title="Time Frame"
-                  itemsList={constants.data?.TimeFrameOutput.split(",") || []}
-                  onValueChange={(value) =>
+                <CustomDropdownV2
+                  options={constants.data?.TimeFrameOutput.split(",").map(
+                    (timeFrame: string) => ({
+                      value: timeFrame,
+                      label: timeFrame,
+                    })
+                  ) || []}
+                  placeholder="Time Frame"
+                  onChange={(value: any) =>
                     setForm({ ...form, timeFrame: value })
                   }
                 />

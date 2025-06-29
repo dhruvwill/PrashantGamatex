@@ -11,6 +11,7 @@ const FollowupCard = ({
   docDate,
   quantity,
   className,
+  userName,
 }: {
   partyName: string;
   itemName: string;
@@ -18,6 +19,7 @@ const FollowupCard = ({
   docDate: Date;
   quantity: number;
   className?: string;
+  userName: string;
 }) => {
   const router = useRouter();
   return (
@@ -46,7 +48,9 @@ const FollowupCard = ({
         </View>
       </View>
       <View className="bg-gray-100 p-3 flex-row justify-between items-center">
-        <Text className="text-sm text-blue-600 font-semibold">View / Edit</Text>
+        <Text className="text-sm text-blue-600 font-semibold">
+          {userName}
+        </Text>
         <View className="flex-row">
           <Text className="text-sm text-blue-600 font-semibold">
             Followup Details

@@ -11,7 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { z } from "zod";
-import CustomDropdown from "~/components/CustomDropdown";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
@@ -32,6 +31,7 @@ import client from "~/api/client";
 import { ErrorResponse } from "~/types/query";
 import CheckboxWithLabel from "~/components/CheckboxWithLabel";
 import { Textarea } from "~/components/ui/textarea";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 
 const m_newfollowup = () => {
   const store = useUserStore();
@@ -234,7 +234,7 @@ const m_newfollowup = () => {
                 <Text>Fetching</Text>
               </View>
             ) : (
-              <CustomDropdown
+              <CustomDropdownv2
                 title="Category"
                 itemsList={category.data.CategoryName.split(",")}
                 onValueChange={(value) => {
@@ -687,10 +687,13 @@ const m_newfollowup = () => {
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                     Project Status
                   </Text>
-                  <CustomDropdown
-                    title="Project Status"
-                    itemsList={Ratings}
-                    onValueChange={(value) => {
+                  <CustomDropdownV2
+                    options={Ratings.map((rating) => ({
+                      value: rating,
+                      label: rating,
+                    }))}
+                    placeholder="Project Status"
+                    onChange={(value: any) => {
                       setForm({ ...form, Rating: value });
                     }}
                   />
@@ -882,10 +885,13 @@ const m_newfollowup = () => {
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
                       Reason
                     </Text>
-                    <CustomDropdown
-                      title="Close"
-                      itemsList={Closed}
-                      onValueChange={(value) => {
+                      <CustomDropdownV2
+                      options={Closed.map((close) => ({
+                        value: close,
+                        label: close,
+                      }))}
+                      placeholder="Close"
+                      onChange={(value: any) => {
                         setForm({ ...form, CloseReason: value });
                       }}
                     />

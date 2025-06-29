@@ -1,7 +1,7 @@
 export type LoginData = {
   username: string;
   password: string;
-  company: "PrashantGamatex" | "WestPoint" | "Serber";
+  company: "PrashantGamatex" | "WestPoint" | "Ferber";
   DeviceName: string;
 };
 
@@ -10,7 +10,7 @@ export type AuthResponse = {
     uid: string;
     username: string;
     name: string;
-    company: "PrashantGamatex" | "WestPoint" | "Serber";
+    company: "PrashantGamatex" | "WestPoint" | "Ferber";
   };
   token: string;
 };

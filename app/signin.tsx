@@ -22,6 +22,7 @@ import { useLogin } from "~/hooks/auth";
 import { LoginData } from "~/types/auth";
 import * as Device from "expo-device";
 import Feather from "@expo/vector-icons/Feather";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 
 export default function Example() {
   const [form, setForm] = useState<LoginData>({
@@ -125,43 +126,26 @@ export default function Example() {
             <Text className="color-[#222] dark:text-gray-300 font-semibold mb-2 text-lg">
               Company
             </Text>
-            <Select
+            <CustomDropdownV2
+              options={companies.map((item) => ({
+                value: item.value,
+                label: item.name,
+              }))}
+              placeholder="Select company"
               defaultValue={{
                 value: companies[0].value,
                 label: companies[0].name,
               }}
-              onValueChange={(company: any) =>
-                setForm({ ...form, company: company.value })
+              onChange={(companyValue: string) =>
+                setForm({
+                  ...form,
+                  company: companyValue as
+                    | "PrashantGamatex"
+                    | "WestPoint"
+                    | "Ferber",
+                })
               }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue
-                  className="text-foreground text-sm native:text-lg"
-                  placeholder={`Select company`}
-                />
-              </SelectTrigger>
-              <SelectContent
-                insets={{
-                  top: insets.top,
-                  bottom: insets.bottom,
-                  // left: 20,
-                  // right: 20,
-                }}
-                className="bg-white dark:bg-black border-0 my-1 min-w-96"
-              >
-                <SelectGroup>
-                  {companies.map((item) => (
-                    <SelectItem
-                      key={item.value}
-                      label={item.name}
-                      value={item.value}
-                    >
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            />
           </View>
 
           {login.isError && (

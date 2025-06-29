@@ -191,7 +191,7 @@ const M_ExpenseForm: React.FC = () => {
         <View className="flex h-full mx-3 my-5">
           <View className="px-3">
             <Text className="text-3xl font-acumin_bold">Expense Form</Text>
-            <Text className="text-muted text-sm text-gray-500 font-acumin">
+            <Text className="text-sm text-gray-500 font-acumin">
               Add Your Expense Details
             </Text>
             <Separator className="my-5 bg-gray-500" orientation="horizontal" />
@@ -283,7 +283,7 @@ const M_ExpenseForm: React.FC = () => {
                       <CustomDropdownV2
                         options={
                           constants.data?.ExpenseOutput.split(",").map(
-                            (expense) => ({
+                            (expense: any) => ({
                               value: expense,
                               label: expense,
                             })

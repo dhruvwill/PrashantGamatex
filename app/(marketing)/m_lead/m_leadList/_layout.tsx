@@ -15,18 +15,10 @@ const _layout = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="[leadId]"
-        options={{
-          headerTitle: "Lead Details",
-          headerTitleStyle: {
-            fontFamily: "acumin",
-          },
-          headerStyle: {
-          },
-          headerTitleAlign: "center",
-        }}
-      />
+      <Stack.Screen name="[leadId]" options={{
+        statusBarHidden: true,
+        headerBackButtonDisplayMode: 'minimal'
+      }} />
     </Stack>
   );
 };

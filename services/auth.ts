@@ -13,13 +13,6 @@ export const login = async (data: LoginData, pushToken?: string): Promise<AuthRe
       ...(pushToken && { pushToken }),
     };
     
-    console.log("Login request with FCM token:", {
-      username: data.username,
-      company: data.company,
-      hasFCMToken: !!pushToken,
-      fcmToken: pushToken ? `${pushToken.substring(0, 20)}...` : "null",
-    });
-    
     const response = await client.post("/auth/login", {
       user,
     });

@@ -8,6 +8,7 @@ export const getDashboard = async (
   timeframe: Timeframe
 ): Promise<any> => {
   try {
+    console.log("timeframe", timeframe);
     const response = await client.get("/user/dashboard/get", {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,

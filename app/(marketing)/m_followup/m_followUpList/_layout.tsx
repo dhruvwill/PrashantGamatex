@@ -1,4 +1,5 @@
 import { View, Text } from "react-native";
+import { Header } from "@react-navigation/elements";
 import React from "react";
 import { Stack } from "expo-router";
 
@@ -44,10 +45,17 @@ const _layout = () => {
       <Stack.Screen
         name="inquiryFollowupTimeline"
         options={{
-          headerTitle: "Inquiry Follow-Up Timeline",
+          header: ({ options }) => (
+            <Header
+              {...options}
+              title={options.title || "Inquiry Follow-Up Timeline"}
+            />
+          ),
           headerTitleStyle: {
             fontFamily: "acumin",
           },
+          headerBackButtonDisplayMode: "minimal",
+          headerBackButtonMenuEnabled: true,
           headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: "steelblue",
@@ -57,10 +65,17 @@ const _layout = () => {
       <Stack.Screen
         name="quotationFollowupTimeline"
         options={{
-          headerTitle: "Quotation Follow-Up Timeline",
+          header: ({ options }) => (
+            <Header
+              {...options}
+              title={options.title || "Quotation Follow-Up Timeline"}
+            />
+          ),
           headerTitleStyle: {
             fontFamily: "acumin",
           },
+          headerBackButtonDisplayMode: "minimal",
+          headerBackButtonMenuEnabled: true,
           headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: "steelblue",

@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
-import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons } from "@expo/vector-icons";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 
 const m_newfollowup = () => {
   const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
@@ -107,13 +107,25 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Company
             </Text>
-            <CustomDropdown title="Company" itemsList={Items} />
+            <CustomDropdownV2 options={Items.map((item) => ({
+              value: item,
+              label: item,
+            }))}
+              placeholder="Company"
+              onChange={(value) => setForm({ ...form, company: value })}
+            />
           </View>
           <View className="mb-4">
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Category
             </Text>
-            <CustomDropdown title="Category" itemsList={Items} />
+            <CustomDropdownV2 options={Items.map((item) => ({
+              value: item,
+              label: item,
+            }))}
+              placeholder="Category"
+              onChange={(value) => setForm({ ...form, category: value })}
+            />
           </View>
           <View className="mb-4 flex flex-row gap-2">
             <View className="flex-1">
@@ -419,7 +431,13 @@ const m_newfollowup = () => {
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                     Rating
                   </Text>
-                  <CustomDropdown title="Ratings" itemsList={Ratings} />
+                  <CustomDropdownV2 options={Ratings.map((rating) => ({
+                    value: rating,
+                    label: rating,
+                  }))}
+                    placeholder="Ratings"
+                    onChange={(value) => setForm({ ...form, rating: value })}
+                  />
                 </View>
               )}
               {form.followupstatus === "Fix in New Visit" && (
@@ -556,7 +574,13 @@ const m_newfollowup = () => {
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
                       Reason
                     </Text>
-                    <CustomDropdown title="Close" itemsList={Closed} />
+                    <CustomDropdownV2 options={Closed.map((close) => ({
+                      value: close,
+                      label: close,
+                    }))}
+                      placeholder="Close"
+                      onChange={(value) => setForm({ ...form, closereason: value })}
+                    />
                   </View>
                   <View className="">
                     <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">

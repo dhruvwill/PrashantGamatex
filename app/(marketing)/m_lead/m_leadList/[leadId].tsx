@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import CustomDropdown from "~/components/CustomDropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -39,7 +38,7 @@ import { Image } from "expo-image";
 const m_editLead = () => {
   usePreventScreenCapture();
 
-  const userToken = useUserStore((state) => state.user?.token);
+  const userToken = useUserStore((state: any) => state.user?.token);
   const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
   const navigation = useNavigation();
@@ -455,10 +454,17 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Lead Source
               </Text>
-              <CustomDropdown
-                title={currentLead?.UDF_LeadSource_2361 || ""}
-                itemsList={LeadSource}
-                onValueChange={(value) =>
+              <CustomDropdownV2
+                options={LeadSource.map((source) => ({
+                  value: source,
+                  label: source,
+                }))}
+                defaultValue={{
+                  value: form.leadSource,
+                  label: form.leadSource,
+                }}
+                placeholder="Lead Source"
+                onChange={(value) =>
                   setForm({ ...form, leadSource: value })
                 }
               />
@@ -491,10 +497,17 @@ const m_editLead = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Time Frame
               </Text>
-              <CustomDropdown
-                title={currentLead?.UDF_TimeFrame_2361 || ""}
-                itemsList={TimeFrame}
-                onValueChange={(value) =>
+              <CustomDropdownV2 
+                options={TimeFrame.map((timeFrame) => ({
+                  value: timeFrame,
+                  label: timeFrame,
+                }))}
+                defaultValue={{
+                  value: form.timeFrame,
+                  label: form.timeFrame,
+                }}
+                placeholder="Time Frame"
+                onChange={(value) =>
                   setForm({ ...form, timeFrame: value })
                 }
               />

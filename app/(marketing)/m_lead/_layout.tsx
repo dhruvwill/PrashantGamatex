@@ -43,7 +43,7 @@ const _layout = () => {
             ) : (
               <Ionicons name="list-outline" size={size} />
             ),
-          headerShown: false,
+          headerShown: false
         }}
       />
       {/* <Tabs.Screen
