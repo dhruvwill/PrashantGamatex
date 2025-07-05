@@ -157,3 +157,19 @@ export type SalesFollowupInsert = {
   DetailDescription: string;
   Rating: string;
 };
+
+export type QuotationReminderData = {
+  UserIdentification: string;
+  UserCode: string;
+  ReferenceTransaction_2361FollowupId: number;
+  NextVisitDateTime: Date;
+  FollowupStatus: string;
+  FollowupDateTime: Date;
+  FollowupDetails: string;
+  CloseReason: string;
+  ModeofContact: string;
+  DetailDescription: string;
+  VisitTo: string;
+  LeadId: number;
+  CompanyName: string;
+};

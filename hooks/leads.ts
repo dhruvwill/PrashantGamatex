@@ -76,10 +76,10 @@ export const useUpdateLead = () => {
       Toast.show({
         type: "success",
         text1: "Success",
-        text2: "Lead Updated Successfully",
+        text2: "Leadp Updated Successfully",
         visibilityTime: 3000,
       });
-      router.navigate("/(marketing)/m_followup/m_followUpList/");
+      router.navigate("/(marketing)/m_followup/m_followUpList");
     },
     onError: (error) => {
       Toast.show({
@@ -96,7 +96,7 @@ export const useUpdateLead = () => {
 };
 
 export const useDocumentNo = (categoryName: string) => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state:any) => state.user?.token);
 
   return useQuery({
     queryKey: ["getLeadDocumentNo"],
@@ -106,7 +106,7 @@ export const useDocumentNo = (categoryName: string) => {
 };
 
 export const useLeadFilters = () => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state:any) => state.user?.token);
 
   return useQuery<any, ErrorResponse, LeadFilterData[]>({
     queryKey: ["getLeadFilters"],

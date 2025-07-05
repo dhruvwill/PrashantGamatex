@@ -153,27 +153,27 @@ const Dashboard = () => {
                 sections={[
                   {
                     percentage: Math.round(
-                      ((dashboardData.data[0].pending_lead || 0) /
-                        (dashboardData.data[0].total_lead || 1)) *
+                      ((dashboardData.data.dashboard[0].pending_lead || 0) /
+                        (dashboardData.data.dashboard[0].total_lead || 1)) *
                         100
                     ),
                     color: "blue",
                     label: `Pending Lead (${
-                      dashboardData.data[0].pending_lead || 0
+                      dashboardData.data.dashboard[0].pending_lead || 0
                     })`,
                   },
                   {
                     percentage:
                       100 -
                       Math.round(
-                        ((dashboardData.data?.[0]?.pending_lead || 0) /
-                          (dashboardData.data?.[0]?.total_lead || 1)) *
+                        ((dashboardData.data.dashboard?.[0]?.pending_lead || 0) /
+                          (dashboardData.data.dashboard?.[0]?.total_lead || 1)) *
                           100
                       ),
                     color: "lightblue",
                     label: `Inquired Lead (${
-                      dashboardData.data[0].total_lead -
-                        dashboardData.data[0].pending_lead || 0
+                      dashboardData.data.dashboard[0].total_lead -
+                        dashboardData.data.dashboard[0].pending_lead || 0
                     })`,
                   },
                 ]}
@@ -213,27 +213,27 @@ const Dashboard = () => {
                 sections={[
                   {
                     percentage: Math.round(
-                      ((dashboardData.data[0].pending_quotation || 0) /
-                        (dashboardData.data[0].total_quotation || 1)) *
+                      ((dashboardData.data.dashboard[0].pending_quotation || 0) /
+                        (dashboardData.data.dashboard[0].total_quotation || 1)) *
                         100
                     ),
                     color: "lightgreen",
                     label: `Pending Quotations (${
-                      dashboardData.data[0].pending_quotation || 0
+                      dashboardData.data.dashboard[0].pending_quotation || 0
                     })`,
                   },
                   {
                     percentage:
                       100 -
                       Math.round(
-                        ((dashboardData.data[0].pending_quotation || 0) /
-                          (dashboardData.data[0].total_quotation || 1)) *
+                        ((dashboardData.data.dashboard[0].pending_quotation || 0) /
+                          (dashboardData.data.dashboard[0].total_quotation || 1)) *
                           100
                       ),
                     color: "green",
                     label: `Order Send (${
-                      dashboardData.data[0].total_quotation -
-                        dashboardData.data[0].pending_quotation || 0
+                      dashboardData.data.dashboard[0].total_quotation -
+                        dashboardData.data.dashboard[0].pending_quotation || 0
                     })`,
                   },
                 ]}
@@ -269,7 +269,7 @@ const Dashboard = () => {
               </View>
               <View className="bg-gray-200 flex items-center justify-between">
                 <View className="flex-1 p-3 border-l-2 border-l-green-500 w-full">
-                  <Text>Task 1</Text>
+                  {/* <Text>{dashboardData.data.leadReminders[0].NextVisitDateTime}</Text> */}
                 </View>
                 <View className="flex-1 p-3 border-l-2 border-l-red-500 w-full">
                   <Text>Task 1</Text>

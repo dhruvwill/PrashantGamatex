@@ -36,6 +36,14 @@ export default function CustomDropdown({
     left: 12,
     right: 12,
   };
+
+  useEffect(() => {
+    if (defaultValue) {
+      onChange?.(defaultValue.value);
+    }
+    return () => {};
+  }, []);
+
   return (
     <ScrollView className="max-h-[80px]">
       <Select
