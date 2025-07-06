@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Pressable, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -14,7 +14,7 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useLeadUpdates, useLeads } from "~/hooks/leads";
-import { LeadData } from "~/types/lead";
+import { LeadData, LeadUpdate } from "~/types/lead";
 
 const LeadFollowupTimeline = () => {
   usePreventScreenCapture();
@@ -47,11 +47,9 @@ const LeadFollowupTimeline = () => {
   const { data: allLeads } = useLeads();
   const leadData = allLeads?.find((lead: LeadData) => lead.ReferenceTransaction_2361Id === parsedLeadId);
 
-  const IMAGES = leadData?.ImageName?.split(",") || [];
-
   return (
     <ScrollView className={`flex-1 bg-gray-100 px-4 py-6`}>
-      <View className="mb-6">
+      <View>
         <Text className="text-2xl font-bold text-gray-800">
           {leadData?.UDF_CompanyName_2361 || "Loading..."}
         </Text>
@@ -104,7 +102,7 @@ const LeadFollowupTimeline = () => {
       ) : (
         <View className={`relative`}>
           <View className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300" />
-            {leadUpdates?.map((update: any, index: number) => (
+            {leadUpdates?.map((update: LeadUpdate, index: number) => (
               <View key={index} className="mb-8 flex-row">
                 <View className="absolute left-[12px] top-1 w-2 h-2 rounded-full bg-blue-500" />
                 <View className="ml-10 flex-1">
@@ -132,7 +130,7 @@ const LeadFollowupTimeline = () => {
                   </View>
                   <View>
                     <Text className="text-lg font-bold text-gray-800 mb-2">
-                      {update.ModeOfContact}
+                      {update.ModeofContact}
                     </Text>
                     <Text className="text-base text-gray-700 mb-3">
                       {update.FollowupDetails}

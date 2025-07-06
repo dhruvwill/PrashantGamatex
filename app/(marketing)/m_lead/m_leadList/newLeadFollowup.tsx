@@ -7,6 +7,8 @@ import {
   Alert,
   Pressable,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -42,7 +44,6 @@ const NewLeadFollowup = () => {
 
   const leadUpdateInsert = useInsertLeadUpdate();
 
-  const Items = ["Items-1", "Items-2", "Items-3", "Items-4", "Items-5"];
   const Ratings = [
     "Banking and land process",
     "Banking process pending",
@@ -56,51 +57,29 @@ const NewLeadFollowup = () => {
   const Closed = ["Close", "Hold", "Lost", "Received"];
 
   const leadUpdateFormSchema = z.object({
-    LeadId: z.number().min(1, "Lead ID is required"),
-    FollowupDateTime: z.date(),
-    FollowupEndDateTime: z.date(),
-    VisitTo: z.string().min(1, "Visit To is required"),
-    FollowupDetails: z.string().min(1, "Followup Details is required"),
-    ModeOfContact: z.string().min(1, "Mode of Contact is required"),
-    documentSent: z.object({
-      offer: z.boolean(),
-      layout: z.boolean(),
-      pi: z.boolean(),
-    }),
-    FollowupStatus: z.string().min(1, "Followup Status is required"),
-    VisitorPerson: z.string().min(1, "Visitor Person is required"),
+    ReferenceTransactionId: z.number().min(1, "Lead ID is required"),
     NextVisitDateTime: z.date(),
-    NextVisitPerson: z.string().optional(),
-    NextVisitorPerson: z.string().optional(),
-    AttentionDetails: z.string().optional(),
-    OrderGoesParty: z.string().optional(),
-    CloseReason: z.string().optional(),
-    DetailDescription: z.string().optional(),
-    Rating: z.string().optional(),
+    FollowupStatus: z.string().min(1, "Followup Status is required"),
+    FollowupDetails: z.string().min(1, "Followup Details is required"),
+    FollowupDateTime: z.date(),
+    CloseReason: z.string(),
+    ModeOfContact: z.string().min(1, "Mode of Contact is required"),
+    DetailDescription: z.string(),
+    VisitTo: z.string().min(1, "Visit To is required"),
+    VisitorPerson: z.string().min(1, "Visitor Person is required"),
   });
 
   const [form, setForm] = useState<LeadUpdateInsert>({
-    LeadId: parsedLeadId,
-    FollowupDateTime: new Date(),
-    FollowupEndDateTime: new Date(),
-    VisitTo: parsedLastFollowupData.VisitTo || "",
-    FollowupDetails: "",
-    ModeOfContact: "Phone",
-    documentSent: {
-      offer: false,
-      layout: false,
-      pi: false,
-    },
-    FollowupStatus: "Not Now",
-    VisitorPerson: store?.user?.data.name || "",
+    ReferenceTransactionId: parsedLeadId,
     NextVisitDateTime: new Date(),
-    NextVisitPerson: "",
-    NextVisitorPerson: "",
-    AttentionDetails: "",
-    OrderGoesParty: "",
+    FollowupStatus: "Fix in New Visit",
+    FollowupDetails: "",
+    FollowupDateTime: new Date(Date.now()),
     CloseReason: "",
+    ModeOfContact: "Phone",
     DetailDescription: "",
-    Rating: "",
+    VisitTo: "",
+    VisitorPerson: store?.user?.data.name || "",
   });
 
   const [errors, setErrors] = useState<any>({});
@@ -118,6 +97,7 @@ const NewLeadFollowup = () => {
             formattedErrors[err.path[0]] = err.message;
           }
         });
+        console.log(formattedErrors);
         Toast.show({
           type: "error",
           text1: "Error",
@@ -134,354 +114,424 @@ const NewLeadFollowup = () => {
     }
   };
 
-  const [isFollowupDateTimeVisible, setFollowupDateTimeVisible] = useState(false);
-  const [isFollowupEndDateTimeVisible, setFollowupEndDateTimeVisible] = useState(false);
-  const [isNextVisitDateTimeVisible, setNextVisitDateTimeVisible] = useState(false);
+  const onLabelPressMode = (label: string) => {
+    return () => {
+      setForm({ ...form, ModeOfContact: label });
+    };
+  };
+  const onLabelPressStatus = (label: string) => {
+    return () => {
+      setForm({ ...form, FollowupStatus: label });
+    };
+  };
+  const RadioGroupItemWithLabel = ({
+    value,
+    onLabelPress,
+  }: {
+    value: string;
+    onLabelPress: () => void;
+  }) => {
+    return (
+      <View className={"flex-row gap-2 items-center"}>
+        <RadioGroupItem aria-labelledby={`label-for-${value}`} value={value} />
+        <Label nativeID={`label-for-${value}`} onPress={onLabelPress}>
+          {value}
+        </Label>
+      </View>
+    );
+  };
+
+  const [isFollowUpDateVisible, setFollowUpDateVisible] = useState(false);
+  const [isFollowUpTimeVisible, setFollowUpTimeVisible] = useState(false);
+
+  const [isNextDateVisible, setNextDateVisible] = useState(false);
+  const [isNextTimeVisible, setNextTimeVisible] = useState(false);
 
   return (
-    <ScrollView className="flex-1 bg-gray-100">
-      <View className="p-4">
-        <Text className="text-2xl font-bold text-gray-800 mb-6">
-          New Lead Update
-        </Text>
-
-        {/* Followup Date & Time */}
-        <View className="mb-4">
-          <Label nativeID="followupDateTime" className="text-sm font-medium text-gray-700 mb-2">
-            Followup Date & Time *
-          </Label>
-          <Pressable
-            onPress={() => setFollowupDateTimeVisible(true)}
-            className="bg-white border border-gray-300 rounded-md p-3"
-          >
-            <Text className="text-gray-900">
-              {form.FollowupDateTime.toLocaleString()}
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <ScrollView 
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex h-full mx-3 my-5">
+        <View className="px-3">
+          <Text className="text-3xl font-acumin_bold">New Lead Follow Up</Text>
+          <Text className="text-gray-900 text-sm font-acumin">
+            Add a New Lead Follow Up
+          </Text>
+          <Separator className="my-5 bg-gray-500" orientation="horizontal" />
+        </View>
+        <View className="px-3">
+          {/* Followup Date & Time */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Follow Up Date & Time
             </Text>
-          </Pressable>
-          {isFollowupDateTimeVisible && (
-            <DateTimePicker
-              value={form.FollowupDateTime}
-              mode="datetime"
-              onChange={(event, selectedDate) => {
-                setFollowupDateTimeVisible(false);
-                if (selectedDate) {
-                  setForm({ ...form, FollowupDateTime: selectedDate });
-                }
-              }}
-            />
-          )}
-        </View>
-
-        {/* Followup End Date & Time */}
-        <View className="mb-4">
-          <Label nativeID="followupEndDateTime" className="text-sm font-medium text-gray-700 mb-2">
-            Followup End Date & Time *
-          </Label>
-          <Pressable
-            onPress={() => setFollowupEndDateTimeVisible(true)}
-            className="bg-white border border-gray-300 rounded-md p-3"
-          >
-            <Text className="text-gray-900">
-              {form.FollowupEndDateTime.toLocaleString()}
+            <View className="flex-row justify-around gap-2">
+              <Pressable
+                onPress={() => {
+                  setFollowUpDateVisible(true);
+                }}
+                className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+              >
+                <Ionicons
+                  name="calendar-clear-outline"
+                  color={"#222222"}
+                  size={20}
+                />
+                <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                  {form.FollowupDateTime.toLocaleDateString()}
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setFollowUpTimeVisible(true);
+                }}
+                className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+              >
+                <Ionicons name="time-outline" color={"#222222"} size={20} />
+                <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                  {form.FollowupDateTime.toLocaleTimeString()}
+                </Text>
+              </Pressable>
+            </View>
+            {isFollowUpDateVisible && (
+              <RNDateTimePicker
+                mode="date"
+                value={form.FollowupDateTime}
+                display="default"
+                onChange={(event, newDate) => {
+                  setFollowUpDateVisible(false);
+                  if (newDate) {
+                    const updatedDateTime = new Date(form.FollowupDateTime);
+                    updatedDateTime.setFullYear(
+                      newDate.getFullYear(),
+                      newDate.getMonth(),
+                      newDate.getDate()
+                    );
+                    setForm({
+                      ...form,
+                      FollowupDateTime: updatedDateTime,
+                    });
+                  }
+                }}
+              />
+            )}
+            {isFollowUpTimeVisible && (
+              <RNDateTimePicker
+                mode="time"
+                value={form.FollowupDateTime}
+                display="default"
+                onChange={(event, newTime) => {
+                  setFollowUpTimeVisible(false);
+                  if (newTime) {
+                    const updatedDateTime = new Date(form.FollowupDateTime);
+                    updatedDateTime.setHours(
+                      newTime.getHours(),
+                      newTime.getMinutes()
+                    );
+                    setForm({
+                      ...form,
+                      FollowupDateTime: updatedDateTime,
+                    });
+                  }
+                }}
+              />
+            )}
+            {errors.FollowupDateTime && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.FollowupDateTime}
+              </Text>
+            )}
+          </View>
+          {/* Visit To */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Communication With
             </Text>
-          </Pressable>
-          {isFollowupEndDateTimeVisible && (
-            <DateTimePicker
-              value={form.FollowupEndDateTime}
-              mode="datetime"
-              onChange={(event, selectedDate) => {
-                setFollowupEndDateTimeVisible(false);
-                if (selectedDate) {
-                  setForm({ ...form, FollowupEndDateTime: selectedDate });
+            <TextInput
+              autoCorrect={false}
+              clearButtonMode="while-editing"
+              onChangeText={(text) => setForm({ ...form, VisitTo: text })}
+              placeholder="Enter Communication With"
+              placeholderTextColor="#6b7280"
+              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
+                errors.VisitTo ? "border-red-500" : ""
+              }`}
+              value={form.VisitTo}
+            />
+            {errors.VisitTo && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.VisitTo}
+              </Text>
+            )}
+          </View>
+
+          {/* Followup Details */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Follow Up Details
+            </Text>
+            <Textarea
+              autoCorrect={false}
+              editable
+              multiline
+              numberOfLines={4}
+              clearButtonMode="while-editing"
+              placeholder="Enter Follow Up Details"
+              className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                errors.FollowupDetails ? "border border-red-500" : ""
+              }`}
+              placeholderClassName="text-base text-muted"
+              value={form.FollowupDetails}
+              onChangeText={(text) =>
+                setForm({ ...form, FollowupDetails: text })
+              }
+              aria-labelledby="followup details"
+            />
+            {errors.FollowupDetails && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.FollowupDetails}
+              </Text>
+            )}
+          </View>
+
+          {/* Mode of Contact */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Mode Of Communication
+            </Text>
+            <View className="">
+              <RadioGroup
+                value={form.ModeOfContact}
+                onValueChange={(value) =>
+                  setForm({ ...form, ModeOfContact: value })
                 }
-              }}
-            />
-          )}
-        </View>
-
-        {/* Visit To */}
-        <View className="mb-4">
-          <Label nativeID="visitTo" className="text-sm font-medium text-gray-700 mb-2">
-            Visit To *
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.VisitTo}
-            onChangeText={(text) => setForm({ ...form, VisitTo: text })}
-            placeholder="Enter visit to"
-          />
-          {errors.VisitTo && (
-            <Text className="text-red-500 text-sm mt-1">{errors.VisitTo}</Text>
-          )}
-        </View>
-
-        {/* Followup Details */}
-        <View className="mb-4">
-          <Label nativeID="followupDetails" className="text-sm font-medium text-gray-700 mb-2">
-            Followup Details *
-          </Label>
-          <Textarea
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.FollowupDetails}
-            onChangeText={(text) => setForm({ ...form, FollowupDetails: text })}
-            placeholder="Enter followup details"
-            numberOfLines={4}
-          />
-          {errors.FollowupDetails && (
-            <Text className="text-red-500 text-sm mt-1">{errors.FollowupDetails}</Text>
-          )}
-        </View>
-
-        {/* Mode of Contact */}
-        <View className="mb-4">
-          <Label nativeID="modeOfContact" className="text-sm font-medium text-gray-700 mb-2">
-            Mode of Contact *
-          </Label>
-          <RadioGroup
-            value={form.ModeOfContact}
-            onValueChange={(value) => setForm({ ...form, ModeOfContact: value })}
-          >
-            <View className="flex-row items-center space-x-2">
-              <RadioGroupItem value="Phone" id="phone" aria-labelledby="phone-label" />
-              <Label nativeID="phone-label">Phone</Label>
+                className="flex flex-row gap-3 font-acumin font-semibold"
+              >
+                <RadioGroupItemWithLabel
+                  value="Visit"
+                  onLabelPress={onLabelPressMode("Visit")}
+                />
+                <RadioGroupItemWithLabel
+                  value="Phone"
+                  onLabelPress={onLabelPressMode("Phone")}
+                />
+                <RadioGroupItemWithLabel
+                  value="Email"
+                  onLabelPress={onLabelPressMode("Email")}
+                />
+                <RadioGroupItemWithLabel
+                  value="WhatsApp"
+                  onLabelPress={onLabelPressMode("WhatsApp")}
+                />
+              </RadioGroup>
             </View>
-            <View className="flex-row items-center space-x-2">
-              <RadioGroupItem value="Email" id="email" aria-labelledby="email-label" />
-              <Label nativeID="email-label">Email</Label>
-            </View>
-            <View className="flex-row items-center space-x-2">
-              <RadioGroupItem value="Visit" id="visit" aria-labelledby="visit-label" />
-              <Label nativeID="visit-label">Visit</Label>
-            </View>
-            <View className="flex-row items-center space-x-2">
-              <RadioGroupItem value="WhatsApp" id="whatsapp" aria-labelledby="whatsapp-label" />
-              <Label nativeID="whatsapp-label">WhatsApp</Label>
-            </View>
-          </RadioGroup>
-        </View>
+          </View>
 
-        {/* Documents Sent */}
-        <View className="mb-4">
-          <Label nativeID="documentsSent" className="text-sm font-medium text-gray-700 mb-2">
-            Documents Sent
-          </Label>
-          <View className="bg-white border border-gray-300 rounded-md p-3">
-            <CheckboxWithLabel
-              value="Offer"
-              checked={form.documentSent.offer}
-              onValueChange={(checked) =>
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, offer: checked },
-                })
+          {/* Followup Status */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Follow Up Status
+            </Text>
+            <View className="flex flex-col">
+              <View className="mb-2">
+                <RadioGroup
+                  value={form.FollowupStatus}
+                  onValueChange={(value) =>
+                    setForm({ ...form, FollowupStatus: value })
+                  }
+                  className="flex flex-row gap-3"
+                >
+                  <RadioGroupItemWithLabel
+                    value="Fix in New Visit"
+                    onLabelPress={onLabelPressStatus("Fix in New Visit")}
+                  />
+                  <RadioGroupItemWithLabel
+                    value="Close"
+                    onLabelPress={onLabelPressStatus("Close")}
+                  />
+                </RadioGroup>
+              </View>
+              {form.FollowupStatus === "Fix in New Visit" && (
+                <View className="mt-2">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
+                    Next Visit Details
+                  </Text>
+                  <View>
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
+                      Next Visit On
+                    </Text>
+                    <View className="flex-row justify-around gap-2 mb-4">
+                      <Pressable
+                        onPress={() => {
+                          setNextDateVisible(true);
+                        }}
+                        className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+                      >
+                        <Ionicons
+                          name="calendar-clear-outline"
+                          color={"#222222"}
+                          size={20}
+                        />
+                        <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                          {form.NextVisitDateTime.toLocaleDateString()}
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => {
+                          setNextTimeVisible(true);
+                        }}
+                        className="flex-1 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md flex-row items-center"
+                      >
+                        <Ionicons
+                          name="time-outline"
+                          color={"#222222"}
+                          size={20}
+                        />
+                        <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                          {form.NextVisitDateTime.toLocaleTimeString()}
+                        </Text>
+                      </Pressable>
+                    </View>
+                    {isNextDateVisible && (
+                      <RNDateTimePicker
+                        mode="date"
+                        value={form.NextVisitDateTime}
+                        display="default"
+                        onChange={(event, newDate) => {
+                          setNextDateVisible(false);
+                          if (newDate) {
+                            const updatedDateTime = new Date(
+                              form.NextVisitDateTime
+                            );
+                            updatedDateTime.setFullYear(
+                              newDate.getFullYear(),
+                              newDate.getMonth(),
+                              newDate.getDate()
+                            );
+                            setForm({
+                              ...form,
+                              NextVisitDateTime: updatedDateTime,
+                            });
+                          }
+                        }}
+                      />
+                    )}
+                    {isNextTimeVisible && (
+                      <RNDateTimePicker
+                        mode="time"
+                        value={form.NextVisitDateTime}
+                        display="default"
+                        onChange={(event, newTime) => {
+                          setNextTimeVisible(false);
+                          if (newTime) {
+                            const updatedDateTime = new Date(
+                              form.NextVisitDateTime
+                            );
+                            updatedDateTime.setHours(
+                              newTime.getHours(),
+                              newTime.getMinutes()
+                            );
+                            setForm({
+                              ...form,
+                              NextVisitDateTime: updatedDateTime,
+                            });
+                          }
+                        }}
+                      />
+                    )}
+                  </View>
+                </View>
+              )}
+              {form.FollowupStatus === "Close" && (
+                <View className="mt-2">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin_bold">
+                    Close Details
+                  </Text>
+                  <View className="mb-4">
+                    <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin flex-1">
+                      Reason
+                    </Text>
+                    <CustomDropdownV2
+                      options={Closed.map((close) => ({
+                        value: close,
+                        label: close,
+                      }))}
+                      placeholder="Close"
+                      onChange={(value: any) => {
+                        setForm({ ...form, CloseReason: value });
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Detailed Description
+            </Text>
+            <Textarea
+              autoCorrect={false}
+              editable
+              multiline
+              numberOfLines={4}
+              clearButtonMode="while-editing"
+              placeholder="Enter Detailed Description"
+              className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                errors.DetailDescription ? "border border-red-500" : ""
+              }`}
+              placeholderClassName="text-base text-muted"
+              value={form.DetailDescription}
+              onChangeText={(text) =>
+                setForm({ ...form, DetailDescription: text })
               }
-              onLabelPress={() => {
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, layout: !form.documentSent.layout },
-                });
-              }}
-            />
-            <CheckboxWithLabel
-              value="Layout"
-              checked={form.documentSent.layout}
-              onValueChange={(checked) =>
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, layout: checked },
-                })
-              }
-              onLabelPress={() => {
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, offer: !form.documentSent.offer },
-                });
-              }}
-            />
-            <CheckboxWithLabel
-              value="PI"
-              checked={form.documentSent.pi}
-              onValueChange={(checked) =>
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, pi: checked },
-                })
-              }
-              onLabelPress={() => {
-                setForm({
-                  ...form,
-                  documentSent: { ...form.documentSent, pi: !form.documentSent.pi },
-                });
-              }}
+              aria-labelledby="detailed description"
             />
           </View>
-        </View>
 
-        {/* Followup Status */}
-        <View className="mb-4">
-          <Label nativeID="followupStatus" className="text-sm font-medium text-gray-700 mb-2">
-            Followup Status *
-          </Label>
-          <CustomDropdownV2
-            options={Closed.map((item) => ({ value: item, label: item }))}
-            optionLabel="label"
-            defaultValue={{ value: form.FollowupStatus, label: form.FollowupStatus }}
-            onChange={(value) => setForm({ ...form, FollowupStatus: value })}
-            placeholder="Select status"
-          />
-        </View>
-
-        {/* Visitor Person */}
-        <View className="mb-4">
-          <Label nativeID="visitorPerson" className="text-sm font-medium text-gray-700 mb-2">
-            Visitor Person *
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.VisitorPerson}
-            onChangeText={(text) => setForm({ ...form, VisitorPerson: text })}
-            placeholder="Enter visitor person"
-          />
-          {errors.VisitorPerson && (
-            <Text className="text-red-500 text-sm mt-1">{errors.VisitorPerson}</Text>
-          )}
-        </View>
-
-        {/* Next Visit Date & Time */}
-        <View className="mb-4">
-          <Label nativeID="nextVisitDateTime" className="text-sm font-medium text-gray-700 mb-2">
-            Next Visit Date & Time *
-          </Label>
-          <Pressable
-            onPress={() => setNextVisitDateTimeVisible(true)}
-            className="bg-white border border-gray-300 rounded-md p-3"
-          >
-            <Text className="text-gray-900">
-              {form.NextVisitDateTime.toLocaleString()}
+          {/* Visitor Person */}
+          <View className="mb-4">
+            <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+              Communication By
             </Text>
-          </Pressable>
-          {isNextVisitDateTimeVisible && (
-            <DateTimePicker
-              value={form.NextVisitDateTime}
-              mode="datetime"
-              onChange={(event, selectedDate) => {
-                setNextVisitDateTimeVisible(false);
-                if (selectedDate) {
-                  setForm({ ...form, NextVisitDateTime: selectedDate });
-                }
-              }}
+            <TextInput
+              autoCorrect={false}
+              clearButtonMode="while-editing"
+              onChangeText={(text) => setForm({ ...form, VisitorPerson: text })}
+              placeholder="Enter Communication By"
+              placeholderTextColor="#6b7280"
+              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
+                errors.VisitorPerson ? "border-red-500" : ""
+              }`}
+              value={form.VisitorPerson}
             />
-          )}
-        </View>
+            {errors.VisitorPerson && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.VisitorPerson}
+              </Text>
+            )}
+          </View>
 
-        {/* Next Visit Person */}
-        <View className="mb-4">
-          <Label nativeID="nextVisitPerson" className="text-sm font-medium text-gray-700 mb-2">
-            Next Visit Person
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.NextVisitPerson}
-            onChangeText={(text) => setForm({ ...form, NextVisitPerson: text })}
-            placeholder="Enter next visit person"
-          />
+          <Separator className="my-5 bg-gray-500" orientation="horizontal" />
+          <View>
+            <TouchableOpacity onPress={handleSubmit}>
+              <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
+                <Text className="text-lg font-semibold text-white">Submit</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* Next Visitor Person */}
-        <View className="mb-4">
-          <Label nativeID="nextVisitorPerson" className="text-sm font-medium text-gray-700 mb-2">
-            Next Visitor Person
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.NextVisitorPerson}
-            onChangeText={(text) => setForm({ ...form, NextVisitorPerson: text })}
-            placeholder="Enter next visitor person"
-          />
         </View>
-
-        {/* Attention Details */}
-        <View className="mb-4">
-          <Label nativeID="attentionDetails" className="text-sm font-medium text-gray-700 mb-2">
-            Attention Details
-          </Label>
-          <Textarea
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.AttentionDetails}
-            onChangeText={(text) => setForm({ ...form, AttentionDetails: text })}
-            placeholder="Enter attention details"
-            numberOfLines={3}
-          />
-        </View>
-
-        {/* Order Goes Party */}
-        <View className="mb-4">
-          <Label nativeID="orderGoesParty" className="text-sm font-medium text-gray-700 mb-2">
-            Order Goes Party
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.OrderGoesParty}
-            onChangeText={(text) => setForm({ ...form, OrderGoesParty: text })}
-            placeholder="Enter order goes party"
-          />
-        </View>
-
-        {/* Close Reason */}
-        <View className="mb-4">
-          <Label nativeID="closeReason" className="text-sm font-medium text-gray-700 mb-2">
-            Close Reason
-          </Label>
-          <TextInput
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.CloseReason}
-            onChangeText={(text) => setForm({ ...form, CloseReason: text })}
-            placeholder="Enter close reason"
-          />
-        </View>
-
-        {/* Detail Description */}
-        <View className="mb-4">
-          <Label nativeID="detailDescription" className="text-sm font-medium text-gray-700 mb-2">
-            Detail Description
-          </Label>
-          <Textarea
-            className="bg-white border border-gray-300 rounded-md p-3"
-            value={form.DetailDescription}
-            onChangeText={(text) => setForm({ ...form, DetailDescription: text })}
-            placeholder="Enter detail description"
-            numberOfLines={3}
-          />
-        </View>
-
-        {/* Rating */}
-        <View className="mb-6">
-          <Label nativeID="rating" className="text-sm font-medium text-gray-700 mb-2">
-            Rating
-          </Label>
-          <CustomDropdownV2
-            options={Ratings.map((item) => ({ value: item, label: item }))  }
-            optionLabel="label"
-            defaultValue={{ value: form.Rating, label: form.Rating }}
-            onChange={(value) => setForm({ ...form, Rating: value })}
-            placeholder="Select rating"
-          />
-        </View>
-
-        {/* Submit Button */}
-        <Pressable
-          className="bg-blue-500 py-3 px-4 rounded-lg items-center"
-          onPress={handleSubmit}
-          disabled={leadUpdateInsert.isPending}
-        >
-          {leadUpdateInsert.isPending ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text className="text-white font-semibold">Submit Lead Update</Text>
-          )}
-        </Pressable>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

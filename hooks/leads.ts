@@ -11,7 +11,7 @@ import {
 } from "~/services/lead";
 import { ErrorResponse } from "~/types/query";
 import Toast from "react-native-toast-message";
-import { LeadInsertData, LeadData, LeadUpdateData, LeadFilterData } from "~/types/lead";
+import { LeadInsertData, LeadData, LeadUpdateData, LeadFilterData, LeadUpdate } from "~/types/lead";
 import { useUserStore } from "~/store";
 import { router } from "expo-router";
 
@@ -119,7 +119,7 @@ export const useLeadFilters = () => {
 };
 
 export const useLeadUpdates = (leadId: number) => {
-  return useQuery<any, ErrorResponse, any[]>({
+  return useQuery<any, ErrorResponse, LeadUpdate[]>({
     queryKey: ["getLeadUpdates", leadId],
     queryFn: () => getLeadUpdates(leadId),
     enabled: !!leadId,
