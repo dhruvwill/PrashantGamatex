@@ -42,9 +42,12 @@ export const useInsertInquiryFollowup = () => {
         // queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
         predicate: (query) =>
           query.queryKey.every((key) =>
-            ["getQuotationFollowups", "getInquiryFollowups"].includes(
-              key as string
-            )
+            [
+              "getQuotationFollowups",
+              "getInquiryFollowups",
+              "getDashboard",
+              "getCalendar",
+            ].includes(key as string)
           ),
       });
       Toast.show({
@@ -53,7 +56,7 @@ export const useInsertInquiryFollowup = () => {
         text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
-      router.navigate("/(marketing)/m_followup/m_followUpList/")
+      router.navigate("/(marketing)/m_followup/m_followUpList")
     },
     onError: (error) => {
       Toast.show({
@@ -79,9 +82,7 @@ export const useInsertQuotationFollowup = () => {
         // queryKey: ["getQuotationFollowups", "getInquiryFollowups"],
         predicate: (query) =>
           query.queryKey.every((key) =>
-            ["getQuotationFollowups", "getInquiryFollowups"].includes(
-              key as string
-            )
+            ["getQuotationFollowups", "getDashboard", "getCalendar"].includes(key as string)
           ),
       });
       Toast.show({
@@ -90,7 +91,7 @@ export const useInsertQuotationFollowup = () => {
         text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
-      router.navigate("/(marketing)/m_followup/m_followUpList/");
+      router.navigate("/(marketing)/m_followup/m_followUpList");
     },
     onError: (error) => {
       Toast.show({
@@ -107,7 +108,7 @@ export const useInsertQuotationFollowup = () => {
 };
 
 export const useCategoryList = () => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state: any) => state.user?.token);
 
   return useQuery<any, ErrorResponse, any>({
     queryKey: ["getCategoryList"],
@@ -117,7 +118,7 @@ export const useCategoryList = () => {
 };
 
 export const useDocumentNo = (categoryName: string) => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state: any) => state.user?.token);
 
   return useQuery({
     queryKey: ["getFollowupDocumentNo"],
@@ -127,7 +128,7 @@ export const useDocumentNo = (categoryName: string) => {
 };
 
 export const useFollowupFilters = () => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state: any) => state.user?.token);
 
   return useQuery<any, ErrorResponse, any>({
     queryKey: ["getFollowupFilters"],

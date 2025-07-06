@@ -4,7 +4,7 @@ import { useUserStore } from "~/store";
 import { ErrorResponse } from "~/types/query";
 
 export const useCalendar = () => {
-  const token = useUserStore((state) => state.user?.token);
+  const token = useUserStore((state:any) => state.user?.token);
   return useQuery<any, ErrorResponse, any>({
     queryKey: ["getCalendar"],
     queryFn: () => getCalendar(token),

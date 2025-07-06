@@ -35,7 +35,12 @@ export const useInsertLead = () => {
         // ],
         predicate: (query) =>
           query.queryKey.every((key) =>
-            ["getAllLeads", "getLeadDocumentNo"].includes(key as string)
+            [
+              "getAllLeads",
+              "getLeadDocumentNo",
+              "getDashboard",
+              "getCalendar",
+            ].includes(key as string)
           ),
       }); 
       Toast.show({
@@ -74,7 +79,7 @@ export const useUpdateLead = () => {
     mutationKey: ["updateLead"],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["getAllLeads"],
+        queryKey: ["getAllLeads", "getDashboard", "getCalendar"],
       });
       Toast.show({
         type: "success",
@@ -135,7 +140,9 @@ export const useInsertLeadUpdate = () => {
       queryClient.invalidateQueries({
         predicate: (query) =>
           query.queryKey.every((key) =>
-            ["getLeadUpdates"].includes(key as string)
+            ["getLeadUpdates", "getDashboard", "getCalendar"].includes(
+              key as string
+            )
           ),
       });
       Toast.show({
@@ -169,7 +176,9 @@ export const useUpdateLeadUpdate = () => {
       queryClient.invalidateQueries({
         predicate: (query) =>
           query.queryKey.every((key) =>
-            ["getLeadUpdates"].includes(key as string)
+            ["getLeadUpdates", "getDashboard", "getCalendar"].includes(
+              key as string
+            )
           ),
       });
       Toast.show({
