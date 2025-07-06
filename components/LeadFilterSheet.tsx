@@ -135,7 +135,7 @@ const LeadFilterSheet: React.FC<LeadFilterSheetProps> = ({
               {/* Person Filter */}
               <View className="mb-4">
                 <Text className="text-lg font-acumin mb-2 text-gray-700">
-                  Person
+                  Representative 
                 </Text>
                 <SimpleDropdown
                   options={associatedUsersOptions}

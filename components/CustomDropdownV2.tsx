@@ -68,7 +68,7 @@ export default function CustomDropdown({
             <SelectGroup>
               {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
               {options.map((option) => (
-                <>
+                <View key={option.value}>
                   <SelectItem
                     key={option.value}
                     label={option.label}
@@ -77,7 +77,7 @@ export default function CustomDropdown({
                     {option.label}
                   </SelectItem>
                   <SelectSeparator className="bg-gray-200" />
-                </>
+                </View>
               ))}
             </SelectGroup>
           </ScrollView>

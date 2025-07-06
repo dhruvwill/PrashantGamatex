@@ -24,6 +24,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAppStore } from "~/store/store";
 import { Timeframe } from "~/types/dashboard";
 import { Button } from "~/components/ui/button";
+import ReminderCard from "~/components/ReminderCard";
+// import { leadReminder, followupReminder } from "~/mocks/reminder";
 
 const Dashboard = () => {
   const queryClient = useQueryClient();
@@ -153,27 +155,29 @@ const Dashboard = () => {
                 sections={[
                   {
                     percentage: Math.round(
-                      ((dashboardData.data.dashboard[0].pending_lead || 0) /
-                        (dashboardData.data.dashboard[0].total_lead || 1)) *
+                      ((dashboardData.data?.dashboard[0].pending_lead || 0) /
+                        (dashboardData.data?.dashboard[0].total_lead || 1)) *
                         100
                     ),
                     color: "blue",
                     label: `Pending Lead (${
-                      dashboardData.data.dashboard[0].pending_lead || 0
+                      dashboardData.data?.dashboard[0].pending_lead || 0
                     })`,
                   },
                   {
                     percentage:
                       100 -
                       Math.round(
-                        ((dashboardData.data.dashboard?.[0]?.pending_lead || 0) /
-                          (dashboardData.data.dashboard?.[0]?.total_lead || 1)) *
+                        ((dashboardData.data?.dashboard?.[0]?.pending_lead ||
+                          0) /
+                          (dashboardData.data?.dashboard?.[0]?.total_lead ||
+                            1)) *
                           100
                       ),
                     color: "lightblue",
                     label: `Inquired Lead (${
-                      dashboardData.data.dashboard[0].total_lead -
-                        dashboardData.data.dashboard[0].pending_lead || 0
+                      dashboardData.data?.dashboard[0].total_lead! -
+                        dashboardData.data?.dashboard[0].pending_lead! || 0
                     })`,
                   },
                 ]}
@@ -213,27 +217,32 @@ const Dashboard = () => {
                 sections={[
                   {
                     percentage: Math.round(
-                      ((dashboardData.data.dashboard[0].pending_quotation || 0) /
-                        (dashboardData.data.dashboard[0].total_quotation || 1)) *
+                      ((dashboardData.data?.dashboard?.[0]?.pending_quotation ||
+                        0) /
+                        (dashboardData.data?.dashboard?.[0]?.total_quotation ||
+                          1)) *
                         100
                     ),
                     color: "lightgreen",
                     label: `Pending Quotations (${
-                      dashboardData.data.dashboard[0].pending_quotation || 0
+                      dashboardData.data?.dashboard?.[0]?.pending_quotation || 0
                     })`,
                   },
                   {
                     percentage:
                       100 -
                       Math.round(
-                        ((dashboardData.data.dashboard[0].pending_quotation || 0) /
-                          (dashboardData.data.dashboard[0].total_quotation || 1)) *
+                        ((dashboardData.data?.dashboard?.[0]
+                          ?.pending_quotation || 0) /
+                          (dashboardData.data?.dashboard?.[0]
+                            ?.total_quotation || 1)) *
                           100
                       ),
                     color: "green",
                     label: `Order Send (${
-                      dashboardData.data.dashboard[0].total_quotation -
-                        dashboardData.data.dashboard[0].pending_quotation || 0
+                      dashboardData.data?.dashboard?.[0]?.total_quotation! -
+                        dashboardData.data?.dashboard?.[0]
+                          ?.pending_quotation! || 0
                     })`,
                   },
                 ]}
@@ -264,19 +273,16 @@ const Dashboard = () => {
             <View className="flex justify-between">
               <View className="border-b border-gray-300 p-4 w-full">
                 <Text className="text-xl font-bold text-gray-600">
-                  Upcoming Tasks (3 days)
+                  Upcoming Reminders (Next 3 days)
                 </Text>
               </View>
-              <View className="bg-gray-200 flex items-center justify-between">
-                <View className="flex-1 p-3 border-l-2 border-l-green-500 w-full">
-                  {/* <Text>{dashboardData.data.leadReminders[0].NextVisitDateTime}</Text> */}
-                </View>
-                <View className="flex-1 p-3 border-l-2 border-l-red-500 w-full">
-                  <Text>Task 1</Text>
-                </View>
-                <View className="flex-1 p-3 border-l-2 border-l-yellow-500 w-full">
-                  <Text>Task 1</Text>
-                </View>
+              <View className="p-4">
+                <ReminderCard
+                  leadReminders={dashboardData.data?.leadReminders || []}
+                  followupReminders={
+                    dashboardData.data?.quotationReminders || []
+                  }
+                />
               </View>
               <View className="border-t border-gray-300 p-4 w-full">
                 <Button

@@ -20,7 +20,16 @@ export const useDashboard = () => {
       quotationReminders: QuotationReminderData[];
     },
     ErrorResponse,
-    any
+    {
+      dashboard: {
+        pending_lead: number;
+        total_lead: number;
+        pending_quotation: number;
+        total_quotation: number;
+      }[];
+      leadReminders: LeadReminderData[];
+      quotationReminders: QuotationReminderData[];
+    }
   >({
     queryKey: ["getDashboard"],
     queryFn: () => getDashboard(token, timeframe),

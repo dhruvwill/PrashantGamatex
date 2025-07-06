@@ -22,8 +22,6 @@ export interface FollowupFilterOptions {
   machineName?: string;
   fromDate?: Date;
   toDate?: Date;
-  minQuantity?: number;
-  maxQuantity?: number;
 }
 
 interface FollowupFilterSheetProps {
@@ -212,47 +210,6 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
                     }}
                   />
                 )}
-              </View>
-
-              {/* Quantity Range Filter */}
-              <View className="mb-4">
-                <Text className="text-lg font-acumin mb-2 text-gray-700">Quantity Range</Text>
-                
-                <View className="flex-row gap-2">
-                  <View className="flex-1">
-                    <TextInput
-                      className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                      placeholder="Min quantity"
-                      value={filters.minQuantity?.toString() || ""}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        setFilters(prev => ({ 
-                          ...prev, 
-                          minQuantity: isNaN(num) ? undefined : num 
-                        }));
-                      }}
-                      keyboardType="numeric"
-                      placeholderTextColor="#666666"
-                    />
-                  </View>
-                  
-                  <View className="flex-1">
-                    <TextInput
-                      className="h-12 border border-gray-300 rounded-lg px-4 bg-gray-50 font-acumin"
-                      placeholder="Max quantity"
-                      value={filters.maxQuantity?.toString() || ""}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        setFilters(prev => ({ 
-                          ...prev, 
-                          maxQuantity: isNaN(num) ? undefined : num 
-                        }));
-                      }}
-                      keyboardType="numeric"
-                      placeholderTextColor="#666666"
-                    />
-                  </View>
-                </View>
               </View>
             </>
           )}
