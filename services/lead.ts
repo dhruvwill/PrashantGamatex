@@ -121,3 +121,57 @@ export const getLeadFilters = async (
     }
   }
 };
+
+export const getLeadUpdates = async (leadId: number): Promise<any> => {
+  try {
+    const response = await client.get(`/user/lead/updates/${leadId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};
+
+export const insertLeadUpdate = async (data: any): Promise<any> => {
+  try {
+    const response = await client.post("/user/lead/updates/insert", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};
+
+export const updateLeadUpdate = async (data: any): Promise<any> => {
+  try {
+    const response = await client.patch("/lead/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + useUserStore.getState().user?.token,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw { errorMessage: error.response.data.error } as ErrorResponse;
+    } else {
+      throw { errorMessage: error.message } as ErrorResponse;
+    }
+  }
+};

@@ -34,6 +34,11 @@ import { usePreventScreenCapture } from "expo-screen-capture";
 import { API_URL } from "~/constants/api";
 import { useUserStore } from "~/store";
 import { Image } from "expo-image";
+import { Header, HeaderBackButton } from "@react-navigation/elements";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const m_editLead = () => {
   usePreventScreenCapture();
@@ -42,7 +47,7 @@ const m_editLead = () => {
   const constants = useConstants();
   const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
   const navigation = useNavigation();
-
+  const { bottom } = useSafeAreaInsets();
   const allLeads = useLeads();
   const currentLead: LeadData | undefined = allLeads.data?.find((lead) => {
     if (isString(leadId)) {
@@ -55,7 +60,12 @@ const m_editLead = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: "Edit Lead #" + leadId,
+      header: ({ options }: any) => (
+        <Header {...options} title={options.title || "Edit Lead #" + leadId} />
+      ),
+      headerLeft: () => (
+        <HeaderBackButton tintColor="white" onPress={() => router.back()} />
+      ),
       headerTitleStyle: {
         fontFamily: "acumin",
       },
@@ -180,19 +190,20 @@ const m_editLead = () => {
     }
   };
   return (
-    <KeyboardAvoidingView behavior="padding">
-      <View
-        className={`${
-          leadUpdate.isPending ? "" : "hidden"
-        } z-50 bg-blue-100/40 absolute spinner h-screen w-screen flex justify-center items-center overflow-hidden`}
-      >
-        <ActivityIndicator size="large" />
-      </View>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        {/* <Spinner visible={leadUpdate.isPending} /> */}
-        <View className="flex h-full mx-3 my-5">
-          <View className="px-3">
-            {/* <View className="mb-4">
+    <SafeAreaView className="flex-1" edges={["bottom"]}>
+      <KeyboardAvoidingView behavior="padding">
+        <View
+          className={`${
+            leadUpdate.isPending ? "" : "hidden"
+          } z-50 bg-blue-100/40 absolute spinner h-screen w-screen flex justify-center items-center overflow-hidden`}
+        >
+          <ActivityIndicator size="large" />
+        </View>
+        <ScrollView keyboardShouldPersistTaps="handled" contentInset={{ bottom: bottom }}>
+          {/* <Spinner visible={leadUpdate.isPending} /> */}
+          <View className="flex h-full mx-3 my-5">
+            <View className="px-3">
+              {/* <View className="mb-4">
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Category
               </Text>
@@ -207,511 +218,515 @@ const m_editLead = () => {
                 value={currentLead?.CategoryName || ""}
               />
             </View> */}
-            <View className="mb-4 flex flex-row gap-2">
-              <View className="flex-1">
+              <View className="mb-4 flex flex-row gap-2">
+                <View className="flex-1">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                    Doc No.
+                  </Text>
+                  <TextInput
+                    readOnly
+                    keyboardType="numeric"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    placeholder="0"
+                    placeholderTextColor="#6b7280"
+                    className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                    value={currentLead?.DocumentNo.toString() || ""}
+                  />
+                </View>
+                <View className="flex-1 flex flex-col">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                    Doc. Date
+                  </Text>
+                  <View className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center">
+                    <Ionicons
+                      name="calendar-clear-outline"
+                      color={"#222222"}
+                      size={20}
+                    />
+                    <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
+                      {currentLead?.DocumentDate.split("T")[0] || ""}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View className="mb-4">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Doc No.
+                  Currency
+                </Text>
+                {constants.isLoading ? (
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                    <ActivityIndicator />
+                    <Text>Fetching</Text>
+                  </View>
+                ) : (
+                  <>
+                    <CustomDropdownV2
+                      options={
+                        constants.data?.CurrencyOutput.split(",").map(
+                          (currency: any) => ({
+                            value: currency,
+                            label: currency,
+                          })
+                        ) || []
+                      }
+                      defaultValue={{
+                        value: currentLead?.CurrencyName || "",
+                        label: currentLead?.CurrencyName || "",
+                      }}
+                      placeholder="Currency"
+                      onChange={(value) => {
+                        setForm({ ...form, currency: value });
+                      }}
+                    />
+                  </>
+                )}
+                {errors.currency && (
+                  <Text className="text-red-500 mt-1">{errors.currency}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Customer Company name
                 </Text>
                 <TextInput
-                  readOnly
-                  keyboardType="numeric"
                   autoCorrect={false}
                   clearButtonMode="while-editing"
-                  placeholder="0"
+                  onChangeText={(customerCompanyName) =>
+                    setForm({ ...form, customerCompanyName })
+                  }
+                  placeholder="Enter Customer Company Name"
                   placeholderTextColor="#6b7280"
-                  className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
-                  value={currentLead?.DocumentNo.toString() || ""}
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.customerCompanyName ? "border-red-500" : ""
+                  }`}
+                  value={form.customerCompanyName}
                 />
+                {errors.customerCompanyName && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.customerCompanyName}
+                  </Text>
+                )}
               </View>
-              <View className="flex-1 flex flex-col">
+              <View className="mb-4">
                 <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Doc. Date
+                  Contact person
                 </Text>
-                <View className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center">
+                <View className="flex-row items-center justify-between gap-2">
+                  <TextInput
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    onChangeText={(contactPerson) =>
+                      setForm({ ...form, contactPerson })
+                    }
+                    placeholder="Contact Person Name"
+                    placeholderTextColor="#6b7280"
+                    className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
+                      errors.contactPerson ? "border-red-500" : ""
+                    } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
+                    value={form.contactPerson}
+                  />
+                  <Pressable
+                    onPress={() => setIsContactPickerVisible(true)}
+                    className="border p-2 px-3 rounded-lg flex items-center justify-center"
+                  >
+                    <MaterialIcons name="contacts" size={24} color="black" />
+                  </Pressable>
+                </View>
+                {errors.contactPerson && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.contactPerson}
+                  </Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Designation
+                </Text>
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(designation) =>
+                    setForm({ ...form, designation })
+                  }
+                  placeholder="Designation"
+                  placeholderTextColor="#6b7280"
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.designation ? "border-red-500" : ""
+                  }`}
+                  value={form.designation}
+                />
+                {errors.designation && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.designation}
+                  </Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Mobile No.
+                </Text>
+                <TextInput
+                  keyboardType="phone-pad"
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
+                  placeholder="Phone"
+                  placeholderTextColor="#6b7280"
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.mobileNo ? "border-red-500" : ""
+                  }`}
+                  value={form.mobileNo}
+                />
+                {errors.mobileNo && (
+                  <Text className="text-red-500 mt-1">{errors.mobileNo}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <View className="flex flex-row">
+                  <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                    Address
+                  </Text>
+                </View>
+                <Textarea
+                  autoCorrect={false}
+                  editable
+                  multiline
+                  numberOfLines={4}
+                  clearButtonMode="while-editing"
+                  placeholder="Enter Address"
+                  className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.address ? "border border-red-500" : ""
+                  }`}
+                  placeholderClassName="text-base text-muted"
+                  value={form.address}
+                  onChangeText={(value) => setForm({ ...form, address: value })}
+                  aria-labelledby="followup details"
+                />
+                {errors.address && (
+                  <Text className="text-red-500 text-sm mt-1">
+                    {errors.address}
+                  </Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Email Id
+                </Text>
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(emailId) => setForm({ ...form, emailId })}
+                  placeholder="Email"
+                  placeholderTextColor="#6b7280"
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.emailId ? "border-red-500" : ""
+                  }`}
+                  value={form.emailId}
+                />
+                {errors.emailId && (
+                  <Text className="text-red-500 mt-1">{errors.emailId}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Product
+                </Text>
+                {constants.isLoading ? (
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                    <ActivityIndicator />
+                    <Text>Fetching</Text>
+                  </View>
+                ) : (
+                  <>
+                    <CustomDropdownV2
+                      options={
+                        constants.data?.ProductOutput.split(",").map(
+                          (product: any) => ({
+                            value: product,
+                            label: product,
+                          })
+                        ) || []
+                      }
+                      defaultValue={{
+                        value: form.product,
+                        label: form.product,
+                      }}
+                      placeholder="Products"
+                      onChange={(value) => {
+                        setForm({ ...form, product: value });
+                      }}
+                    />
+                  </>
+                )}
+                {errors.product && (
+                  <Text className="text-red-500 mt-1">{errors.product}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Lead Source
+                </Text>
+                <CustomDropdownV2
+                  options={LeadSource.map((source) => ({
+                    value: source,
+                    label: source,
+                  }))}
+                  defaultValue={{
+                    value: form.leadSource,
+                    label: form.leadSource,
+                  }}
+                  placeholder="Lead Source"
+                  onChange={(value) => setForm({ ...form, leadSource: value })}
+                />
+                {errors.leadSource && (
+                  <Text className="text-red-500 mt-1">{errors.leadSource}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Competition with
+                </Text>
+                <TextInput
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  onChangeText={(competition) =>
+                    setForm({ ...form, competition })
+                  }
+                  placeholder="Competition"
+                  placeholderTextColor="#6b7280"
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.competition ? "border-red-500" : ""
+                  }`}
+                  value={form.competition}
+                />
+                {errors.competition && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.competition}
+                  </Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Time Frame
+                </Text>
+                <CustomDropdownV2
+                  options={TimeFrame.map((timeFrame) => ({
+                    value: timeFrame,
+                    label: timeFrame,
+                  }))}
+                  defaultValue={{
+                    value: form.timeFrame,
+                    label: form.timeFrame,
+                  }}
+                  placeholder="Time Frame"
+                  onChange={(value) => setForm({ ...form, timeFrame: value })}
+                />
+                {errors.timeFrame && (
+                  <Text className="text-red-500 mt-1">{errors.timeFrame}</Text>
+                )}
+              </View>
+              <View className="flex-1 flex flex-col mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Lead Remind Date
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    setLeadRemindDate(true);
+                  }}
+                  className={`h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center ${
+                    errors.leadRemindDate ? "border-red-500" : ""
+                  }`}
+                >
                   <Ionicons
                     name="calendar-clear-outline"
                     color={"#222222"}
                     size={20}
                   />
                   <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                    {currentLead?.DocumentDate.split("T")[0] || ""}
+                    {form.leadRemindDate.toLocaleDateString("en-GB")}
                   </Text>
-                </View>
+                  {isLeadRemindDate && (
+                    <DateTimePicker
+                      mode="date"
+                      value={form.leadRemindDate}
+                      display="default"
+                      onChange={(event, newDate) => {
+                        setForm({
+                          ...form,
+                          leadRemindDate: newDate ? newDate : new Date(),
+                        });
+                        setLeadRemindDate(false);
+                      }}
+                    />
+                  )}
+                </Pressable>
+                {errors.leadRemindDate && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.leadRemindDate}
+                  </Text>
+                )}
               </View>
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Currency
-              </Text>
-              {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <ActivityIndicator />
-                  <Text>Fetching</Text>
-                </View>
-              ) : (
-                <>
-                  <CustomDropdownV2
-                    options={
-                      constants.data?.CurrencyOutput.split(",").map(
-                        (currency: any) => ({
-                          value: currency,
-                          label: currency,
-                        })
-                      ) || []
-                    }
-                    defaultValue={{
-                      value: currentLead?.CurrencyName || "",
-                      label: currentLead?.CurrencyName || "",
-                    }}
-                    placeholder="Currency"
-                    onChange={(value) => {
-                      setForm({ ...form, currency: value });
-                    }}
-                  />
-                </>
-              )}
-              {errors.currency && (
-                <Text className="text-red-500 mt-1">{errors.currency}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Customer Company name
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(customerCompanyName) =>
-                  setForm({ ...form, customerCompanyName })
-                }
-                placeholder="Enter Customer Company Name"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.customerCompanyName ? "border-red-500" : ""
-                }`}
-                value={form.customerCompanyName}
-              />
-              {errors.customerCompanyName && (
-                <Text className="text-red-500 mt-1">
-                  {errors.customerCompanyName}
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Customer Application
                 </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Contact person
-              </Text>
-              <View className="flex-row items-center justify-between gap-2">
+                {constants.isLoading ? (
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                    <ActivityIndicator />
+                    <Text>Fetching</Text>
+                  </View>
+                ) : (
+                  <>
+                    <CustomDropdownV2
+                      options={
+                        constants.data?.ApplicationOutput.split(",").map(
+                          (application: any) => ({
+                            value: application,
+                            label: application,
+                          })
+                        ) || []
+                      }
+                      defaultValue={{
+                        value: form.customerApplication,
+                        label: form.customerApplication,
+                      }}
+                      placeholder="Applications"
+                      onChange={(value) => {
+                        setForm({ ...form, customerApplication: value });
+                      }}
+                    />
+                  </>
+                )}
+                {errors.customerApplication && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.customerApplication}
+                  </Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Customer Existing Machine
+                </Text>
                 <TextInput
                   autoCorrect={false}
                   clearButtonMode="while-editing"
-                  onChangeText={(contactPerson) =>
-                    setForm({ ...form, contactPerson })
+                  onChangeText={(customerExistingMachine) =>
+                    setForm({ ...form, customerExistingMachine })
                   }
-                  placeholder="Contact Person Name"
+                  placeholder="Enter Customer Existing Machine"
                   placeholderTextColor="#6b7280"
-                  className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
-                    errors.contactPerson ? "border-red-500" : ""
-                  } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
-                  value={form.contactPerson}
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.customerExistingMachine ? "border-red-500" : ""
+                  }`}
+                  value={form.customerExistingMachine}
                 />
-                <Pressable
-                  onPress={() => setIsContactPickerVisible(true)}
-                  className="border p-2 px-3 rounded-lg flex items-center justify-center"
-                >
-                  <MaterialIcons name="contacts" size={24} color="black" />
-                </Pressable>
-              </View>
-              {errors.contactPerson && (
-                <Text className="text-red-500 mt-1">
-                  {errors.contactPerson}
-                </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Designation
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(designation) =>
-                  setForm({ ...form, designation })
-                }
-                placeholder="Designation"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.designation ? "border-red-500" : ""
-                }`}
-                value={form.designation}
-              />
-              {errors.designation && (
-                <Text className="text-red-500 mt-1">{errors.designation}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Mobile No.
-              </Text>
-              <TextInput
-                keyboardType="phone-pad"
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
-                placeholder="Phone"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.mobileNo ? "border-red-500" : ""
-                }`}
-                value={form.mobileNo}
-              />
-              {errors.mobileNo && (
-                <Text className="text-red-500 mt-1">{errors.mobileNo}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <View className="flex flex-row">
-                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                  Address
-                </Text>
-              </View>
-              <Textarea
-                autoCorrect={false}
-                editable
-                multiline
-                numberOfLines={4}
-                clearButtonMode="while-editing"
-                placeholder="Enter Address"
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.address ? "border border-red-500" : ""
-                }`}
-                placeholderClassName="text-base text-muted"
-                value={form.address}
-                onChangeText={(value) => setForm({ ...form, address: value })}
-                aria-labelledby="followup details"
-              />
-              {errors.address && (
-                <Text className="text-red-500 text-sm mt-1">
-                  {errors.address}
-                </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Email Id
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(emailId) => setForm({ ...form, emailId })}
-                placeholder="Email"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.emailId ? "border-red-500" : ""
-                }`}
-                value={form.emailId}
-              />
-              {errors.emailId && (
-                <Text className="text-red-500 mt-1">{errors.emailId}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Product
-              </Text>
-              {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <ActivityIndicator />
-                  <Text>Fetching</Text>
-                </View>
-              ) : (
-                <>
-                  <CustomDropdownV2
-                    options={
-                      constants.data?.ProductOutput.split(",").map(
-                        (product: any) => ({
-                          value: product,
-                          label: product,
-                        })
-                      ) || []
-                    }
-                    defaultValue={{
-                      value: form.product,
-                      label: form.product,
-                    }}
-                    placeholder="Products"
-                    onChange={(value) => {
-                      setForm({ ...form, product: value });
-                    }}
-                  />
-                </>
-              )}
-              {errors.product && (
-                <Text className="text-red-500 mt-1">{errors.product}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Lead Source
-              </Text>
-              <CustomDropdownV2
-                options={LeadSource.map((source) => ({
-                  value: source,
-                  label: source,
-                }))}
-                defaultValue={{
-                  value: form.leadSource,
-                  label: form.leadSource,
-                }}
-                placeholder="Lead Source"
-                onChange={(value) =>
-                  setForm({ ...form, leadSource: value })
-                }
-              />
-              {errors.leadSource && (
-                <Text className="text-red-500 mt-1">{errors.leadSource}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Competition with
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(competition) =>
-                  setForm({ ...form, competition })
-                }
-                placeholder="Competition"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.competition ? "border-red-500" : ""
-                }`}
-                value={form.competition}
-              />
-              {errors.competition && (
-                <Text className="text-red-500 mt-1">{errors.competition}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Time Frame
-              </Text>
-              <CustomDropdownV2 
-                options={TimeFrame.map((timeFrame) => ({
-                  value: timeFrame,
-                  label: timeFrame,
-                }))}
-                defaultValue={{
-                  value: form.timeFrame,
-                  label: form.timeFrame,
-                }}
-                placeholder="Time Frame"
-                onChange={(value) =>
-                  setForm({ ...form, timeFrame: value })
-                }
-              />
-              {errors.timeFrame && (
-                <Text className="text-red-500 mt-1">{errors.timeFrame}</Text>
-              )}
-            </View>
-            <View className="flex-1 flex flex-col mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Lead Remind Date
-              </Text>
-              <Pressable
-                onPress={() => {
-                  setLeadRemindDate(true);
-                }}
-                className={`h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg flex-row items-center ${
-                  errors.leadRemindDate ? "border-red-500" : ""
-                }`}
-              >
-                <Ionicons
-                  name="calendar-clear-outline"
-                  color={"#222222"}
-                  size={20}
-                />
-                <Text className="text-lg text-[#222] dark:text-gray-100 font-acumin ml-2">
-                  {form.leadRemindDate.toLocaleDateString("en-GB")}
-                </Text>
-                {isLeadRemindDate && (
-                  <DateTimePicker
-                    mode="date"
-                    value={form.leadRemindDate}
-                    display="default"
-                    onChange={(event, newDate) => {
-                      setForm({
-                        ...form,
-                        leadRemindDate: newDate ? newDate : new Date(),
-                      });
-                      setLeadRemindDate(false);
-                    }}
-                  />
-                )}
-              </Pressable>
-              {errors.leadRemindDate && (
-                <Text className="text-red-500 mt-1">
-                  {errors.leadRemindDate}
-                </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Customer Application
-              </Text>
-              {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
-                  <ActivityIndicator />
-                  <Text>Fetching</Text>
-                </View>
-              ) : (
-                <>
-                  <CustomDropdownV2
-                    options={
-                      constants.data?.ApplicationOutput.split(",").map(
-                        (application: any) => ({
-                          value: application,
-                          label: application,
-                        })
-                      ) || []
-                    }
-                    defaultValue={{
-                      value: form.customerApplication,
-                      label: form.customerApplication,
-                    }}
-                    placeholder="Applications"
-                    onChange={(value) => {
-                      setForm({ ...form, customerApplication: value });
-                    }}
-                  />
-                </>
-              )}
-              {errors.customerApplication && (
-                <Text className="text-red-500 mt-1">
-                  {errors.customerApplication}
-                </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Customer Existing Machine
-              </Text>
-              <TextInput
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                onChangeText={(customerExistingMachine) =>
-                  setForm({ ...form, customerExistingMachine })
-                }
-                placeholder="Enter Customer Existing Machine"
-                placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.customerExistingMachine ? "border-red-500" : ""
-                }`}
-                value={form.customerExistingMachine}
-              />
-              {errors.customerExistingMachine && (
-                <Text className="text-red-500 mt-1">
-                  {errors.customerExistingMachine}
-                </Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Lead Note
-              </Text>
-              <Textarea
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                placeholder="Enter Lead Notes.."
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
-                  errors.leadNote ? "border border-red-500" : ""
-                }`}
-                placeholderClassName="text-base text-muted"
-                value={form.leadNote}
-                onChangeText={(leadNote) => setForm({ ...form, leadNote })}
-                aria-labelledby="textareaLabel"
-              />
-              {errors.leadNote && (
-                <Text className="text-red-500 mt-1">{errors.leadNote}</Text>
-              )}
-            </View>
-            <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Attachments
-              </Text>
-              {currentLead?.ImageName &&
-              currentLead.ImageName.split(",").length > 0 ? (
-                <ScrollView horizontal className="mt-4">
-                  {currentLead.ImageName.split(",").map(
-                    (image: string, index: number) => (
-                      // <View key={index} className="mr-4 bg-black rounded-md">
-                      //   <Image
-                      //     source={getLeadImageUri(image)}
-                      //     className="w-20 h-20 rounded-md"
-                      //     style={{ width: 80, height: 80 }}
-                      //   />
-                      // </View>
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => setSelectedImage(image)}
-                      >
-                        <View className="mr-2 rounded-md">
-                          <Image
-                            source={getLeadImageUri(image)}
-                            className="w-20 h-20 rounded-md"
-                            style={{ width: 80, height: 80 }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )
-                  )}
-                </ScrollView>
-              ) : (
-                <Text className="text-gray-500 italic">No attachments</Text>
-              )}
-            </View>
-            <Separator className="my-5 bg-gray-500" orientation="horizontal" />
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  // router.replace("homepage");
-                  handleSubmit();
-                }}
-              >
-                <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
-                  <Text className=" text-lg font-semibold text-white">
-                    Submit
+                {errors.customerExistingMachine && (
+                  <Text className="text-red-500 mt-1">
+                    {errors.customerExistingMachine}
                   </Text>
-                </View>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Lead Note
+                </Text>
+                <Textarea
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  placeholder="Enter Lead Notes.."
+                  className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                    errors.leadNote ? "border border-red-500" : ""
+                  }`}
+                  placeholderClassName="text-base text-muted"
+                  value={form.leadNote}
+                  onChangeText={(leadNote) => setForm({ ...form, leadNote })}
+                  aria-labelledby="textareaLabel"
+                />
+                {errors.leadNote && (
+                  <Text className="text-red-500 mt-1">{errors.leadNote}</Text>
+                )}
+              </View>
+              <View className="mb-4">
+                <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
+                  Attachments
+                </Text>
+                {currentLead?.ImageName &&
+                currentLead.ImageName.split(",").length > 0 ? (
+                  <ScrollView horizontal className="mt-4">
+                    {currentLead.ImageName.split(",").map(
+                      (image: string, index: number) => (
+                        // <View key={index} className="mr-4 bg-black rounded-md">
+                        //   <Image
+                        //     source={getLeadImageUri(image)}
+                        //     className="w-20 h-20 rounded-md"
+                        //     style={{ width: 80, height: 80 }}
+                        //   />
+                        // </View>
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => setSelectedImage(image)}
+                        >
+                          <View className="mr-2 rounded-md">
+                            <Image
+                              source={getLeadImageUri(image)}
+                              className="w-20 h-20 rounded-md"
+                              style={{ width: 80, height: 80 }}
+                            />
+                          </View>
+                        </TouchableOpacity>
+                      )
+                    )}
+                  </ScrollView>
+                ) : (
+                  <Text className="text-gray-500 italic">No attachments</Text>
+                )}
+              </View>
+              <Separator
+                className="my-5 bg-gray-500"
+                orientation="horizontal"
+              />
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    // router.replace("homepage");
+                    handleSubmit();
+                  }}
+                >
+                  <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
+                    <Text className=" text-lg font-semibold text-white">
+                      Submit
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <Modal visible={!!selectedImage} animationType="fade">
+            <View className="flex-1 w-full bg-black bg-opacity-90 justify-center items-center">
+              {selectedImage && (
+                <Image
+                  source={getLeadImageUri(selectedImage)}
+                  style={{ width: 350, height: 500 }}
+                  contentFit="contain"
+                />
+              )}
+              <TouchableOpacity
+                className="absolute top-10 right-10 z-10 self-end"
+                onPress={() => setSelectedImage(null)}
+              >
+                <Ionicons name="close" size={30} color="white" />
               </TouchableOpacity>
             </View>
-          </View>
-        </View>
-        <Modal visible={!!selectedImage} animationType="fade">
-          <View className="flex-1 w-full bg-black bg-opacity-90 justify-center items-center">
-            {selectedImage && (
-              <Image
-                source={getLeadImageUri(selectedImage)}
-                style={{ width: 350, height: 500 }}
-                contentFit="contain"
-              />
-            )}
-            <TouchableOpacity
-              className="absolute top-10 right-10 z-10 self-end"
-              onPress={() => setSelectedImage(null)}
-            >
-              <Ionicons name="close" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      </ScrollView>
-      <ContactPickerModal
-        isVisible={isContactPickerVisible}
-        onClose={() => setIsContactPickerVisible(false)}
-        onSelectContact={handleSelectContact}
-      />
-    </KeyboardAvoidingView>
+          </Modal>
+        </ScrollView>
+        <ContactPickerModal
+          isVisible={isContactPickerVisible}
+          onClose={() => setIsContactPickerVisible(false)}
+          onSelectContact={handleSelectContact}
+        />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
-import { Header } from "@react-navigation/elements";
+import { Header, HeaderBackButton } from "@react-navigation/elements";
 import React from "react";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 
 const _layout = () => {
   return (
@@ -19,7 +19,12 @@ const _layout = () => {
       <Stack.Screen
         name="newInquiryFollowup"
         options={{
-          headerTitle: "Inquiry Follow-Up",
+          headerLeft: () => (
+            <HeaderBackButton tintColor="white" onPress={() => router.back()} />
+          ),
+          header: ({ options }) => (
+            <Header {...options} title={options.title || "Inquiry Follow-Up"} />
+          ),
           headerTitleStyle: {
             fontFamily: "acumin",
           },
@@ -32,7 +37,15 @@ const _layout = () => {
       <Stack.Screen
         name="newQuotationFollowup"
         options={{
-          headerTitle: "Quotation Follow-Up",
+          headerLeft: () => (
+            <HeaderBackButton tintColor="white" onPress={() => router.back()} />
+          ),
+          header: ({ options }) => (
+            <Header
+              {...options}
+              title={options.title || "Quotation Follow-Up"}
+            />
+          ),
           headerTitleStyle: {
             fontFamily: "acumin",
           },
@@ -51,11 +64,13 @@ const _layout = () => {
               title={options.title || "Inquiry Follow-Up Timeline"}
             />
           ),
+          headerLeft: () => (
+            <HeaderBackButton tintColor="white" onPress={() => router.back()} />
+          ),
+          headerBackButtonDisplayMode: "minimal",
           headerTitleStyle: {
             fontFamily: "acumin",
           },
-          headerBackButtonDisplayMode: "minimal",
-          headerBackButtonMenuEnabled: true,
           headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: "steelblue",
@@ -70,6 +85,9 @@ const _layout = () => {
               {...options}
               title={options.title || "Quotation Follow-Up Timeline"}
             />
+          ),
+          headerLeft: () => (
+            <HeaderBackButton tintColor="white" onPress={() => router.back()} />
           ),
           headerTitleStyle: {
             fontFamily: "acumin",

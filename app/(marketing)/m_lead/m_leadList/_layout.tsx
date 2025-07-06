@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
+import { Header, HeaderBackButton } from "@react-navigation/elements";
 
 const _layout = () => {
   return (
@@ -19,6 +20,45 @@ const _layout = () => {
         statusBarHidden: true,
         headerBackButtonDisplayMode: 'minimal'
       }} />
+      <Stack.Screen
+        name="leadFollowupTimeline"
+        options={{
+          header: ({ options }) => (
+            <Header
+              {...options}
+              title={options.title || "Lead Follow-Up Timeline"}
+            />
+          ),
+          headerLeft: () => <HeaderBackButton tintColor="white" onPress={() => router.back()}/>,
+          headerTitleStyle: {
+            fontFamily: "acumin",
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "steelblue",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="newLeadFollowup"
+        options={{
+          header: ({ options }) => (
+            <Header
+              {...options}
+              title={options.title || "New Lead Follow-Up"}
+              headerBackButtonDisplayMode="minimal"
+            />
+          ),
+          headerLeft: () => <HeaderBackButton tintColor="white" onPress={() => router.back()}/>,
+          headerTitleStyle: {
+            fontFamily: "acumin",
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "steelblue",
+          },
+        }}
+      />
     </Stack>
   );
 };

@@ -213,7 +213,7 @@ const m_newfollowup = () => {
       <View className="flex h-full mx-3 my-5">
         <View className="px-3">
           <Text className="text-3xl font-acumin_bold">New Follow Up</Text>
-          <Text className="text-muted text-sm text-gray-500 font-acumin">
+          <Text className="text-gray-900 text-sm font-acumin">
             Add a New Follow Up
           </Text>
           <Separator className="my-5 bg-gray-500" orientation="horizontal" />

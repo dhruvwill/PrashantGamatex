@@ -88,3 +88,96 @@ export type LeadReminderData = {
   LeadId: number;
   CompanyName: string;
 };
+
+export type LeadUpdate = {
+  LeadUpdateId: number;
+  LeadId: number;
+  FollowupDateTime: Date;
+  FollowupEndDateTime: Date;
+  VisitTo: string;
+  FollowupDetails: string;
+  ModeOfContact: string;
+  documentSent: {
+    offer: boolean;
+    layout: boolean;
+    pi: boolean;
+  };
+  FollowupStatus: string;
+  VisitorPerson: string;
+  NextVisitDateTime: Date;
+  NextVisitPerson: string;
+  NextVisitorPerson: string;
+  AttentionDetails: string;
+  OrderGoesParty: string;
+  CloseReason: string;
+  DetailDescription: string;
+  Rating: string;
+  UserName: string;
+  DocumentNo: number;
+  DocumentDate: Date;
+  CategoryName: string;
+  CurrencyName: string;
+  UDF_CompanyName_2361: string;
+  UDF_ContactPerson_2361: string;
+  UDF_Designation_2361: string;
+  UDF_MobileNo_2361: string;
+  UDF_CustomerAdd_2361: string;
+  UDF_EmailId_2361: string;
+  UDF_Product_2361: string;
+  UDF_LeadSource_2361: string;
+  UDF_CompetitionWith_2361: string;
+  UDF_TimeFrame_2361: string;
+  UDF_LeadRemindDate_2361: Date;
+  UDF_CustomerApplication_2361: string;
+  UDF_CustomerExistingMachine_2361: string;
+  UDF_LeadNotes_2361: string;
+  ImageName: string;
+};
+
+export type LeadUpdateInsert = {
+  LeadId: number;
+  FollowupDateTime: Date;
+  FollowupEndDateTime: Date;
+  VisitTo: string;
+  FollowupDetails: string;
+  ModeOfContact: string;
+  documentSent: {
+    offer: boolean;
+    layout: boolean;
+    pi: boolean;
+  };
+  FollowupStatus: string;
+  VisitorPerson: string;
+  NextVisitDateTime: Date;
+  NextVisitPerson: string;
+  NextVisitorPerson: string;
+  AttentionDetails: string;
+  OrderGoesParty: string;
+  CloseReason: string;
+  DetailDescription: string;
+  Rating: string;
+};
+
+export type LeadUpdatePatch = {
+  LeadUpdateId: number;
+  FollowupDateTime: Date;
+  FollowupEndDateTime: Date;
+  VisitTo: string;
+  FollowupDetails: string;
+  ModeOfContact: string;
+  documentSent: {
+    offer: boolean;
+    layout: boolean;
+    pi: boolean;
+  };
+  FollowupStatus: string;
+  VisitorPerson: string;
+  NextVisitDateTime: Date;
+  NextVisitPerson: string;
+  NextVisitorPerson: string;
+  AttentionDetails: string;
+  OrderGoesParty: string;
+  CloseReason: string;
+  DetailDescription: string;
+  Rating: string;
+};

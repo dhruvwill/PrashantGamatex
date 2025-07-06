@@ -24,7 +24,7 @@ const LeadCard = ({
       className="w-full bg-white shadow-md rounded-lg overflow-hidden mb-4 border"
       onPress={() => {
         router.push({
-          pathname: "/(marketing)/m_lead/m_leadList/[leadId]",
+          pathname: "/(marketing)/m_lead/m_leadList/leadFollowupTimeline",
           params: { leadId: leadId },
         });
       }}
@@ -52,14 +52,26 @@ const LeadCard = ({
           <Text className="text-sm text-gray-600 ml-2">{userName}</Text>
         </View>
       </View>
-      <View className="bg-gray-100 p-3 flex-row justify-end items-center">
-        {/* <Text className="text-sm text-blue-600 font-semibold">View / Edit</Text> */}
-        <View className="flex-row">
+      <View className="bg-gray-100 p-3 flex-row justify-between items-center">
+        <Pressable className="flex-row items-center" onPress={() => {
+          router.push({
+            pathname: "/(marketing)/m_lead/m_leadList/[leadId]",
+            params: { leadId: leadId },
+          });
+        }}>
+          <Text className="text-sm text-blue-600 font-semibold">View / Edit</Text>
+        </Pressable>
+        <Pressable className="flex-row items-center" onPress={() => {
+          router.push({
+            pathname: "/(marketing)/m_lead/m_leadList/leadFollowupTimeline",
+            params: { leadId: leadId },
+          });
+        }}>
           <Text className="text-sm text-blue-600 font-semibold">
-            Lead Details
+            Lead Updates
           </Text>
           <Ionicons name="chevron-forward" size={20} color="#2563EB" />
-        </View>
+        </Pressable>
       </View>
     </Pressable>
   );
