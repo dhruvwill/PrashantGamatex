@@ -217,25 +217,27 @@ const inquiryFollowupTimeline = () =>
           </View>
         )}
 
-        <View className={`pb-[${bottom}px] my-10`}>
-          <Pressable
-            className={`bg-blue-500 py-3 px-4 rounded-lg items-center`}
-            onPress={() => {
-              router.push({
-                pathname:
-                  "/(marketing)/m_followup/m_followUpList/newQuotationFollowup",
-                params: {
-                  data,
-                  lastFollowupData: JSON.stringify(
-                    followupdata?.[followupdata.length - 1]
-                  ),
-                },
-              });
-            }}
-          >
-            <Text className="text-white font-semibold">Add New Followup</Text>
-          </Pressable>
-        </View>
+        {tab == "timeline" && (
+          <View className={`pb-[${bottom}px] my-10`}>
+            <Pressable
+              className={`bg-blue-500 py-3 px-4 rounded-lg items-center`}
+              onPress={() => {
+                router.push({
+                  pathname:
+                    "/(marketing)/m_followup/m_followUpList/newQuotationFollowup",
+                  params: {
+                    data,
+                    lastFollowupData: JSON.stringify(
+                      followupdata?.[followupdata.length - 1]
+                    ),
+                  },
+                });
+              }}
+            >
+              <Text className="text-white font-semibold">Add New Followup</Text>
+            </Pressable>
+          </View>
+        )}
         <Modal
           visible={!!selectedImage}
           // transparent={true}

@@ -91,7 +91,8 @@ export const useInsertQuotationFollowup = () => {
         text2: "Followup Added Successfully",
         visibilityTime: 3000,
       });
-      router.navigate("/(marketing)/m_followup/m_followUpList");
+      router.back();
+      // router.navigate("/(marketing)/m_followup/m_followUpList");
     },
     onError: (error) => {
       Toast.show({

@@ -50,7 +50,7 @@ const Dashboard = () => {
   const { timeframe, setTimeframe } = useAppStore((state: any) => state);
 
   const graphs = ["Leads", "Inquiries", "Quotations"];
-  const dashboardData = useDashboard();
+  const dashboardData = useDashboard(timeframe);
 
   const router = useRouter();
 

@@ -4,10 +4,11 @@ import { ErrorResponse } from "~/types/query";
 import { useAppStore, useUserStore } from "~/store/store";
 import { LeadReminderData } from "~/types/lead";
 import { QuotationReminderData } from "~/types/followup";
+import { Timeframe } from "~/types/dashboard";
 
-export const useDashboard = () => {
-  const token = useUserStore((state:any) => state.user?.token);
-  const timeframe = useAppStore((state:any) => state.timeframe);
+export const useDashboard = (timeframe: Timeframe) => {
+  const token = useUserStore((state: any) => state.user?.token);
+  // const timeframe = useAppStore((state: any) => state.timeframe);
   return useQuery<
     {
       dashboard: {

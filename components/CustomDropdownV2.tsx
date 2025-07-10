@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Select,
@@ -45,44 +45,45 @@ export default function CustomDropdown({
   }, []);
 
   return (
-    <ScrollView className="max-h-[80px]">
-      <Select
-        defaultValue={defaultValue}
-        onValueChange={(option) => {
-          if (onChange) {
-            onChange(option!.value);
-          }
-        }}
+    <Select
+      defaultValue={defaultValue}
+      onValueChange={(option) => {
+        if (onChange) {
+          onChange(option!.value);
+        }
+      }}
+    >
+      <SelectTrigger className="w-full border border-gray-900">
+        <SelectValue
+          className="text-foreground text-sm native:text-lg"
+          placeholder={"Select " + placeholder}
+        />
+      </SelectTrigger>
+      <SelectContent
+        insets={contentInsets}
+        className="bg-white dark:bg-black border border-input shadow-md my-1 w-full"
       >
-        <SelectTrigger className="w-full border border-gray-900">
-          <SelectValue
-            className="text-foreground text-sm native:text-lg"
-            placeholder={"Select " + placeholder}
+        <SelectGroup>
+          {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
+          <FlatList
+            data={options}
+            renderItem={({ item }) => (
+              <View key={item.value}>
+                <SelectItem
+                  key={item.value}
+                  label={item.label}
+                  value={item.value}
+                >
+                  {item.label}
+                </SelectItem>
+              </View>
+            )}
+            keyExtractor={(item) => item.value}
+            ItemSeparatorComponent={() => <SelectSeparator className="bg-gray-200" />}
+            style={{ maxHeight: 240 }}
           />
-        </SelectTrigger>
-        <SelectContent
-          insets={contentInsets}
-          className="bg-white dark:bg-black border border-input shadow-md my-1 w-full mx-3"
-        >
-          <ScrollView className="max-h-60">
-            <SelectGroup>
-              {optionLabel && <SelectLabel>{optionLabel}</SelectLabel>}
-              {options.map((option) => (
-                <View key={option.value}>
-                  <SelectItem
-                    key={option.value}
-                    label={option.label}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </SelectItem>
-                  <SelectSeparator className="bg-gray-200" />
-                </View>
-              ))}
-            </SelectGroup>
-          </ScrollView>
-        </SelectContent>
-      </Select>
-    </ScrollView>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }

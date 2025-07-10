@@ -54,6 +54,7 @@ const useUserStore = create<UserStore>()(
     persist(
       (set) => ({
         user: null,
+        fcmToken: null,
         setUser: (user: User) => set({ user }),
         clearUser: () => set({ user: null }),
         setToken: (token: string) =>

@@ -30,7 +30,9 @@ const ReminderCard = ({ leadReminders, followupReminders }: ReminderCardProps) =
 
   const getDaysUntil = (date: Date) => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const reminderDate = new Date(date);
+    reminderDate.setHours(0, 0, 0, 0);
     const diffTime = reminderDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     

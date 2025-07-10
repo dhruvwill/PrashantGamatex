@@ -114,7 +114,7 @@ const SelectContent = React.forwardRef<
       <SelectPrimitive.Overlay
         style={Platform.OS !== "web" ? StyleSheet.absoluteFill : undefined}
       >
-        <Animated.View>
+        <Animated.View className={"w-full p-6"}>
           <SelectPrimitive.Content
             ref={ref}
             className={cn(

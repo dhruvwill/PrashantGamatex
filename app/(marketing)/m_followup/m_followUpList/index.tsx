@@ -96,21 +96,6 @@ const m_followUpList = () => {
         }
       }
 
-      // Quantity range filter
-      if (
-        activeFilters.minQuantity !== undefined &&
-        item.Quantity < activeFilters.minQuantity
-      ) {
-        return false;
-      }
-
-      if (
-        activeFilters.maxQuantity !== undefined &&
-        item.Quantity > activeFilters.maxQuantity
-      ) {
-        return false;
-      }
-
       return true;
     });
   };
@@ -153,7 +138,7 @@ const m_followUpList = () => {
         <View className="flex h-full mx-3 my-5">
           <View className="px-3">
             <Text className="text-3xl font-acumin_bold">
-              List of Inquiry/Quotations
+              List of Quotations
             </Text>
             <Text className="text-gray-900 text-sm font-acumin">
               Add a Follow up
@@ -167,7 +152,7 @@ const m_followUpList = () => {
               <Search size={20} color="#666666" />
               <TextInput
                 className="flex-1 ml-2 text-base font-acumin"
-                placeholder="party, machine or document no..."
+                placeholder="Search here..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 placeholderTextColor="#666666"

@@ -151,7 +151,9 @@ export const useInsertLeadUpdate = () => {
         text2: "Lead Update Added Successfully",
         visibilityTime: 3000,
       });
-      router.navigate("/(marketing)/m_lead/m_leadList/");
+
+      router.back();
+      // xrouter.navigate("/(marketing)/m_lead/m_leadList/");
     },
     onError: (error) => {
       Toast.show({
