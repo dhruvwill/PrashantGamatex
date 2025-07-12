@@ -24,12 +24,12 @@ type UserStore = {
   clearFcmToken: () => void;
 };
 
-type AppStore = {
+export type AppStore = {
   timeframe: Timeframe;
   setTimeframe: (timeframe: Timeframe) => void;
 };
 
-type ThemeStore = {
+export type ThemeStore = {
   theme: "light" | "dark" | "system";
   setTheme: (theme: "light" | "dark" | "system") => void;
 };

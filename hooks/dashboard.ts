@@ -6,9 +6,9 @@ import { LeadReminderData } from "~/types/lead";
 import { QuotationReminderData } from "~/types/followup";
 import { Timeframe } from "~/types/dashboard";
 
-export const useDashboard = (timeframe: Timeframe) => {
+export const useDashboard = () => {
   const token = useUserStore((state: any) => state.user?.token);
-  // const timeframe = useAppStore((state: any) => state.timeframe);
+  const timeframe = useAppStore((state: any) => state.timeframe);
   return useQuery<
     {
       dashboard: {
@@ -32,7 +32,7 @@ export const useDashboard = (timeframe: Timeframe) => {
       quotationReminders: QuotationReminderData[];
     }
   >({
-    queryKey: ["getDashboard"],
+    queryKey: ["getDashboard", timeframe],
     queryFn: () => getDashboard(token, timeframe),
     enabled: !!token,
   });

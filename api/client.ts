@@ -5,6 +5,7 @@ const client = axios.create({
   baseURL: API_URL,
   headers: {
     "ngrok-skip-browser-warning": "true",
+    "Cache-Control": "no-cache",
   },
 });
 

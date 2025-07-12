@@ -9,27 +9,20 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DonutChart from "~/components/graphs/donut";
 import { useDashboard } from "~/hooks/dashboard";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAppStore } from "~/store/store";
+import { AppStore, useAppStore } from "~/store/store";
 import { Timeframe } from "~/types/dashboard";
 import { Button } from "~/components/ui/button";
 import ReminderCard from "~/components/ReminderCard";
+import CustomDropdownV2 from "~/components/CustomDropdownV2";
 // import { leadReminder, followupReminder } from "~/mocks/reminder";
 
 const Dashboard = () => {
   const queryClient = useQueryClient();
-  const timeframes = [
+  const timeframes: Timeframe[] = [
     {
       value: "1D",
       label: "1 Day",
@@ -47,32 +40,22 @@ const Dashboard = () => {
       label: "1 Year",
     },
   ];
-  const { timeframe, setTimeframe } = useAppStore((state: any) => state);
+  const { timeframe, setTimeframe } = useAppStore((state: AppStore) => state);
 
-  const graphs = ["Leads", "Inquiries", "Quotations"];
-  const dashboardData = useDashboard(timeframe);
+  const dashboardData = useDashboard();
 
   const router = useRouter();
 
   const insets = useSafeAreaInsets();
-  const contentInsets = {
-    top: insets.top,
-    bottom: insets.bottom,
-    left: 12,
-    right: 12,
-  };
 
-  const handleTimeframeChange = (timeframe: any) => {
-    setTimeframe(timeframe as Timeframe);
-    setTimeout(() => {
-      queryClient.invalidateQueries({
-        queryKey: ["getDashboard"],
-      });
-    }, 500);
-    // queryClient.invalidateQueries({
-    //   queryKey: ["getDashboard"],
-    // });
-  };
+  useEffect(() => {
+    console.log("invalidating");
+    queryClient.invalidateQueries({
+      queryKey: ["getDashboard", timeframe],
+    });
+    console.log(dashboardData.data, timeframe);
+  }, [timeframe]);
+
 
   return (
     <ScrollView>
@@ -88,48 +71,18 @@ const Dashboard = () => {
           {/* Right Side - Dropdown and Icon */}
           <View className="flex-row flex flex-1 items-center">
             {/* Dropdown */}
-            <View>
-              <Select
+            <View className="flex-1">
+              <CustomDropdownV2
+                options={timeframes}
+                placeholder="timeframe"
                 defaultValue={{
                   value: timeframes[0].value,
                   label: timeframes[0].label,
                 }}
-                onValueChange={(timeframe: any) => {
-                  handleTimeframeChange(timeframe);
+                onChange={(value) => {
+                  setTimeframe(timeframes.find((t) => t.value === value)!);
                 }}
-              >
-                <SelectTrigger className="w-full">
-                  <View className="flex-row items-center">
-                    <Ionicons name="calendar-outline" size={18} color="#000" />
-                    <SelectValue
-                      className="text-foreground text-sm native:text-lg ml-2"
-                      placeholder="Select a timeframe"
-                    >
-                      {timeframes[0].label}
-                    </SelectValue>
-                  </View>
-                </SelectTrigger>
-                <SelectContent insets={contentInsets} className="bg-white">
-                  <SelectGroup>
-                    {timeframes.map((timeframe) => (
-                      <SelectItem
-                        key={timeframe.value}
-                        label={timeframe.label}
-                        value={timeframe.value}
-                      >
-                        <View className="flex-row items-center">
-                          <Ionicons
-                            name="calendar-outline"
-                            size={18}
-                            color="#000"
-                          />
-                          <Text className="ml-2">{timeframe.label}</Text>
-                        </View>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              />
             </View>
 
             {/* Notification Icon */}
