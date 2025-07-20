@@ -262,7 +262,7 @@ const NewLeadFollowup = () => {
                 onChangeText={(text) => setForm({ ...form, VisitTo: text })}
                 placeholder="Enter Communication With"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 ${
                   errors.VisitTo ? "border-red-500" : ""
                 }`}
                 value={form.VisitTo}
@@ -286,10 +286,10 @@ const NewLeadFollowup = () => {
                 numberOfLines={4}
                 clearButtonMode="while-editing"
                 placeholder="Enter Follow Up Details"
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                   errors.FollowupDetails ? "border border-red-500" : ""
                 }`}
-                placeholderClassName="text-base text-muted"
+                placeholderClassName=" text-muted"
                 value={form.FollowupDetails}
                 onChangeText={(text) =>
                   setForm({ ...form, FollowupDetails: text })
@@ -487,10 +487,10 @@ const NewLeadFollowup = () => {
                 numberOfLines={4}
                 clearButtonMode="while-editing"
                 placeholder="Enter Detailed Description"
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                   errors.DetailDescription ? "border border-red-500" : ""
                 }`}
-                placeholderClassName="text-base text-muted"
+                placeholderClassName=" text-muted"
                 value={form.DetailDescription}
                 onChangeText={(text) =>
                   setForm({ ...form, DetailDescription: text })
@@ -512,7 +512,7 @@ const NewLeadFollowup = () => {
                 }
                 placeholder="Enter Communication By"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 ${
                   errors.VisitorPerson ? "border-red-500" : ""
                 }`}
                 value={form.VisitorPerson}

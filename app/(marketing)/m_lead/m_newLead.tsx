@@ -220,7 +220,7 @@ const m_newLead = () => {
                 Category
               </Text>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -260,7 +260,7 @@ const m_newLead = () => {
                   editable={false}
                   placeholder="Document No"
                   placeholderTextColor="#6b7280"
-                  className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                  className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                   value={doc.data?.DocumentNo || form.documentNo}
                 />
               </View> */}
@@ -315,7 +315,7 @@ const m_newLead = () => {
                 <Text className="text-red-500">*</Text>
               </View>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -357,7 +357,7 @@ const m_newLead = () => {
                 }
                 placeholder="Enter Customer Company Name"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.customerCompanyName ? "border-red-500" : ""
                 }`}
                 value={form.customerCompanyName}
@@ -384,7 +384,7 @@ const m_newLead = () => {
                   }
                   placeholder="Contact Person Name"
                   placeholderTextColor="#6b7280"
-                  className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
+                  className={`flex-grow h-10 native:h-12 border rounded-lg px-4  font-medium ${
                     errors.contactPerson ? "border-red-500" : ""
                   } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
                   value={form.contactPerson}
@@ -418,7 +418,7 @@ const m_newLead = () => {
                 }
                 placeholder="Designation"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.designation ? "border-red-500" : ""
                 }`}
                 value={form.designation}
@@ -441,7 +441,7 @@ const m_newLead = () => {
                 onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
                 placeholder="Phone"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.mobileNo ? "border-red-500" : ""
                 }`}
                 value={form.mobileNo}
@@ -464,7 +464,7 @@ const m_newLead = () => {
                 onChangeText={(emailId) => setForm({ ...form, emailId })}
                 placeholder="Phone"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.emailId ? "border-red-500" : ""
                 }`}
                 value={form.emailId}
@@ -486,10 +486,10 @@ const m_newLead = () => {
                 numberOfLines={4}
                 clearButtonMode="while-editing"
                 placeholder="Enter Address"
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                   errors.address ? "border border-red-500" : ""
                 }`}
-                placeholderClassName="text-base text-muted"
+                placeholderClassName=" text-muted"
                 value={form.address}
                 onChangeText={(value) => setForm({ ...form, address: value })}
                 aria-labelledby="followup details"
@@ -508,7 +508,7 @@ const m_newLead = () => {
                 <Text className="text-red-500">*</Text>
               </View>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -543,7 +543,7 @@ const m_newLead = () => {
                 <Text className="text-red-500">*</Text>
               </View>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -577,7 +577,7 @@ const m_newLead = () => {
                 }
                 placeholder="Competition"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.competition ? "border-red-500" : ""
                 }`}
                 value={form.competition}
@@ -594,7 +594,7 @@ const m_newLead = () => {
                 <Text className="text-red-500">*</Text>
               </View>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -668,7 +668,7 @@ const m_newLead = () => {
                 </Text>
               </View>
               {constants.isLoading ? (
-                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                   <ActivityIndicator />
                   <Text>Fetching</Text>
                 </View>
@@ -708,7 +708,7 @@ const m_newLead = () => {
                 }
                 placeholder="Enter Customer Existing Machine"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                   errors.customerExistingMachine ? "border-red-500" : ""
                 }`}
                 value={form.customerExistingMachine}
@@ -727,10 +727,10 @@ const m_newLead = () => {
                 autoCorrect={false}
                 clearButtonMode="while-editing"
                 placeholder="Enter Lead Notes.."
-                className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                   errors.leadNote ? "border border-red-500" : ""
                 }`}
-                placeholderClassName="text-base text-muted"
+                placeholderClassName=" text-muted"
                 value={form.leadNote}
                 onChangeText={(leadNote) => setForm({ ...form, leadNote })}
                 aria-labelledby="textareaLabel"
@@ -746,7 +746,7 @@ const m_newLead = () => {
               <TouchableOpacity onPress={pickImages}>
                 <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg flex-row items-center">
                   <Ionicons name="document" size={24} color="#007aff" />
-                  <Text className="text-blue-500 text-base font-medium ml-2">
+                  <Text className="text-blue-500  font-medium ml-2">
                     Select Images
                   </Text>
                 </View>

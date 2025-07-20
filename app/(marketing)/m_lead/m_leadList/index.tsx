@@ -136,7 +136,7 @@ const m_leadList = () => {
           <View className="flex flex-grow flex-row items-center px-4 py-2 bg-gray-100 rounded-lg border border-gray-200">
             <Search size={20} color="#666666" />
             <TextInput
-              className="flex-1 ml-2 text-base font-acumin"
+              className="flex-1 ml-2  font-acumin"
               placeholder="company, product or contact..."
               value={searchQuery}
               onChangeText={setSearchQuery}

@@ -28,7 +28,7 @@ const SimplifiedCalendar: React.FC = () => {
     if (dayEvents.length === 0) {
       return (
         <View className="py-5 items-center">
-          <Text className="text-gray-500 text-base">
+          <Text className="text-gray-500 ">
             No events planned for this day
           </Text>
         </View>
@@ -56,7 +56,7 @@ const SimplifiedCalendar: React.FC = () => {
               </>
             )}
           </View>
-          <Text className="text-black font-medium text-base mt-1">
+          <Text className="text-black font-medium  mt-1">
             {event.partyName}
           </Text>
           <Text className="text-sm text-gray-500">{event.machineName}</Text>
@@ -75,7 +75,7 @@ const SimplifiedCalendar: React.FC = () => {
       {calendar.isLoading ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#007AFF" />
-          <Text className="text-gray-500 text-base">Loading...</Text>
+          <Text className="text-gray-500 ">Loading...</Text>
         </View>
       ) : (
         <>

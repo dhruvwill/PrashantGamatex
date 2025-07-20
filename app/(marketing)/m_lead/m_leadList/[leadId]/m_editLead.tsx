@@ -10,20 +10,21 @@ import {
   Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import {
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Separator } from "~/components/ui/separator";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useUpdateLead, useLeads } from "~/hooks/leads";
 import {
-  Category,
   LeadSource,
-  Currency,
   TimeFrame,
 } from "~/constants/dropdowns";
 import CustomDropdownV2 from "~/components/CustomDropdownV2";
 import { LeadData, LeadUpdateData } from "~/types/lead";
-import { Portal } from "~/components/primitives/portal";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
 import { useConstants } from "~/hooks/const";
@@ -45,10 +46,26 @@ const m_editLead = () => {
 
   const userToken = useUserStore((state: any) => state.user?.token);
   const constants = useConstants();
-  const { leadId } = useLocalSearchParams<{ leadId: string | string[] }>();
+  const { leadId } = useLocalSearchParams<{ leadId: string }>();
   const navigation = useNavigation();
   const { bottom } = useSafeAreaInsets();
   const allLeads = useLeads();
+  const router = useRouter();
+  const leadUpdate = useUpdateLead();
+
+  // Initialize form with empty values first
+  
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLeadRemindDate, setLeadRemindDate] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isContactPickerVisible, setIsContactPickerVisible] = useState(false);
+
+  // Helper function to check if value is string
+  function isString(value: unknown): value is string {
+    return typeof value === "string";
+  }
+
+  // Find current lead based on leadId
   const currentLead: LeadData | undefined = allLeads.data?.find((lead) => {
     if (isString(leadId)) {
       return lead.ReferenceTransaction_2361Id === parseInt(leadId);
@@ -58,24 +75,24 @@ const m_editLead = () => {
     return false;
   });
 
-  useEffect(() => {
-    navigation.setOptions({
-      header: ({ options }: any) => (
-        <Header {...options} title={options.title || "Edit Lead #" + leadId} />
-      ),
-      headerLeft: () => (
-        <HeaderBackButton tintColor="white" onPress={() => router.back()} />
-      ),
-      headerTitleStyle: {
-        fontFamily: "acumin",
-      },
-      headerTitleAlign: "center",
-      headerStyle: {
-        backgroundColor: "steelblue",
-      },
-    });
-  }, [leadId]);
-
+  const [form, setForm] = useState<LeadUpdateData>({
+    currency: currentLead?.CurrencyName || "",
+    customerCompanyName: currentLead?.UDF_CompanyName_2361 || "",
+    contactPerson: currentLead?.UDF_ContactPerson_2361 || "",
+    designation: currentLead?.UDF_Designation_2361 || "",
+    mobileNo: currentLead?.UDF_MobileNo_2361 || "",
+    address: currentLead?.UDF_CustomerAdd_2361 || "",
+    emailId: currentLead?.UDF_EmailId_2361 || "",
+    product: currentLead?.UDF_Product_2361 || "",
+    leadSource: currentLead?.UDF_LeadSource_2361 || "",
+    competition: currentLead?.UDF_CompetitionWith_2361 || "",
+    timeFrame: currentLead?.UDF_TimeFrame_2361 || "",
+    leadRemindDate: new Date(currentLead?.UDF_LeadRemindDate_2361 || ""),
+    customerApplication: currentLead?.UDF_CustomerApplication_2361 || "",
+    customerExistingMachine: currentLead?.UDF_CustomerExistingMachine_2361 || "",
+    leadNote: currentLead?.UDF_LeadNotes_2361 || "",
+  });
+  // Get lead image URI
   const getLeadImageUri = (imageName: string) => {
     return {
       uri: `${API_URL}/user/lead/images/${imageName}`,
@@ -83,6 +100,7 @@ const m_editLead = () => {
     };
   };
 
+  // Form validation schema
   const leadFormSchema = z.object({
     currency: z.string().min(1, "Currency is required"),
     customerCompanyName: z.string().min(1, "Customer Company Name is required"),
@@ -101,38 +119,7 @@ const m_editLead = () => {
     leadNote: z.string().optional(),
   });
 
-  const [form, setForm] = useState<LeadUpdateData>({
-    currency: currentLead?.CurrencyName || "",
-    customerCompanyName: currentLead?.UDF_CompanyName_2361 || "",
-    contactPerson: currentLead?.UDF_ContactPerson_2361 || "",
-    designation: currentLead?.UDF_Designation_2361 || "",
-    mobileNo: currentLead?.UDF_MobileNo_2361 || "",
-    address: currentLead?.UDF_CustomerAdd_2361 || "",
-    emailId: currentLead?.UDF_EmailId_2361 || "",
-    product: currentLead?.UDF_Product_2361 || "",
-    leadSource: currentLead?.UDF_LeadSource_2361 || "",
-    competition: currentLead?.UDF_CompetitionWith_2361 || "",
-    timeFrame: currentLead?.UDF_TimeFrame_2361 || "",
-    leadRemindDate: new Date(currentLead?.UDF_LeadRemindDate_2361 || ""),
-    customerApplication: currentLead?.UDF_CustomerApplication_2361 || "",
-    customerExistingMachine:
-      currentLead?.UDF_CustomerExistingMachine_2361 || "",
-    leadNote: currentLead?.UDF_LeadNotes_2361 || "",
-  });
-
-  const [errors, setErrors] = useState<any>({});
-
-  const [isLeadRemindDate, setLeadRemindDate] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const router = useRouter();
-  const leadUpdate = useUpdateLead();
-
-  function isString(value: unknown): value is string {
-    return typeof value === "string";
-  }
-
-  const [isContactPickerVisible, setIsContactPickerVisible] = useState(false);
+  // Handle contact selection
   const handleSelectContact = (contact: Contact) => {
     if (contact.phoneNumbers && contact.phoneNumbers.length > 0) {
       setForm((prev) => ({
@@ -144,19 +131,24 @@ const m_editLead = () => {
     setIsContactPickerVisible(false);
   };
 
-  // Map dropdown constants to { value, label }[] format for CustomDropdownV2
-  const categoryOptions = Category.map((item) => ({ value: item, label: item }));
-  const timeFrameOptions = TimeFrame.map((item) => ({ value: item, label: item }));
-  const leadSourceOptions = LeadSource.map((item) => ({ value: item, label: item }));
-  const currencyOptions = Currency.map((item) => ({ value: item, label: item }));
-
+  // Handle form submission
   const handleSubmit = async () => {
     try {
       const validatedForm = leadFormSchema.parse(form);
       setErrors({});
+      
+      if (!currentLead) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Lead data not found",
+        });
+        return;
+      }
+
       await leadUpdate.mutateAsync({
-        RecordId: currentLead?.ReferenceTransaction_2361Id || 0,
-        category: currentLead?.CategoryName || "",
+        RecordId: currentLead.ReferenceTransaction_2361Id || 0,
+        category: currentLead.CategoryName || "",
         currency: form.currency,
         customerCompanyName: form.customerCompanyName,
         contactPerson: form.contactPerson,
@@ -175,8 +167,7 @@ const m_editLead = () => {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Handle validation errors
-        const newErrors: any = {};
+        const newErrors: Record<string, string> = {};
         error.errors.forEach((err) => {
           newErrors[err.path[0]] = err.message;
         });
@@ -195,6 +186,73 @@ const m_editLead = () => {
       }
     }
   };
+
+  // Set up navigation header
+  useEffect(() => {
+    console.log("leadId", leadId);
+    navigation.setOptions({
+      header: ({ options }: any) => (
+        <Header {...options} title={options.title || "Edit Lead #" + leadId} />
+      ),
+      headerLeft: () => (
+        <HeaderBackButton tintColor="white" onPress={() => router.back()} />
+      ),
+      headerTitleStyle: {
+        fontFamily: "acumin",
+      },
+      headerTitleAlign: "center",
+      headerStyle: {
+        backgroundColor: "steelblue",
+      },
+    });
+  }, [leadId, navigation, router]);
+
+  // 🔥 This useEffect will run when currentLead data becomes available
+  useEffect(() => {
+    if (currentLead) {
+      console.log("Populating form with lead data:", currentLead);
+      setForm({
+        currency: currentLead.CurrencyName || "",
+        customerCompanyName: currentLead.UDF_CompanyName_2361 || "",
+        contactPerson: currentLead.UDF_ContactPerson_2361 || "",
+        designation: currentLead.UDF_Designation_2361 || "",
+        mobileNo: currentLead.UDF_MobileNo_2361 || "",
+        address: currentLead.UDF_CustomerAdd_2361 || "",
+        emailId: currentLead.UDF_EmailId_2361 || "",
+        product: currentLead.UDF_Product_2361 || "",
+        leadSource: currentLead.UDF_LeadSource_2361 || "",
+        competition: currentLead.UDF_CompetitionWith_2361 || "",
+        timeFrame: currentLead.UDF_TimeFrame_2361 || "",
+        leadRemindDate: currentLead.UDF_LeadRemindDate_2361
+          ? new Date(currentLead.UDF_LeadRemindDate_2361)
+          : new Date(),
+        customerApplication: currentLead.UDF_CustomerApplication_2361 || "",
+        customerExistingMachine:
+          currentLead.UDF_CustomerExistingMachine_2361 || "",
+        leadNote: currentLead.UDF_LeadNotes_2361 || "",
+      });
+    }
+  }, [currentLead]); // Runs when currentLead changes from undefined to actual data
+
+  // Add debugging to see the timing
+  useEffect(() => {
+    console.log("leadId:", leadId);
+    console.log("allLeads.isLoading:", allLeads.isLoading);
+    console.log("currentLead:", currentLead ? "Found" : "Not found");
+  }, [leadId, allLeads.isLoading, currentLead]);
+
+  // Show loading state while waiting for data
+  if (!leadId || allLeads.isLoading || !currentLead) {
+    return (
+      <SafeAreaView className="flex-1" edges={["bottom"]}>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" />
+          <Text className="mt-2 text-lg font-acumin">Loading lead data...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1" edges={["bottom"]}>
       <KeyboardAvoidingView behavior="padding">
@@ -209,24 +267,8 @@ const m_editLead = () => {
           keyboardShouldPersistTaps="handled"
           contentInset={{ bottom: bottom }}
         >
-          {/* <Spinner visible={leadUpdate.isPending} /> */}
           <View className="flex h-full mx-3 my-5">
             <View className="px-3">
-              {/* <View className="mb-4">
-              <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
-                Category
-              </Text>
-              <TextInput
-                readOnly
-                keyboardType="numeric"
-                autoCorrect={false}
-                clearButtonMode="while-editing"
-                placeholder="0"
-                placeholderTextColor="#6b7280"
-                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
-                value={currentLead?.CategoryName || ""}
-              />
-            </View> */}
               <View className="mb-4 flex flex-row gap-2">
                 <View className="flex-1">
                   <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
@@ -239,7 +281,7 @@ const m_editLead = () => {
                     clearButtonMode="while-editing"
                     placeholder="0"
                     placeholderTextColor="#6b7280"
-                    className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                    className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                     value={currentLead?.DocumentNo.toString() || ""}
                   />
                 </View>
@@ -264,13 +306,14 @@ const m_editLead = () => {
                   Currency
                 </Text>
                 {constants.isLoading ? (
-                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                     <ActivityIndicator />
                     <Text>Fetching</Text>
                   </View>
                 ) : (
                   <>
                     <CustomDropdownV2
+                      key={`currency-${form.currency}`}
                       options={
                         constants.data?.CurrencyOutput.split(",").map(
                           (currency: any) => ({
@@ -280,8 +323,8 @@ const m_editLead = () => {
                         ) || []
                       }
                       defaultValue={{
-                        value: currentLead?.CurrencyName || "",
-                        label: currentLead?.CurrencyName || "",
+                        value: form.currency,
+                        label: form.currency,
                       }}
                       placeholder="Currency"
                       onChange={(value) => {
@@ -306,7 +349,7 @@ const m_editLead = () => {
                   }
                   placeholder="Enter Customer Company Name"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.customerCompanyName ? "border-red-500" : ""
                   }`}
                   value={form.customerCompanyName}
@@ -330,7 +373,7 @@ const m_editLead = () => {
                     }
                     placeholder="Contact Person Name"
                     placeholderTextColor="#6b7280"
-                    className={`flex-grow h-10 native:h-12 border rounded-lg px-4 text-base font-medium ${
+                    className={`flex-grow h-10 native:h-12 border rounded-lg px-4  font-medium ${
                       errors.contactPerson ? "border-red-500" : ""
                     } dark:bg-gray-800 text-[#222] dark:text-gray-100`}
                     value={form.contactPerson}
@@ -360,7 +403,7 @@ const m_editLead = () => {
                   }
                   placeholder="Designation"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.designation ? "border-red-500" : ""
                   }`}
                   value={form.designation}
@@ -382,7 +425,7 @@ const m_editLead = () => {
                   onChangeText={(mobileNo) => setForm({ ...form, mobileNo })}
                   placeholder="Phone"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.mobileNo ? "border-red-500" : ""
                   }`}
                   value={form.mobileNo}
@@ -404,10 +447,10 @@ const m_editLead = () => {
                   numberOfLines={4}
                   clearButtonMode="while-editing"
                   placeholder="Enter Address"
-                  className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                     errors.address ? "border border-red-500" : ""
                   }`}
-                  placeholderClassName="text-base text-muted"
+                  placeholderClassName=" text-muted"
                   value={form.address}
                   onChangeText={(value) => setForm({ ...form, address: value })}
                   aria-labelledby="followup details"
@@ -428,7 +471,7 @@ const m_editLead = () => {
                   onChangeText={(emailId) => setForm({ ...form, emailId })}
                   placeholder="Email"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.emailId ? "border-red-500" : ""
                   }`}
                   value={form.emailId}
@@ -442,13 +485,14 @@ const m_editLead = () => {
                   Product
                 </Text>
                 {constants.isLoading ? (
-                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                     <ActivityIndicator />
                     <Text>Fetching</Text>
                   </View>
                 ) : (
                   <>
                     <CustomDropdownV2
+                      key={`product-${form.product}`}
                       options={
                         constants.data?.ProductOutput.split(",").map(
                           (product: any) => ({
@@ -477,6 +521,7 @@ const m_editLead = () => {
                   Lead Source
                 </Text>
                 <CustomDropdownV2
+                  key={`leadSource-${form.leadSource}`}
                   options={LeadSource.map((source) => ({
                     value: source,
                     label: source,
@@ -504,7 +549,7 @@ const m_editLead = () => {
                   }
                   placeholder="Competition"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.competition ? "border-red-500" : ""
                   }`}
                   value={form.competition}
@@ -520,6 +565,7 @@ const m_editLead = () => {
                   Time Frame
                 </Text>
                 <CustomDropdownV2
+                  key={`timeFrame-${form.timeFrame}`}
                   options={TimeFrame.map((timeFrame) => ({
                     value: timeFrame,
                     label: timeFrame,
@@ -581,13 +627,14 @@ const m_editLead = () => {
                   Customer Application
                 </Text>
                 {constants.isLoading ? (
-                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
+                  <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
                     <ActivityIndicator />
                     <Text>Fetching</Text>
                   </View>
                 ) : (
                   <>
                     <CustomDropdownV2
+                      key={`customerApplication-${form.customerApplication}`}
                       options={
                         constants.data?.ApplicationOutput.split(",").map(
                           (application: any) => ({
@@ -625,7 +672,7 @@ const m_editLead = () => {
                   }
                   placeholder="Enter Customer Existing Machine"
                   placeholderTextColor="#6b7280"
-                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
                     errors.customerExistingMachine ? "border-red-500" : ""
                   }`}
                   value={form.customerExistingMachine}
@@ -644,10 +691,10 @@ const m_editLead = () => {
                   autoCorrect={false}
                   clearButtonMode="while-editing"
                   placeholder="Enter Lead Notes.."
-                  className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
+                  className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
                     errors.leadNote ? "border border-red-500" : ""
                   }`}
-                  placeholderClassName="text-base text-muted"
+                  placeholderClassName=" text-muted"
                   value={form.leadNote}
                   onChangeText={(leadNote) => setForm({ ...form, leadNote })}
                   aria-labelledby="textareaLabel"
@@ -665,13 +712,6 @@ const m_editLead = () => {
                   <ScrollView horizontal className="mt-4">
                     {currentLead.ImageName.split(",").map(
                       (image: string, index: number) => (
-                        // <View key={index} className="mr-4 bg-black rounded-md">
-                        //   <Image
-                        //     source={getLeadImageUri(image)}
-                        //     className="w-20 h-20 rounded-md"
-                        //     style={{ width: 80, height: 80 }}
-                        //   />
-                        // </View>
                         <TouchableOpacity
                           key={index}
                           onPress={() => setSelectedImage(image)}
@@ -697,10 +737,7 @@ const m_editLead = () => {
               />
               <View>
                 <TouchableOpacity
-                  onPress={() => {
-                    // router.replace("homepage");
-                    handleSubmit();
-                  }}
+                  onPress={handleSubmit}
                 >
                   <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff] bg-[#007aff]">
                     <Text className=" text-lg font-semibold text-white">
@@ -739,4 +776,4 @@ const m_editLead = () => {
   );
 };
 
-export default m_editLead; 
+export default m_editLead;

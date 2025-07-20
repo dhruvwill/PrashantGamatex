@@ -139,7 +139,7 @@ const m_newfollowup = () => {
                 onChangeText={(documentNo) => setForm({ ...form, documentNo })}
                 placeholder="0"
                 placeholderTextColor="#6b7280"
-                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                 value={form.documentNo}
               />
             </View>
@@ -190,7 +190,7 @@ const m_newfollowup = () => {
                 onChangeText={(refNo) => setForm({ ...form, refNo })}
                 placeholder="0"
                 placeholderTextColor="#6b7280"
-                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                 value={form.refNo}
               />
             </View>
@@ -239,7 +239,7 @@ const m_newfollowup = () => {
               onChangeText={(partyname) => setForm({ ...form, partyname })}
               placeholder="Enter Party Name"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
               value={form.partyname}
             />
           </View>
@@ -255,7 +255,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Communication By"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
               value={form.communicationperson}
             />
           </View>
@@ -347,7 +347,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Communication With"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
               value={form.communicationwith}
             />
           </View>
@@ -367,7 +367,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Follow Up Details"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
               value={form.followupdetails}
             />
           </View>
@@ -499,7 +499,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Next Communication With"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                       value={form.nextcommunicationwith}
                     />
                   </View>
@@ -519,7 +519,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Next Communication By"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                       value={form.nextcommunicationby}
                     />
                   </View>
@@ -539,7 +539,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Attention On"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                       value={form.attentionon}
                     />
                   </View>
@@ -566,7 +566,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Order Goes To"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                       value={form.ordergoesto}
                     />
                   </View>
@@ -598,7 +598,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Detailed Description"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
                       value={form.detaileddescription}
                     />
                   </View>

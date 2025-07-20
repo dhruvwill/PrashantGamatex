@@ -79,7 +79,7 @@ export default function Example() {
               onChangeText={(username) => setForm({ ...form, username })}
               placeholder="Enter your Username"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 w-full px-4 rounded-lg  font-medium text-[#222] dark:text-gray-100"
               value={form.username}
             />
           </View>
@@ -95,7 +95,7 @@ export default function Example() {
                 onChangeText={(password) => setForm({ ...form, password })}
                 placeholder="Enter your Password"
                 placeholderTextColor="#6b7280"
-                className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
+                className="h-10 native:h-12 w-full  font-medium text-[#222] dark:text-gray-100"
                 secureTextEntry={!showPassword}
                 value={form.password}
               />
