@@ -24,8 +24,8 @@ const LeadCard = ({
       className="w-full bg-white shadow-md rounded-lg overflow-hidden mb-4 border"
       onPress={() => {
         router.push({
-          pathname: "/(marketing)/m_lead/m_leadList/leadFollowupTimeline",
-          params: { id: leadId },
+          pathname: '/(marketing)/m_lead/m_leadList/[leadId]',
+          params: { leadId: leadId },
         });
       }}
     >
@@ -55,7 +55,7 @@ const LeadCard = ({
       <View className="bg-gray-100 p-3 flex-row justify-between items-center">
         <Pressable className="flex-row items-center" onPress={() => {
           router.push({
-            pathname: "/(marketing)/m_lead/m_leadList/[leadId]",
+            pathname: '/(marketing)/m_lead/m_leadList/[leadId]',
             params: { leadId: leadId },
           });
         }}>
@@ -63,7 +63,7 @@ const LeadCard = ({
         </Pressable>
         <Pressable className="flex-row items-center" onPress={() => {
           router.push({
-            pathname: "/(marketing)/m_lead/m_leadList/[leadId]/leadFollowupTimeline",
+            pathname: '/(marketing)/m_lead/m_leadList/[leadId]/timeline',
             params: { leadId: leadId },
           });
         }}>

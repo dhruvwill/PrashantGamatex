@@ -144,6 +144,12 @@ const m_editLead = () => {
     setIsContactPickerVisible(false);
   };
 
+  // Map dropdown constants to { value, label }[] format for CustomDropdownV2
+  const categoryOptions = Category.map((item) => ({ value: item, label: item }));
+  const timeFrameOptions = TimeFrame.map((item) => ({ value: item, label: item }));
+  const leadSourceOptions = LeadSource.map((item) => ({ value: item, label: item }));
+  const currencyOptions = Currency.map((item) => ({ value: item, label: item }));
+
   const handleSubmit = async () => {
     try {
       const validatedForm = leadFormSchema.parse(form);
@@ -199,7 +205,10 @@ const m_editLead = () => {
         >
           <ActivityIndicator size="large" />
         </View>
-        <ScrollView keyboardShouldPersistTaps="handled" contentInset={{ bottom: bottom }}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentInset={{ bottom: bottom }}
+        >
           {/* <Spinner visible={leadUpdate.isPending} /> */}
           <View className="flex h-full mx-3 my-5">
             <View className="px-3">
@@ -730,4 +739,4 @@ const m_editLead = () => {
   );
 };
 
-export default m_editLead;
+export default m_editLead; 

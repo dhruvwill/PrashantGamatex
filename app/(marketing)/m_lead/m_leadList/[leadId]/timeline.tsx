@@ -102,67 +102,63 @@ const LeadFollowupTimeline = () => {
       ) : (
         <View className={`relative`}>
           <View className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300" />
-            {leadUpdates?.map((update: LeadUpdate, index: number) => (
-              <View key={index} className="mb-8 flex-row">
-                <View className="absolute left-[12px] top-1 w-2 h-2 rounded-full bg-blue-500" />
-                <View className="ml-10 flex-1">
-                  <View className="flex flex-row">
-                    <Text className="text-sm font-semibold text-gray-600 mb-2">
-                      {new Date(update.FollowupDateTime).toLocaleDateString(
-                        "en-IN",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )}
-                      ,{" "}
-                    </Text>
-                    <Text className="text-sm text-gray-600">
-                      {new Date(update.FollowupDateTime).toLocaleTimeString(
-                        "en-IN",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                        }
-                      )}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text className="text-lg font-bold text-gray-800 mb-2">
-                      {update.ModeofContact}
-                    </Text>
-                    <Text className="text-base text-gray-700 mb-3">
-                      {update.FollowupDetails}
-                    </Text>
-                    <View className="flex-row items-center mb-1">
-                      <Ionicons
-                        name="person-outline"
-                        size={16}
-                        color="#4B5563"
-                      />
-                      <Text className="text-sm text-gray-600 ml-2">
-                        {update.VisitTo}
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center mb-3">
-                      <Ionicons name="documents" size={16} color="#4B5563" />
-                      <Text className="text-sm text-gray-600 ml-2">
-                        Documents
-                      </Text>
-                    </View>
-                    {update.FollowupStatus && (
-                      <View className="mt-3 pt-3 border-t border-gray-200 flex flex-row gap-1">
-                        <Text className="text-sm">Status:</Text>
-                        <Text className="text-sm font-semibold text-gray-700">
-                          {update.FollowupStatus}
-                        </Text>
-                      </View>
+          {leadUpdates?.map((update: LeadUpdate, index: number) => (
+            <View key={index} className="mb-8 flex-row">
+              <View className="absolute left-[12px] top-1 w-2 h-2 rounded-full bg-blue-500" />
+              <View className="ml-10 flex-1">
+                <View className="flex flex-row">
+                  <Text className="text-sm font-semibold text-gray-600 mb-2">
+                    {new Date(update.FollowupDateTime).toLocaleDateString(
+                      "en-IN",
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }
                     )}
+                    ,{" "}
+                  </Text>
+                  <Text className="text-sm text-gray-600">
+                    {new Date(update.FollowupDateTime).toLocaleTimeString(
+                      "en-IN",
+                      {
+                        hour: "numeric",
+                        minute: "numeric",
+                      }
+                    )}
+                  </Text>
+                </View>
+                <View>
+                  <Text className="text-lg font-bold text-gray-800 mb-2">
+                    {update.ModeofContact}
+                  </Text>
+                  <Text className="text-base text-gray-700 mb-3">
+                    {update.FollowupDetails}
+                  </Text>
+                  <View className="flex-row items-center mb-1">
+                    <Ionicons name="person-outline" size={16} color="#4B5563" />
+                    <Text className="text-sm text-gray-600 ml-2">
+                      {update.VisitTo}
+                    </Text>
                   </View>
+                  <View className="flex-row items-center mb-3">
+                    <Ionicons name="documents" size={16} color="#4B5563" />
+                    <Text className="text-sm text-gray-600 ml-2">
+                      Documents
+                    </Text>
+                  </View>
+                  {update.FollowupStatus && (
+                    <View className="mt-3 pt-3 border-t border-gray-200 flex flex-row gap-1">
+                      <Text className="text-sm">Status:</Text>
+                      <Text className="text-sm font-semibold text-gray-700">
+                        {update.FollowupStatus}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               </View>
-            ))}
+            </View>
+          ))}
         </View>
       )}
 
@@ -185,10 +181,7 @@ const LeadFollowupTimeline = () => {
         </Pressable>
       </View>
 
-      <Modal
-        visible={!!selectedImage}
-        animationType="fade"
-      >
+      <Modal visible={!!selectedImage} animationType="fade">
         <View className="flex-1 w-full bg-black bg-opacity-90 justify-center items-center">
           {selectedImage && (
             <Image

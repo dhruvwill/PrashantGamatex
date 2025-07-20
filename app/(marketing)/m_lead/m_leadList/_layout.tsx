@@ -10,18 +10,16 @@ const _layout = () => {
         headerTintColor: "#fff",
       }}
     >
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen name="[leadId]" options={{
+      <Stack.Screen name="index" options={{
+        headerShown: false,
+      }} />
+      {/* <Stack.Screen name="[leadId]/index" options={{
         statusBarHidden: true,
-        headerBackButtonDisplayMode: 'minimal'
+        headerBackButtonDisplayMode: 'minimal',
+        headerShown: false,
       }} />
       <Stack.Screen
-        name="leadFollowupTimeline"
+        name="[leadId]/timeline"
         options={{
           header: ({ options }) => (
             <Header
@@ -38,7 +36,10 @@ const _layout = () => {
             backgroundColor: "steelblue",
           },
         }}
-      />
+      /> */}
+      <Stack.Screen name="[leadId]" options={{
+        headerShown: false,
+      }} />
       <Stack.Screen
         name="newLeadFollowup"
         options={{
