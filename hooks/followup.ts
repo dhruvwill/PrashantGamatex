@@ -11,6 +11,7 @@ import {
   insertQuotationFollowup,
 } from "~/services/followup";
 import { useUserStore } from "~/store";
+import { UserStore } from "~/store/store";
 import {
   SalesFollowupInsert,
   SalesInquiryFollowup,
@@ -109,7 +110,7 @@ export const useInsertQuotationFollowup = () => {
 };
 
 export const useCategoryList = () => {
-  const token = useUserStore((state: any) => state.user?.token);
+  const token = useUserStore((state: UserStore) => state.user?.token);
 
   return useQuery<any, ErrorResponse, any>({
     queryKey: ["getCategoryList"],
@@ -119,7 +120,7 @@ export const useCategoryList = () => {
 };
 
 export const useDocumentNo = (categoryName: string) => {
-  const token = useUserStore((state: any) => state.user?.token);
+  const token = useUserStore((state: UserStore) => state.user?.token);
 
   return useQuery({
     queryKey: ["getFollowupDocumentNo"],
@@ -129,7 +130,7 @@ export const useDocumentNo = (categoryName: string) => {
 };
 
 export const useFollowupFilters = () => {
-  const token = useUserStore((state: any) => state.user?.token);
+  const token = useUserStore((state: UserStore) => state.user?.token);
 
   return useQuery<any, ErrorResponse, any>({
     queryKey: ["getFollowupFilters"],

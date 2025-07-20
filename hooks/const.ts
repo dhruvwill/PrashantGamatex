@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getConstants } from "~/services/constants";
 import { ErrorResponse } from "~/types/query";
 import { useUserStore } from "~/store/store";
+import { ConstData } from "~/types/const";
 
 export const useConstants = () => {
   const queryClient = useQueryClient();

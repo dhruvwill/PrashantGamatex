@@ -1,4 +1,4 @@
-type ConstData = {
+export type ConstData = {
   LeadSourceOutput: string;
   TimeFrameOutput: string;
   CurrencyOutput: string;

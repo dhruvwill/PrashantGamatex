@@ -6,16 +6,17 @@ import { useRouter } from "expo-router";
 import { AuthResponse, LoginData } from "~/types/auth";
 import { ErrorResponse } from "~/types/query";
 import Toast from "react-native-toast-message";
+import { UserStore } from "~/store/store";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const store = useUserStore((state:any) => state);
-  const setUser = useUserStore((state:any) => state.setUser);
+  const store = useUserStore((state:UserStore) => state);
+  const setUser = useUserStore((state:UserStore) => state.setUser);
 
   return useMutation<AuthResponse, ErrorResponse, LoginData>({
     mutationFn: (data: LoginData) => {
-      const fcmToken = store.user?.fcmToken;
+      const fcmToken = store.fcmToken;
       return login(data, fcmToken || undefined);
     },
     mutationKey: undefined,
@@ -38,8 +39,8 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
-  const clearUser = useUserStore((state:any) => state.clearUser);
-  const clearToken = useUserStore((state:any) => state.clearToken);
+  const clearUser = useUserStore((state:UserStore) => state.clearUser);
+  const clearToken = useUserStore((state:UserStore) => state.clearToken);
   const router = useRouter();
   const queryClient = useQueryClient();
   queryClient.invalidateQueries({
@@ -57,7 +58,7 @@ export const useLogout = () => {
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const user = useUserStore((state:any) => state.user);
+  const user = useUserStore((state:UserStore) => state.user);
   const router = useRouter();
 
   useEffect(() => {

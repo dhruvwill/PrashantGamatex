@@ -37,6 +37,7 @@ import { Separator } from "~/components/ui/separator";
 import { API_URL } from "~/constants/api";
 import { useUserStore } from "~/store";
 import { usePreventScreenCapture } from "expo-screen-capture";
+import { UserStore } from "~/store/store";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -47,7 +48,7 @@ const inquiryFollowupTimeline = () =>
     usePreventScreenCapture();
     
     const router = useRouter();
-    const userToken = useUserStore((state:any) => state.user?.token);
+    const userToken = useUserStore((state:UserStore) => state.user?.token);
 
 
     const { data } = useLocalSearchParams<{ data: string }>();

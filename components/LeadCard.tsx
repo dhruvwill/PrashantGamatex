@@ -25,7 +25,7 @@ const LeadCard = ({
       onPress={() => {
         router.push({
           pathname: "/(marketing)/m_lead/m_leadList/leadFollowupTimeline",
-          params: { leadId: leadId },
+          params: { id: leadId },
         });
       }}
     >
@@ -63,7 +63,7 @@ const LeadCard = ({
         </Pressable>
         <Pressable className="flex-row items-center" onPress={() => {
           router.push({
-            pathname: "/(marketing)/m_lead/m_leadList/leadFollowupTimeline",
+            pathname: "/(marketing)/m_lead/m_leadList/[leadId]/leadFollowupTimeline",
             params: { leadId: leadId },
           });
         }}>

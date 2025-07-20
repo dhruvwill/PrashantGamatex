@@ -13,6 +13,8 @@ export const login = async (data: LoginData, pushToken?: string): Promise<AuthRe
       ...(pushToken && { pushToken }),
     };
     
+    console.log("login: ",user);
+    
     const response = await client.post("/auth/login", {
       user,
     });

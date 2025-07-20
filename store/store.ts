@@ -13,7 +13,7 @@ type User = {
   token: string;
 };
 
-type UserStore = {
+export type UserStore = {
   user: User | null;
   fcmToken: string | null;
   setUser: (user: User) => void;

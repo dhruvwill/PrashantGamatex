@@ -14,6 +14,7 @@ import Toast from "react-native-toast-message";
 import { LeadInsertData, LeadData, LeadUpdateData, LeadFilterData, LeadUpdate } from "~/types/lead";
 import { useUserStore } from "~/store";
 import { router } from "expo-router";
+import { UserStore } from "~/store/store";
 
 export const useLeads = () => {
   return useQuery<any, ErrorResponse, LeadData[]>({
@@ -104,7 +105,7 @@ export const useUpdateLead = () => {
 };
 
 export const useDocumentNo = (categoryName: string) => {
-  const token = useUserStore((state:any) => state.user?.token);
+  const token = useUserStore((state:UserStore) => state.user?.token);
 
   return useQuery({
     queryKey: ["getLeadDocumentNo"],
@@ -114,7 +115,7 @@ export const useDocumentNo = (categoryName: string) => {
 };
 
 export const useLeadFilters = () => {
-  const token = useUserStore((state:any) => state.user?.token);
+  const token = useUserStore((state:UserStore) => state.user?.token);
 
   return useQuery<any, ErrorResponse, LeadFilterData[]>({
     queryKey: ["getLeadFilters"],

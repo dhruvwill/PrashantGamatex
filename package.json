@@ -14,7 +14,7 @@
     "eas-build-post-install": "tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css.native.css"
   },
   "dependencies": {
-    "@expo/config-plugins": "~10.0.0",
+    "@expo/config-plugins": "^10.1.1",
     "@expo/metro-runtime": "~5.0.4",
     "@hookform/resolvers": "^3.6.0",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -24,7 +24,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-native-async-storage/async-storage": "2.1.2",
-    "@react-native-community/datetimepicker": "8.3.0",
+    "@react-native-community/datetimepicker": "^8.4.1",
     "@react-navigation/drawer": "^7.3.9",
     "@react-navigation/native": "^7.1.6",
     "@rn-primitives/checkbox": "^1.0.3",
@@ -40,10 +40,11 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "expo": "53.0.12",
+    "expo": "^53.0.19",
     "expo-checkbox": "~4.1.4",
     "expo-constants": "~17.1.6",
     "expo-contacts": "~14.2.4",
+    "expo-dev-client": "~5.2.1",
     "expo-device": "~7.1.4",
     "expo-font": "~13.3.1",
     "expo-image": "~2.3.0",
@@ -61,7 +62,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.52.0",
-    "react-native": "0.79.4",
+    "react-native": "^0.79.5",
     "react-native-calendars": "^1.1306.0",
     "react-native-date-picker": "^5.0.4",
     "react-native-gesture-handler": "~2.24.0",
@@ -77,8 +78,7 @@
     "tailwindcss-animate": "^1.0.7",
     "victory-native": "^41.17.3",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2",
-    "expo-dev-client": "~5.2.1"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
