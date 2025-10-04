@@ -76,7 +76,7 @@ const LeadCard = ({
           }}
         >
           <Text className="text-sm text-blue-600 font-semibold">
-            Lead Updates
+            Lead Follow-up
           </Text>
           <Ionicons name="chevron-forward" size={20} color="#2563EB" />
         </Pressable>

@@ -49,13 +49,16 @@ const Dashboard = () => {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    console.log("invalidating");
     queryClient.invalidateQueries({
       queryKey: ["getDashboard", timeframe],
     });
-    console.log(dashboardData.data, timeframe);
   }, [timeframe]);
 
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["getDashboard", timeframe],
+    });
+  }, []);
 
   return (
     <ScrollView>

@@ -358,6 +358,10 @@ const NewLeadFollowup = () => {
                       value="Close"
                       onLabelPress={onLabelPressStatus("Close")}
                     />
+                    <RadioGroupItemWithLabel
+                      value="Offer"
+                      onLabelPress={onLabelPressStatus("Offer")}
+                    />
                   </RadioGroup>
                 </View>
                 {form.FollowupStatus === "Fix in New Visit" && (
