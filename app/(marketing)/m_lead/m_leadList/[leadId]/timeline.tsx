@@ -18,7 +18,7 @@ import { LeadData, LeadUpdate } from "~/types/lead";
 
 const LeadFollowupTimeline = () => {
   usePreventScreenCapture();
-  
+
   const router = useRouter();
   const userToken = useUserStore((state: any) => state.user?.token);
 
@@ -45,7 +45,9 @@ const LeadFollowupTimeline = () => {
 
   // Get lead data from the leads list
   const { data: allLeads } = useLeads();
-  const leadData = allLeads?.find((lead: LeadData) => lead.ReferenceTransaction_2361Id === parsedLeadId);
+  const leadData = allLeads?.find(
+    (lead: LeadData) => lead.ReferenceTransaction_2361Id === parsedLeadId
+  );
 
   return (
     <ScrollView className={`flex-1 bg-gray-100 px-4 py-6`}>
@@ -132,7 +134,7 @@ const LeadFollowupTimeline = () => {
                   <Text className="text-lg font-bold text-gray-800 mb-2">
                     {update.ModeofContact}
                   </Text>
-                  <Text className="text-base text-gray-700 mb-3">
+                  <Text className=" text-gray-700 mb-3">
                     {update.FollowupDetails}
                   </Text>
                   <View className="flex-row items-center mb-1">
@@ -202,4 +204,4 @@ const LeadFollowupTimeline = () => {
   );
 };
 
-export default LeadFollowupTimeline; 
+export default LeadFollowupTimeline;
