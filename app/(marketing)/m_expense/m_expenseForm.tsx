@@ -209,7 +209,7 @@ const M_ExpenseForm: React.FC = () => {
                 }
                 placeholder="Enter Customer Company Name"
                 placeholderTextColor="#6b7280"
-                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
+                className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
                   errors.customerCompany ? "border-red-500" : ""
                 }`}
                 value={form.customerCompany}
@@ -274,7 +274,7 @@ const M_ExpenseForm: React.FC = () => {
                     }
                   /> */}
                   {constants.isLoading ? (
-                    <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
+                    <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
                       <ActivityIndicator />
                       <Text>Fetching</Text>
                     </View>
@@ -310,7 +310,7 @@ const M_ExpenseForm: React.FC = () => {
                     }
                     placeholder="₹ 0.00"
                     placeholderTextColor="#6b7280"
-                    className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg font-medium text-[#222] dark:text-gray-100 ${
+                    className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg text-base font-medium text-[#222] dark:text-gray-100 ${
                       errors.expenseItems?.[index]?.amount
                         ? "border-red-500"
                         : ""
@@ -337,7 +337,7 @@ const M_ExpenseForm: React.FC = () => {
                     }
                     placeholder="Enter description"
                     placeholderTextColor="#6b7280"
-                    className="h-20 native:h-24 border dark:bg-gray-800 px-4 py-2 rounded-lg  font-medium text-[#222] dark:text-gray-100"
+                    className="h-20 native:h-24 border dark:bg-gray-800 px-4 py-2 rounded-lg text-base font-medium text-[#222] dark:text-gray-100"
                     value={item.description}
                   />
                 </View>
@@ -354,7 +354,7 @@ const M_ExpenseForm: React.FC = () => {
                   <TouchableOpacity onPress={() => pickImage(index)}>
                     <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-lg flex-row items-center">
                       <Ionicons name="document" size={24} color="#007aff" />
-                      <Text className="text-blue-500  font-medium ml-2">
+                      <Text className="text-blue-500 text-base font-medium ml-2">
                         {item.attachment
                           ? "Change Attachment"
                           : "Add Attachment"}
@@ -368,7 +368,7 @@ const M_ExpenseForm: React.FC = () => {
                     className="mt-2"
                   >
                     <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-red-500">
-                      <Text className="text-red-500  font-medium">
+                      <Text className="text-red-500 text-base font-medium">
                         Remove
                       </Text>
                     </View>
@@ -379,7 +379,7 @@ const M_ExpenseForm: React.FC = () => {
             {form.expenseItems.length < 25 && (
               <TouchableOpacity onPress={handleAddExpenseItem} className="mb-4">
                 <View className="flex-row items-center justify-center rounded-lg py-2 px-4 border border-[#007aff]">
-                  <Text className="text-[#007aff]  font-medium">
+                  <Text className="text-[#007aff] text-base font-medium">
                     Add Expense Item
                   </Text>
                 </View>

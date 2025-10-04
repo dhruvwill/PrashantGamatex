@@ -130,7 +130,7 @@ const PasswordChangePage = () => {
                   }
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
-                  className="h-10 native:h-12 w-full  font-medium text-[#222] dark:text-gray-100"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
                   secureTextEntry={!showPassword.currentPassword}
                   value={form.currentPassword}
                 />
@@ -185,7 +185,7 @@ const PasswordChangePage = () => {
                   }
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
-                  className="h-10 native:h-12 w-full  font-medium text-[#222] dark:text-gray-100"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
                   secureTextEntry={!showPassword.newPassword}
                   value={form.newPassword}
                 />
@@ -238,7 +238,7 @@ const PasswordChangePage = () => {
                   }
                   placeholder="Enter your Password"
                   placeholderTextColor="#6b7280"
-                  className="h-10 native:h-12 w-full  font-medium text-[#222] dark:text-gray-100"
+                  className="h-10 native:h-12 w-full text-base font-medium text-[#222] dark:text-gray-100"
                   secureTextEntry={!showPassword.confirmNewPassword}
                   value={form.confirmNewPassword}
                 />

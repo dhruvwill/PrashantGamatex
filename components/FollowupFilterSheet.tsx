@@ -223,7 +223,7 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
               className="flex-1 h-12 border border-gray-300 rounded-lg flex-row items-center justify-center"
               disabled={!hasActiveFilters()}
             >
-              <Text className={` font-acumin ${hasActiveFilters() ? 'text-gray-700' : 'text-gray-400'}`}>
+              <Text className={`text-base font-acumin ${hasActiveFilters() ? 'text-gray-700' : 'text-gray-400'}`}>
                 Clear All
               </Text>
             </TouchableOpacity>
@@ -232,7 +232,7 @@ const FollowupFilterSheet: React.FC<FollowupFilterSheetProps> = ({
               onPress={handleApplyFilter}
               className="flex-1 h-12 bg-blue-500 rounded-lg flex-row items-center justify-center"
             >
-              <Text className="text-white  font-acumin_bold">
+              <Text className="text-white text-base font-acumin_bold">
                 Apply Filter
               </Text>
             </TouchableOpacity>

@@ -3,8 +3,8 @@ import { Header, HeaderBackButton } from "@react-navigation/elements";
 
 export default function LeadIdLayout() {
   return (
-    <Stack initialRouteName="m_editLead">
-      <Stack.Screen name="m_editLead" options={{ title: "Edit Lead", headerTintColor: "white" }} />
+    <Stack>
+      <Stack.Screen name="index" options={{ title: "Edit Lead", headerTintColor: "white" }} />
       <Stack.Screen
         name="timeline"
         options={{

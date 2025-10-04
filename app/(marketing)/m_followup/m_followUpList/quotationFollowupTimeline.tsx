@@ -155,7 +155,7 @@ const inquiryFollowupTimeline = () =>
                       <Text className="text-lg font-bold text-gray-800 mb-2">
                         {followup.ModeofContact}
                       </Text>
-                      <Text className=" text-gray-700 mb-3">
+                      <Text className="text-base text-gray-700 mb-3">
                         {followup.FollowupDetails}
                       </Text>
                       <View className="flex-row items-center mb-1">

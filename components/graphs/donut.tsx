@@ -52,7 +52,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
           className="w-5 h-5 mr-2"
           style={{ backgroundColor: section.color }}
         />
-        <Text className="" style={{ color: textColor }}>
+        <Text className="text-base" style={{ color: textColor }}>
           {section.label} - {section.percentage.toFixed(1)}%
         </Text>
       </View>
@@ -66,7 +66,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   if (isEmpty) {
     return (
       <View className="flex items-center justify-center h-52">
-        <Text className="" style={{ color: textColor }}>
+        <Text className="text-base" style={{ color: textColor }}>
           No data to display
         </Text>
       </View>

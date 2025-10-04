@@ -229,7 +229,7 @@ const m_newfollowup = () => {
               </Text>
             )}
             {category.isLoading && !category.isError ? (
-              <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
+              <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
                 <ActivityIndicator />
                 <Text>Fetching</Text>
               </View>
@@ -254,7 +254,7 @@ const m_newfollowup = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Doc No.
               </Text>
-              <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 flex justify-center">
+              <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
                 <Text>{form.DocumentNo}</Text>
               </View>
             </View> */}
@@ -298,7 +298,7 @@ const m_newfollowup = () => {
               <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
                 Ref No.
               </Text>
-              <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 flex justify-center">
+              <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
                 <Text>{parsedData?.ReferenceNo}</Text>
               </View>
             </View>
@@ -324,7 +324,7 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Machine name
             </Text>
-            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 flex justify-center">
+            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
               <Text>{parsedData?.MachineName}</Text>
             </View>
           </View>
@@ -332,7 +332,7 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Party name
             </Text>
-            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 flex justify-center">
+            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
               <Text>{parsedData?.PartyName}</Text>
             </View>
           </View>
@@ -340,7 +340,7 @@ const m_newfollowup = () => {
             <Text className="color-[#222] dark:text-gray-300 mb-2 text-lg font-acumin">
               Communication By
             </Text>
-            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 flex justify-center">
+            <View className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 flex justify-center">
               <Text>{form.VisitorPerson}</Text>
             </View>
           </View> */}
@@ -509,7 +509,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Communication With"
               placeholderTextColor="#6b7280"
-              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+              className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
               value={form.VisitTo}
             />
           </View> */}
@@ -525,7 +525,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Communication With"
               placeholderTextColor="#6b7280"
-              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 ${
+              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
                 errors.VisitTo ? "border-red-500" : ""
               }`}
               value={form.VisitTo}
@@ -552,7 +552,7 @@ const m_newfollowup = () => {
               }
               placeholder="Enter Follow Up Details"
               placeholderTextColor="#6b7280"
-              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100 ${
+              className={`h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100 ${
                 errors.FollowupDetails ? "border-red-500" : ""
               }`}
               value={form.FollowupDetails}
@@ -564,10 +564,10 @@ const m_newfollowup = () => {
               numberOfLines={4}
               clearButtonMode="while-editing"
               placeholder="Enter Follow Up Details"
-              className={`native: rounded-lg dark:bg-gray-800  font-medium text-[#222] dark:text-gray-100 ${
+              className={`native:text-base rounded-lg dark:bg-gray-800 text-base font-medium text-[#222] dark:text-gray-100 ${
                 errors.FollowupDetails ? "border border-red-500" : ""
               }`}
-              placeholderClassName=" text-muted"
+              placeholderClassName="text-base text-muted"
               value={form.FollowupDetails}
               onChangeText={(followupdetails: any) =>
                 setForm({ ...form, FollowupDetails: followupdetails })
@@ -824,7 +824,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Next Communication With"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.NextVisitPerson}
                     />
                   </View>
@@ -847,7 +847,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Next Communication By"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.NextVisitorPerson}
                     />
                   </View>
@@ -867,7 +867,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Special Note"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.AttentionDetails}
                     />
                   </View>
@@ -894,7 +894,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Order Goes To"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.OrderGoesParty}
                     />
                   </View>
@@ -932,7 +932,7 @@ const m_newfollowup = () => {
                       }
                       placeholder="Detailed Description"
                       placeholderTextColor="#6b7280"
-                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100"
+                      className="h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100"
                       value={form.DetailDescription}
                     />
                   </View>

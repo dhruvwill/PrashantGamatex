@@ -94,7 +94,7 @@ const Dashboard = () => {
 
         <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
           {dashboardData.isLoading && !dashboardData.isError ? (
-            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
               <ActivityIndicator />
               <Text>Fetching</Text>
             </View>
@@ -154,7 +154,7 @@ const Dashboard = () => {
 
         <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
           {dashboardData.isLoading && !dashboardData.isError ? (
-            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
               <ActivityIndicator />
               <Text>Fetching</Text>
             </View>
@@ -218,7 +218,7 @@ const Dashboard = () => {
         </View>
         <View className="rounded-lg shadow-lg mb-6 w-full bg-gray-100 border border-gray-300">
           {dashboardData.isLoading && !dashboardData.isError ? (
-            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md  font-medium text-[#222] dark:text-gray-100">
+            <View className="flex-row items-center justify-start gap-2 h-10 native:h-12 border dark:bg-gray-800 px-4 rounded-md text-base font-medium text-[#222] dark:text-gray-100">
               <ActivityIndicator />
               <Text>Fetching</Text>
             </View>

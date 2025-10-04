@@ -94,7 +94,7 @@ const ContactPickerModal: React.FC<ContactPickerModalProps> = ({
         </View>
         <View className="p-4 border-b border-gray-200">
           <Input
-            className="h-12 px-4 border border-gray-300 rounded-md"
+            className="h-10 px-4 border border-gray-300 rounded-md"
             placeholder="Search contacts..."
             value={searchQuery}
             onChangeText={handleSearch}
