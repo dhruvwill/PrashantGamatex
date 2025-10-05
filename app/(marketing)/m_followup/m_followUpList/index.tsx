@@ -17,7 +17,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useInquiryFollowup, useQuotationFollowup } from "~/hooks/followup";
 import { ActivityIndicator } from "react-native";
 import { Search } from "lucide-react-native";
-import { usePreventScreenCapture } from "expo-screen-capture";
 import { Ionicons } from "@expo/vector-icons";
 import FollowupFilterSheet, {
   FollowupFilterOptions,
@@ -35,8 +34,6 @@ interface FollowupItem {
 }
 
 const m_followUpList = () => {
-  usePreventScreenCapture();
-
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   // const [list, setList] = useState("inquiry");

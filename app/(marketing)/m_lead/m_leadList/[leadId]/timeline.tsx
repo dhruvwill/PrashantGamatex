@@ -12,13 +12,10 @@ import { API_URL } from "~/constants/api";
 import { Separator } from "~/components/ui/separator";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
-import { usePreventScreenCapture } from "expo-screen-capture";
 import { useLeadUpdates, useLeads } from "~/hooks/leads";
 import { LeadData, LeadUpdate } from "~/types/lead";
 
 const LeadFollowupTimeline = () => {
-  usePreventScreenCapture();
-
   const router = useRouter();
   const userToken = useUserStore((state: any) => state.user?.token);
 

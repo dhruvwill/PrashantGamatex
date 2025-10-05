@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({
-      queryKey: ["getDashboard", timeframe],
+      queryKey: ["getDashboard", timeframe || timeframes[0].value],
     });
   }, []);
 

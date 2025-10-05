@@ -14,13 +14,11 @@ import { Search } from "lucide-react-native";
 import LeadCard from "~/components/LeadCard";
 import { Separator } from "~/components/ui/separator";
 import { useLeads } from "~/hooks/leads";
-import { usePreventScreenCapture } from "expo-screen-capture";
 import LeadFilterSheet, { LeadFilterOptions } from "~/components/LeadFilterSheet";
 import { LeadData } from "~/types/lead";
 import { Person } from "~/types/user";
 
 const m_leadList = () => {
-  usePreventScreenCapture();
   
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

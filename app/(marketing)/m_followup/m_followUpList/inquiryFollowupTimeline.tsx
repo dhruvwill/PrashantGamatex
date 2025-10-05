@@ -36,7 +36,6 @@ import { getFollowupList } from "~/services/followup";
 import { Separator } from "~/components/ui/separator";
 import { API_URL } from "~/constants/api";
 import { useUserStore } from "~/store";
-import { usePreventScreenCapture } from "expo-screen-capture";
 import { UserStore } from "~/store/store";
 
 const blurhash =
@@ -44,9 +43,7 @@ const blurhash =
 
 const inquiryFollowupTimeline = () =>
   // { followups, inquiryDetails }
-  {
-    usePreventScreenCapture();
-    
+  {    
     const router = useRouter();
     const userToken = useUserStore((state:UserStore) => state.user?.token);
 

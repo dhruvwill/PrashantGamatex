@@ -24,7 +24,6 @@ import { useConstants } from "~/hooks/const";
 import { Contact } from "~/types/contacts";
 import ContactPickerModal from "~/components/ContactPickerModal";
 import { Textarea } from "~/components/ui/textarea";
-import { usePreventScreenCapture } from "expo-screen-capture";
 import { API_URL } from "~/constants/api";
 import { useUserStore } from "~/store";
 import { Image } from "expo-image";
@@ -35,7 +34,6 @@ import {
 } from "react-native-safe-area-context";
 
 const m_editLead = () => {
-  usePreventScreenCapture();
 
   const userToken = useUserStore((state: any) => state.user?.token);
   const constants = useConstants();
