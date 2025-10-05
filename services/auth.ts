@@ -10,7 +10,7 @@ export const login = async (data: LoginData, pushToken?: string): Promise<AuthRe
       password: data.password,
       company: data.company,
       deviceName: data.DeviceName,
-      ...(pushToken && { pushToken }),
+      pushToken: pushToken,
     };
     
     console.log("login: ",user);

@@ -72,19 +72,9 @@ const useUserStore = create<UserStore>()(
             return state;
           }),
         setFcmToken: (fcmToken: string) =>
-          set((state: any) => {
-            if (state.user) {
-              return { user: { ...state.user, fcmToken } };
-            }
-            return state;
-          }),
+          set({ fcmToken }),
         clearFcmToken: () =>
-          set((state: any) => {
-            if (state.user) {
-              return { user: { ...state.user, fcmToken: "" } };
-            }
-            return state;
-          }),
+          set({ fcmToken: null }),
       }),
       {
         name: "userStore",
