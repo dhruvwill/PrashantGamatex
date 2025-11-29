@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({
-      queryKey: ["getDashboard", timeframe || timeframes[0].value],
+      queryKey: ["getDashboard", timeframe || timeframes[2].value],
     });
   }, []);
 
@@ -79,8 +79,8 @@ const Dashboard = () => {
                 options={timeframes}
                 placeholder="timeframe"
                 defaultValue={{
-                  value: timeframes[0].value,
-                  label: timeframes[0].label,
+                  value: timeframes[2].value,
+                  label: timeframes[2].label,
                 }}
                 onChange={(value) => {
                   setTimeframe(timeframes.find((t) => t.value === value)!);

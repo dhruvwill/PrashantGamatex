@@ -86,8 +86,8 @@ const useUserStore = create<UserStore>()(
 
 const useAppStore = create<AppStore>((set: any) => ({
   timeframe: {
-    value: "1D",
-    label: "1 Day",
+    value: "1M",
+    label: "1 Month",
   },
   setTimeframe: (timeframe: Timeframe) => set({ timeframe }),
 }));
