@@ -14,7 +14,7 @@
 - [ ] ToDo list & remainder Facility
 - [ ] Reminder with alarm and visit updates
 - [x] User Data should link with ERP data update status.
-- [ ] Social Media Links in application.
+- [ ] Social Media Links in application..
 
 ### Updated END Goal
 
