@@ -32,24 +32,55 @@ const m_newLead = () => {
   const constants = useConstants();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const leadFormSchema = z.object({
-    currency: z.string().min(1, "Currency is required"),
-    documentDate: z.date(),
-    customerCompanyName: z.string().min(1, "Customer Company Name is required"),
-    contactPerson: z.string().min(1, "Contact Person is required"),
-    designation: z.string().min(1, "Designation is required"),
-    mobileNo: z.string().min(10, "Mobile number must be at least 10 digits"),
-    emailId: z.string().email("Invalid email address"),
-    product: z.string().min(1, "Product is required"),
-    leadSource: z.string().min(1, "Lead Source is required"),
-    competition: z.string().optional(),
-    timeFrame: z.string().min(1, "Time Frame is required"),
-    leadRemindDate: z.date(),
-    customerApplication: z.string().optional(),
-    customerExistingMachine: z.string().optional(),
-    leadNote: z.string().optional(),
-    attachments: z.array(z.any()).optional(),
-  });
+  const leadFormSchema = z
+    .object({
+      currency: z.string().min(1, "Currency is required"),
+      documentDate: z.date(),
+      customerCompanyName: z
+        .string()
+        .min(1, "Customer Company Name is required"),
+      contactPerson: z.string().min(1, "Contact Person is required"),
+      designation: z.string().min(1, "Designation is required"),
+      mobileNo: z
+        .string()
+        .trim()
+        .optional()
+        .refine(
+          (value) => !value || value.length >= 10,
+          "Mobile number must be at least 10 digits"
+        ),
+      emailId: z
+        .string()
+        .trim()
+        .optional()
+        .refine(
+          (value) => !value || z.string().email().safeParse(value).success,
+          "Invalid email address"
+        ),
+      product: z.string().min(1, "Product is required"),
+      leadSource: z.string().min(1, "Lead Source is required"),
+      competition: z.string().optional(),
+      timeFrame: z.string().min(1, "Time Frame is required"),
+      leadRemindDate: z.date(),
+      customerApplication: z.string().optional(),
+      customerExistingMachine: z.string().optional(),
+      leadNote: z.string().optional(),
+      attachments: z.array(z.any()).optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.mobileNo?.trim() && !data.emailId?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Either Mobile No. or Email is required",
+          path: ["mobileNo"],
+        });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Either Mobile No. or Email is required",
+          path: ["emailId"],
+        });
+      }
+    });
 
   const [form, setForm] = useState({
     documentDate: new Date(),

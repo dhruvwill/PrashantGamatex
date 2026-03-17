@@ -93,23 +93,54 @@ const m_editLead = () => {
   };
 
   // Form validation schema
-  const leadFormSchema = z.object({
-    currency: z.string().min(1, "Currency is required"),
-    customerCompanyName: z.string().min(1, "Customer Company Name is required"),
-    contactPerson: z.string().min(1, "Contact Person is required"),
-    designation: z.string().min(1, "Designation is required"),
-    mobileNo: z.string().min(10, "Mobile number must be at least 10 digits"),
-    address: z.string().optional(),
-    emailId: z.string().email("Invalid email address"),
-    product: z.string().min(1, "Product is required"),
-    leadSource: z.string().min(1, "Lead Source is required"),
-    competition: z.string().optional(),
-    timeFrame: z.string().min(1, "Time Frame is required"),
-    leadRemindDate: z.date(),
-    customerApplication: z.string().optional(),
-    customerExistingMachine: z.string().optional(),
-    leadNote: z.string().optional(),
-  });
+  const leadFormSchema = z
+    .object({
+      currency: z.string().min(1, "Currency is required"),
+      customerCompanyName: z
+        .string()
+        .min(1, "Customer Company Name is required"),
+      contactPerson: z.string().min(1, "Contact Person is required"),
+      designation: z.string().min(1, "Designation is required"),
+      mobileNo: z
+        .string()
+        .trim()
+        .optional()
+        .refine(
+          (value) => !value || value.length >= 10,
+          "Mobile number must be at least 10 digits"
+        ),
+      address: z.string().optional(),
+      emailId: z
+        .string()
+        .trim()
+        .optional()
+        .refine(
+          (value) => !value || z.string().email().safeParse(value).success,
+          "Invalid email address"
+        ),
+      product: z.string().min(1, "Product is required"),
+      leadSource: z.string().min(1, "Lead Source is required"),
+      competition: z.string().optional(),
+      timeFrame: z.string().min(1, "Time Frame is required"),
+      leadRemindDate: z.date(),
+      customerApplication: z.string().optional(),
+      customerExistingMachine: z.string().optional(),
+      leadNote: z.string().optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.mobileNo?.trim() && !data.emailId?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Either Mobile No. or Email is required",
+          path: ["mobileNo"],
+        });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Either Mobile No. or Email is required",
+          path: ["emailId"],
+        });
+      }
+    });
 
   // Handle contact selection
   const handleSelectContact = (contact: Contact) => {
